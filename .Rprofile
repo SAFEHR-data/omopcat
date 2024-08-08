@@ -1,6 +1,6 @@
 if (interactive()) {
-  suppressMessages(requireNamespace("devtools"))
-  suppressMessages(requireNamespace("golem"))
+  suppressMessages(require("devtools"))
+  suppressMessages(require("golem"))
 
   # warn about partial matching
   options(
