@@ -2,15 +2,27 @@
 #'
 #' @param request Internal parameter for `{shiny}`.
 #'     DO NOT REMOVE.
-#' @import shiny
+#' @import shiny shinydashboard
 #' @noRd
 app_ui <- function(request) {
   tagList(
     # Leave this function for adding external resources
     golem_add_external_resources(),
-    # Your application UI logic
-    fluidPage(
-      h1("calypso")
+
+    # The UI logic
+    dashboardPage(
+      dashboardHeader(title = "calypso"),
+      dashboardSidebar(
+        title = "Filtering",
+        mod_timeframe_ui("timeframe_1")
+      ),
+      dashboardBody(
+        fluidRow(
+          box(mod_totals_ui("totals_1"), width = 12),
+          box(mod_monthly_count_ui("monthly_count_1"), height = 250),
+          box(mod_stat_numeric_ui("stat_numeric_1"), height = 250)
+        )
+      )
     )
   )
 }

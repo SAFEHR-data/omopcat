@@ -8,7 +8,8 @@ Imports:
     config (>= 0.3.2),
     DT,
     golem (>= 0.4.1),
-    shiny (>= 1.9.1)
+    shiny (>= 1.9.1),
+    shinydashboard
 Suggests:
     devtools,
     usethis,
@@ -17,6 +18,6 @@ Suggests:
     spelling
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.1
+RoxygenNote: 7.3.2
 Config/testthat/edition: 3
 Language: en-US
