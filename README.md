@@ -4,22 +4,17 @@
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
-The goal of calypso is to ...
+The goal of calypso is to provide a summary of OMOP data and display it in a public data catalogue
 
 ## Installation
 
-You can install the development version of calypso like so:
+You can install the development version of calypso from within R like so:
 
-``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+```r
+# install.packages("pak")
+pak::pak("UCLH-Foundry/calypso")
 ```
 
-## Example
+## Development
 
-This is a basic example which shows you how to solve a common problem:
-
-``` r
-library(calypso)
-## basic example code
-```
-
+* Using the [`{golem}`](https://engineering-shiny.org/golem.html) framework
