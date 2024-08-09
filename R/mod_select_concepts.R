@@ -27,7 +27,7 @@ mod_select_concepts_server <- function(id, data) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     observeEvent(data(), {
-      updateSelectInput(session, "select_concepts", choices = data()$name)
+      updateSelectInput(session, "select_concepts", choices = data()$name, selected = data()$name)
     })
 
     reactive(data()[data()$name %in% input$select_concepts, ])
