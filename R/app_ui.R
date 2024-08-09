@@ -15,7 +15,9 @@ app_ui <- function(request) {
       sidebar = sidebar(
         title = "Filtering options",
         mod_select_concepts_ui("select_concepts"),
-        mod_date_range_ui("date_range_1")
+        mod_date_range_ui("date_range_1"),
+        mod_export_ui("export")
+
       ),
       card(mod_datatable_ui("totals")),
       layout_columns(

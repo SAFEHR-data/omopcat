@@ -25,4 +25,5 @@ app_server <- function(input, output, session) {
   mod_datatable_server("totals", selected_data)
   mod_monthly_count_server("monthly_count_1")
   mod_stat_numeric_server("stat_numeric_1")
+  mod_export_server("export", mock_data)
 }
