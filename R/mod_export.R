@@ -28,7 +28,7 @@ mod_export_server <- function(id, data) {
         paste0("calypso-export-", Sys.Date(), ".csv")
       },
       content = function(file) {
-        write.csv(data(), file, row.names = FALSE)
+        utils::write.csv(data(), file, row.names = FALSE)
       }
     )
   })
