@@ -20,8 +20,7 @@ mod_monthly_count_ui <- function(id){
 mod_monthly_count_server <- function(id) {
   moduleServer(id, function(input, output, session) {
     # TODO: how to get the data?
-    # Need to get the `totals` object from `mod_totals_server`
-    # and filter it based on the selected timeframe and selected row
+    # Need to get the input data and filter it based on the selected timeframe and selected row
     # see https://stackoverflow.com/a/77039776/11801854
     monthly_count <- data.frame(
       date = c("2020-01","2020-02", "2020-03", "2020-04"),
@@ -32,4 +31,3 @@ mod_monthly_count_server <- function(id) {
     })
   })
 }
-
