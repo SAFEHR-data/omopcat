@@ -8,8 +8,9 @@ Imports:
     bslib,
     config (>= 0.3.2),
     DT,
+    ggplot2,
     golem (>= 0.4.1),
-    shiny (>= 1.9.1),
+    shiny (>= 1.9.1)
 Suggests:
     devtools,
     usethis,
