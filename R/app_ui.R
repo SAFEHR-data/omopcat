@@ -16,7 +16,7 @@ app_ui <- function(request) {
         title = "Filtering options",
         mod_timeframe_ui("timeframe_1")
       ),
-      card(mod_totals_ui("totals_1")),
+      card(mod_datatable_ui("totals")),
       layout_columns(
         card(mod_monthly_count_ui("monthly_count_1")),
         card(mod_stat_numeric_ui("stat_numeric_1"))
