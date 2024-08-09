@@ -10,19 +10,24 @@ app_ui <- function(request) {
     golem_add_external_resources(),
 
     # The UI logic
-    page_sidebar(
+    page_navbar(
       title = "calpyso - PROTOTYPE",
       sidebar = sidebar(
         title = "Filtering options",
         mod_select_concepts_ui("select_concepts"),
         mod_date_range_ui("date_range_1"),
-        mod_export_ui("export")
-
       ),
-      card(mod_datatable_ui("totals")),
-      layout_columns(
-        card(mod_monthly_count_ui("monthly_count_1")),
-        card(mod_stat_numeric_ui("stat_numeric_1"))
+      nav_panel(
+        title = "Dashboard",
+        card(mod_datatable_ui("totals")),
+        layout_columns(
+          card(mod_monthly_count_ui("monthly_count_1")),
+          card(mod_stat_numeric_ui("stat_numeric_1"))
+        )
+      ),
+      nav_panel(
+        title = "Export",
+        mod_export_tab_ui("export_tab")
       )
     )
   )

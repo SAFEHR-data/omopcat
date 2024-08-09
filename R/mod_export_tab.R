@@ -17,6 +17,8 @@ mod_export_tab_ui <- function(id) {
 
 #' export_tab Server Functions
 #'
+#' @param data A reactive data.frame containing the data to be exported
+#'
 #' @noRd
 mod_export_tab_server <- function(id, data) {
   stopifnot(is.reactive(data))
