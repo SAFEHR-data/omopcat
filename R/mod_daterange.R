@@ -1,13 +1,11 @@
-#' timeframe UI Function
-#'
-#' Adds  a slider input to select a date range.
+#' date_range UI Function
 #'
 #' @param id,input,output,session Internal parameters for {shiny}.
 #'
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
-mod_timeframe_ui <- function(id) {
+mod_date_range_ui <- function(id) {
   ns <- NS(id)
   tagList(
     sliderInput(ns("slider"), "Date range:",
@@ -19,10 +17,10 @@ mod_timeframe_ui <- function(id) {
   )
 }
 
-#' timeframe Server Functions
+#' date_range Server Functions
 #'
 #' @noRd
-mod_timeframe_server <- function(id) {
+mod_date_range_server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
   })
