@@ -1,0 +1,32 @@
+#' datatable UI Function
+#'
+#' @description A shiny Module.
+#'
+#' @param id,input,output,session Internal parameters for {shiny}.
+#'
+#' @noRd
+#'
+#' @importFrom shiny NS tagList
+mod_datatable_ui <- function(id) {
+  ns <- NS(id)
+  tagList(
+    DT::DTOutput(ns("datatable"))
+  )
+}
+
+#' datatable Server Functions
+#'
+#' @param data A reactive data.frame containing the data to be displayed
+#'
+#' @noRd
+mod_datatable_server <- function(id, data) {
+  stopifnot(is.reactive(data))
+
+  moduleServer(id, function(input, output, session) {
+    output$datatable <- DT::renderDT(data(), selection = list(
+      mode = "single",
+      selected = 1,
+      target = "row"
+    ))
+  })
+}
