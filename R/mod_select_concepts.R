@@ -25,7 +25,6 @@ mod_select_concepts_server <- function(id, data) {
   stopifnot(is.reactive(data))
 
   moduleServer(id, function(input, output, session) {
-    ns <- session$ns
     observeEvent(data(), {
       updateSelectInput(session, "select_concepts", choices = data()$name, selected = data()$name)
     })
