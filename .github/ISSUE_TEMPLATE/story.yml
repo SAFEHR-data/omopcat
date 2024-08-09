@@ -1,6 +1,6 @@
 name: New story
 description: Create a new story or task
-projects:
+# projects: [ "UCLH-Foundry/13" ]
 body:
   - type: markdown
     attributes:
