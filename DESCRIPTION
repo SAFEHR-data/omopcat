@@ -5,11 +5,11 @@ Authors@R: person('Milan', 'Malfait', email = 'm.malfait@ucl.ac.uk', role = c('c
 Description: .
 License: MIT + file LICENSE
 Imports: 
+    bslib,
     config (>= 0.3.2),
     DT,
     golem (>= 0.4.1),
     shiny (>= 1.9.1),
-    shinydashboard
 Suggests:
     devtools,
     usethis,
