@@ -11,7 +11,7 @@ app_ui <- function(request) {
 
     # The UI logic
     page_navbar(
-      title = "calpyso - PROTOTYPE",
+      title = "calypso - PROTOTYPE",
       sidebar = sidebar(
         title = "Filtering options",
         mod_select_concepts_ui("select_concepts"),
