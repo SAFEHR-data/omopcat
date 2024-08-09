@@ -3,7 +3,7 @@ Title: A Dashboard to Display an OMOP Data Catalogue
 Version: 0.0.0.9000
 Authors@R: person('Milan', 'Malfait', email = 'm.malfait@ucl.ac.uk', role = c('cre', 'aut'))
 Description: .
-License: MIT + file LICENSE
+License: Apache License (>= 2)
 Imports: 
     bslib,
     config (>= 0.3.2),
