@@ -14,6 +14,7 @@ app_ui <- function(request) {
       title = "calpyso - PROTOTYPE",
       sidebar = sidebar(
         title = "Filtering options",
+        mod_select_concepts_ui("select_concepts"),
         mod_timeframe_ui("timeframe_1")
       ),
       card(mod_datatable_ui("totals")),

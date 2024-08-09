@@ -19,6 +19,7 @@ app_server <- function(input, output, session) {
   )
   mock_data <- reactiveVal(mock_data)
 
+  mod_select_concepts_server("select_concepts", mock_data)
   mod_timeframe_server("timeframe_1")
   mod_datatable_server("totals", mock_data)
   mod_monthly_count_server("monthly_count_1")
