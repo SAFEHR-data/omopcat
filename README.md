@@ -61,3 +61,22 @@ The filenames in `R/` follow the [`{golem}` conventions](https://engineering-shi
 An overview of the app's design is given in the diagram below (note that this is subject to change):
 
 ![](./dev/design/omop-data-catalogue-design.png)
+
+### Coding style
+
+We'll mainly follow the [tidyverse style guide](https://style.tidyverse.org/).
+The [`{styler}`](https://styler.r-lib.org/index.html) package can be used to automatically format R code to this style,
+by regularly running
+
+```r
+styler::style_pkg()
+```
+
+within the project directory.
+It's also recommended to install [`{lintr}`](https://github.com/r-lib/lintr) and regularly run
+
+```r
+lintr::lint_package()
+```
+
+(or have it [run automatically in your IDE](https://lintr.r-lib.org/articles/editors.html)).
