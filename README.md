@@ -35,3 +35,29 @@ as it has good support for R package development and Shiny.
     install.packages("renv")
     renv::restore()
     ```
+
+3. To preview the app locally, run the following from an R console within the project directory:
+
+    ```r
+    golem::run_dev()
+    ```
+
+The `dev/02_dev.R` script contains a few helper functions to get you started.
+ 
+### Design
+
+The Shiny app is developed using the [`{golem}`](https://engineering-shiny.org/golem.html) framework.
+Among other things, this means that we make heavy use of [Shiny modules](https://mastering-shiny.org/scaling-modules.html).
+In brief, a Shiny module is a self-contained, encapsulated piece of Shiny UI and server logic.
+In practice, this will often be a particular component of the dashboard.
+Note that it is possible to nest modules within other modules, leading to a hierarchical structure.
+
+The filenames in `R/` follow the [`{golem}` conventions](https://engineering-shiny.org/golem.html#understanding-golem-app-structure):
+
+* The `app_*.R` files define the UI and server logic for the app itself.
+* The `mod_*.R` files define the UI and server logic for the modules.
+* Any business logic functions, which are independent from the app's application logic, are defined in the `fct_*.R` files.
+
+An overview of the app's design is given in the diagram below (note that this is subject to change):
+
+![](./dev/design/omop-data-catalogue-design.png)
