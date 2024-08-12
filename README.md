@@ -18,4 +18,20 @@ pak::pak("UCLH-Foundry/calypso")
 
 ## Development
 
-* Using the [`{golem}`](https://engineering-shiny.org/golem.html) framework
+### Set up
+
+Make sure you have a [recent version of R](https://cloud.r-project.org/) (>= 4.0.0) installed.
+Though not required, [RStudio](https://www.rstudio.com/products/rstudio/download/) is recommended as an IDE,
+as it has good support for R package development and Shiny.
+
+1. Clone this repository
+
+    - Either with `git clone git@github.com:UCLH-Foundry/omop-data-catalogue.git`
+    - Or by creating [a new project in RStudio from version control](https://docs.posit.co/ide/user/ide/guide/tools/version-control.html#creating-a-new-project-based-on-a-remote-git-or-subversion-repository)
+
+2. Install [`{renv}`](https://rstudio.github.io/renv/index.html) and restore the project library by running the following from an R console in the project directory:
+
+    ```r
+    install.packages("renv")
+    renv::restore()
+    ```
