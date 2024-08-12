@@ -58,11 +58,13 @@ testServer(app_server, {
   session$setInputs(x = 2)
   expect_equal(input$x, 2)
 
+  # nolint start
   # Example of tests you can do on the server:
   # - Checking reactiveValues
   # expect_equal(r$lg, 'EN')
   # - Checking output
   # expect_equal(output$txt, "Text")
+  # nolint end
 })
 
 # Configure this test to fit your need
