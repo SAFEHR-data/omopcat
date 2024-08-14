@@ -16,7 +16,8 @@ Suggests:
     usethis,
     styler,
     testthat (>= 3.0.0),
-    spelling
+    spelling,
+    lintr
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.2
