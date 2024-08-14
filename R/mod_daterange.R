@@ -26,7 +26,5 @@ mod_date_range_ui <- function(id) {
 #' @noRd
 mod_date_range_server <- function(id) {
   moduleServer(id, function(input, output, session) {
-    ns <- session$ns
   })
 }
-
