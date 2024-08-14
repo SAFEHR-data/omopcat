@@ -256,6 +256,52 @@
       ],
       "Hash": "8b7222e9d9eb5178eea545c0c4d33fc2"
     },
+    "covr": {
+      "Package": "covr",
+      "Version": "3.6.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "crayon",
+        "digest",
+        "httr",
+        "jsonlite",
+        "methods",
+        "rex",
+        "stats",
+        "utils",
+        "withr",
+        "yaml"
+      ],
+      "Hash": "0cbf0435830e767ba9b292b313592362"
+    },
+    "covrpage": {
+      "Package": "covrpage",
+      "Version": "0.2",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "covrpage",
+      "RemoteUsername": "yonicd",
+      "RemotePkgRef": "yonicd/covrpage",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "bafeb195d1999b8c3a48186e26f59cafcdfa3670",
+      "Requirements": [
+        "R",
+        "covr",
+        "curl",
+        "git2r",
+        "remotes",
+        "rmarkdown",
+        "stats",
+        "testthat",
+        "utils",
+        "whisker",
+        "withr"
+      ],
+      "Hash": "c76669abb3ad72a85286f6d2e6c25985"
+    },
     "cpp11": {
       "Package": "cpp11",
       "Version": "0.4.7",
@@ -536,6 +582,18 @@
         "rlang"
       ],
       "Hash": "fbbbc48eba7a6626a08bb365e44b563b"
+    },
+    "git2r": {
+      "Package": "git2r",
+      "Version": "0.33.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "graphics",
+        "utils"
+      ],
+      "Hash": "cdec9964efeda730d1b2cd3d5dd27747"
     },
     "gitcreds": {
       "Package": "gitcreds",
@@ -893,7 +951,7 @@
     },
     "nlme": {
       "Package": "nlme",
-      "Version": "3.1-165",
+      "Version": "3.1-166",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -903,7 +961,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "2769a88be217841b1f33ed469675c3cc"
+      "Hash": "ccbb8846be320b627e6aa2b4616a2ded"
     },
     "openssl": {
       "Package": "openssl",
@@ -1179,6 +1237,16 @@
         "utils"
       ],
       "Hash": "397b7b2a265bc5a7a06852524dabae20"
+    },
+    "rex": {
+      "Package": "rex",
+      "Version": "1.2.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "lazyeval"
+      ],
+      "Hash": "ae34cd56890607370665bee5bd17812f"
     },
     "rhub": {
       "Package": "rhub",
