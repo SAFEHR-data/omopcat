@@ -1,0 +1,5 @@
+# Eunomia data
+*.zip
+
+# duckdb databases
+*.duckdb
