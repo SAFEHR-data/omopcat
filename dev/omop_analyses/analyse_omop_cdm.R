@@ -40,33 +40,27 @@ analyse_monthly_counts <- function(cdm) {
   # Function to analyse a column from a specific table
   # for each month
   analyse_table <- function(table, concept, date) {
-    # Get total count for each month
-    total_count <- table |>
+    # Extract year and month from date column
+    table <- table |>
       mutate(
+        concept_id = {{ concept }},
         date_year = lubridate::year({{ date }}),
         date_month = lubridate::month({{ date }})
-      ) |>
-      select(concept_id = {{ concept }}, date_year, date_month) |>
+      )
+    # Get total count for each month
+    total_count <- table |>
+      select(concept_id, date_year, date_month) |>
       collect() |>
       group_by(date_year, date_month, concept_id) |>
       count(name = "total_count")
     # Get number of unique patients per concept for each month
     person_count <- table |>
-      mutate(
-        date_year = lubridate::year({{ date }}),
-        date_month = lubridate::month({{ date }})
-      ) |>
-      select(concept_id = {{ concept }}, date_year, date_month, person_id) |>
+      select(concept_id, date_year, date_month, person_id) |>
       collect() |>
       group_by(date_year, date_month, concept_id) |>
       reframe(person_count = n_distinct(person_id))
     # Get number of records per person for each month
     table |>
-      select(concept_id = {{ concept }}, {{ date }}) |>
-      mutate(
-        date_year = lubridate::year({{ date }}),
-        date_month = lubridate::month({{ date }})
-      ) |>
       select(concept_id, date_year, date_month) |>
       distinct() |>
       collect() |>
@@ -95,12 +89,35 @@ analyse_monthly_counts <- function(cdm) {
 
 # Function to produce the 'calypso_summary_stats' table
 analyse_summary_stats <- function(cdm) {
-  # Empty dataframe
-  data.frame(
-    concept_id = integer(),
-    summary_attribute = character(),
-    value_as_string = character(),
-    value_as_number = double()
+  # Function to analyse a numeric column
+  # by calculation the mean and the standard deviation
+  analyse_numeric_column <- function(table, concept, value) {
+    # Rename columns and remove empty values
+    table <- table |>
+      select(concept_id = {{ concept }}, value = {{ value }}) |>
+      filter(!is.na(value)) |>
+      collect()
+    # Calculate mean
+    df_mean <- table |>
+      group_by(concept_id) |>
+      reframe(
+        summary_attribute = "mean",
+        value_as_number = mean(value)
+      )
+    # Calculate standard deviation
+    df_sd <- table |>
+      group_by(concept_id) |>
+      reframe(
+        summary_attribute = "sd",
+        value_as_number = sd(value)
+      )
+    # Combine mean and standard deviation
+    bind_rows(df_mean, df_sd)
+  }
+  # Combine results for all columns
+  bind_rows(
+    cdm$measurement |> analyse_numeric_column(measurement_concept_id, value_as_number),
+    cdm$observation |> analyse_numeric_column(observation_concept_id, value_as_number)
   )
 }
 
