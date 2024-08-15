@@ -10,13 +10,19 @@ Imports:
     DT,
     ggplot2,
     golem (>= 0.4.1),
-    shiny (>= 1.9.1)
+    shiny (>= 1.9.1),
+    DBI,
+    duckdb,
+    glue
 Suggests:
     devtools,
     usethis,
     styler,
     testthat (>= 3.0.0),
     spelling,
+    here,
+    CDMConnector,
+    lubridate,
     lintr
 Encoding: UTF-8
 LazyData: true

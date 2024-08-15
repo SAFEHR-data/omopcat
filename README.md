@@ -35,8 +35,14 @@ as it has good support for R package development and Shiny.
     install.packages("renv")
     renv::restore()
     ```
+3. Create the [duckdb](https://github.com/duckdb/duckdb) test database and run the analyses by running from an R console in the project directory (test dataset properties can be updated in the [`.Rprofile`](https://github.com/UCLH-Foundry/omop-data-catalogue/blob/main/.Rprofile) file):
 
-3. To preview the app locally, run the following from an R console within the project directory:
+    ```r
+    source(here::here("dev/test_db/setup_test_db.R"))
+    source(here::here("dev/omop_analyses/analyse_omop_cdm.R"))
+    ```
+
+4. To preview the app locally, run the following from an R console within the project directory:
 
     ```r
     golem::run_dev()
