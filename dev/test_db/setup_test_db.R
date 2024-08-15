@@ -21,4 +21,3 @@ CDMConnector::cdm_from_con(
 # Clean up
 DBI::dbDisconnect(con)
 rm(con)
-gc()
