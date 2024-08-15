@@ -14,7 +14,7 @@ if (interactive()) {
 source("renv/activate.R")
 
 # Path to download Eunomia datasets
-Sys.setenv(EUNOMIA_DATA_FOLDER = here::here("dev/test_db/eunomia"))
+Sys.setenv(EUNOMIA_DATA_FOLDER = file.path("dev/test_db/eunomia"))
 # Name of the synthetic dataset to use
 Sys.setenv(TEST_DB_NAME = "GiBleed")
 # OMOP CDM version
