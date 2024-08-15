@@ -17,17 +17,21 @@ mod_stat_numeric_ui <- function(id) {
 #' stat_numeric Server Functions
 #'
 #' @noRd
-mod_stat_numeric_server <- function(id) {
+mod_stat_numeric_server <- function(id, selected_row) {
+  stopifnot(is.reactive(selected_row))
+
   moduleServer(id, function(input, output, session) {
-    summary_stat <- data.frame(
-      concept = "SELECTED ROW",
-      sd = 0.8280661,
-      mean = 5.843
-    )
+    selected_concept <- reactive(selected_row()$name)
+    summary_stat <- reactive({
+      data.frame(
+        concept = selected_concept(),
+        sd = 0.8280661,
+        mean = 5.843
+      )
+    })
 
     output$stat_numeric_plot <- renderPlot({
-      # TODO: move this to a separate function
-      stat_numeric_plot(summary_stat)
+      stat_numeric_plot(summary_stat())
     })
   })
 }

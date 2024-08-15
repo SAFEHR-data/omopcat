@@ -21,8 +21,10 @@ app_server <- function(input, output, session) {
   selected_data <- mod_select_concepts_server("select_concepts", mock_data)
 
   mod_date_range_server("date_range_1")
-  mod_datatable_server("totals", selected_data)
-  mod_monthly_count_server("monthly_count_1")
-  mod_stat_numeric_server("stat_numeric_1")
+
+  selected_row <- mod_datatable_server("totals", selected_data)
+  mod_monthly_count_server("monthly_count_1", selected_row)
+  mod_stat_numeric_server("stat_numeric_1", selected_row)
+
   mod_export_tab_server("export_tab", selected_data)
 }
