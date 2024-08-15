@@ -1,7 +1,7 @@
 #' connect_to_test_db
 #'
-#' @description Connect to the test database
-#' @description (using environment variables from .Rprofile)
+#' Connect to the test database
+#' (using environment variables from .Rprofile)
 #'
 #' @return A DBI connection to the test database
 #'
