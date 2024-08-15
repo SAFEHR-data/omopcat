@@ -1,1 +1,4 @@
-/dev/
+# Ignore golem dev scripts
+/dev/01_start.R
+/dev/02_dev.R
+/dev/03_deploy.R
