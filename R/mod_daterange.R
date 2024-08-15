@@ -7,7 +7,7 @@
 #' @importFrom shiny NS tagList
 mod_date_range_ui <- function(id) {
   ns <- NS(id)
-  # TODO: decide on which option to keep; dateRangeInput or sliderInput
+
   tagList(
     dateRangeInput(
       ns("date_range"), "Date range",
@@ -17,12 +17,6 @@ mod_date_range_ui <- function(id) {
       end = as.Date("2024-08-01"),
       startview = "decade",
       format = "yyyy-mm",
-    ),
-    sliderInput(ns("slider"), "Date range:",
-                min = as.Date("2019-04-01", "%Y-%m-%d"),
-                max = as.Date("2024-08-01", "%Y-%m-%d"),
-                value = c(as.Date("2019-04-01"), as.Date("2024-08-01")),
-                timeFormat = "%Y-%m"
     )
   )
 }
@@ -32,7 +26,5 @@ mod_date_range_ui <- function(id) {
 #' @noRd
 mod_date_range_server <- function(id) {
   moduleServer(id, function(input, output, session) {
-    ns <- session$ns
   })
 }
-
