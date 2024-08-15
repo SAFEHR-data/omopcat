@@ -52,7 +52,7 @@ The `dev/02_dev.R` script contains a few helper functions to get you started.
 
 ### Updating the `renv` lockfile
 
-Make sure to regularly run `renv::status()` to check if your local library and the lockfile
+Make sure to regularly run `renv::status(dev = TRUE)` to check if your local library and the lockfile
 are up to date.
 
 When adding a new dependency, install it in the `renv` library with
@@ -67,10 +67,10 @@ and then use it in your code as usual.
 To update the lockfile, run
 
 ```r
-renv::snapshot(dep = TRUE)
+renv::snapshot(dev = TRUE)
 ```
 
-The `dep = TRUE` argument ensures that development dependencies (e.g. those recorded under
+The `dev = TRUE` argument ensures that development dependencies (e.g. those recorded under
 `Suggests` in the `DESCRIPTION` file) are also included in the lockfile.
  
 ### Design
