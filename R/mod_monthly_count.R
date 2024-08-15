@@ -31,7 +31,10 @@ mod_monthly_count_server <- function(id, selected_row) {
     selected_concept <- reactive(selected_row()$name)
 
     output$monthly_count_plot <- renderPlot({
-      monthly_count_plot(monthly_count, selected_concept())
+      ## Only show plot when a concept is selected
+      if (length(selected_concept())) {
+        monthly_count_plot(monthly_count, selected_concept())
+      }
     })
   })
 }
