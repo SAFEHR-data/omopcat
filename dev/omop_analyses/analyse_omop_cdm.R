@@ -193,6 +193,5 @@ rm(sql)
 rm(dir)
 rm(name)
 rm(version)
-gc()
 
 detach("package:tidyverse", unload = TRUE)
