@@ -15,14 +15,14 @@ app_ui <- function(request) {
       sidebar = sidebar(
         title = "Filtering options",
         mod_select_concepts_ui("select_concepts"),
-        mod_date_range_ui("date_range_1"),
+        mod_date_range_ui("date_range"),
       ),
       nav_panel(
         title = "Dashboard",
         card(mod_datatable_ui("totals")),
         layout_columns(
-          card(mod_monthly_count_ui("monthly_count_1")),
-          card(mod_stat_numeric_ui("stat_numeric_1"))
+          card(mod_monthly_count_ui("monthly_count")),
+          card(mod_stat_numeric_ui("stat_numeric"))
         )
       ),
       nav_panel(
