@@ -10,12 +10,18 @@
 monthly_count_plot <- function(monthly_counts, name) {
   stopifnot(is.data.frame(monthly_counts))
   stopifnot(is.character(name))
-  stopifnot(all(c("date", "record_count") %in% colnames(monthly_counts)))
+  stopifnot(all(c("date_year", "date_month", "person_count") %in% colnames(monthly_counts)))
 
-  date <- record_count <- NULL
-  ggplot(monthly_counts, aes(x = date, y = record_count)) +
+  monthly_counts$date <- .convert_to_date(monthly_counts$date_year, monthly_counts$date_month)
+
+  date <- person_count <- NULL
+  ggplot(monthly_counts, aes(x = date, y = person_count)) +
     geom_bar(stat = "identity") +
     ggtitle(name) +
     xlab("Month") +
     ylab("Number of records")
+}
+
+.convert_to_date <- function(date_year, date_month) {
+  as.Date(paste0(date_year, "-", date_month, "-01"))
 }
