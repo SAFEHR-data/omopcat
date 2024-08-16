@@ -7,8 +7,9 @@
 #' @importFrom ggplot2 ggplot aes geom_boxplot
 #' @noRd
 stat_numeric_plot <- function(summary_stat) {
-  mean <- sd <- concept <- NULL
-  ggplot(summary_stat, aes(x = concept)) +
+  mean <- sd <- concept_id <- NULL
+  # FIXME: need to convert data to proper format for the plot
+  ggplot(summary_stat, aes(x = concept_id)) +
     geom_boxplot(
       aes(
         lower = mean - sd,
