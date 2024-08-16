@@ -14,23 +14,15 @@ mod_stat_numeric_ui <- function(id) {
   )
 }
 
+# TODO: this module needs unit tests
+
 #' stat_numeric Server Functions
 #'
 #' @noRd
-mod_stat_numeric_server <- function(id, summary_stats, selected_row) {
-  stopifnot(is.data.frame(summary_stats))
-  stopifnot(is.reactive(selected_row))
+mod_stat_numeric_server <- function(id, summary_stats) {
+  stopifnot(is.reactive(summary_stats))
 
   moduleServer(id, function(input, output, session) {
-    selected_concept_id <- reactive(selected_row()$concept_id)
-    summary_stats <- reactive({
-      # When no row is selected, show nothing
-      if (!length(selected_concept())) {
-        return(NULL)
-      }
-      summary_stats()[summary_stats()$concept_id == selected_concept_id(), ]
-    })
-
     output$stat_numeric_plot <- renderPlot({
       stat_numeric_plot(summary_stats())
     })

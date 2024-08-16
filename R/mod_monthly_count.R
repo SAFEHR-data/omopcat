@@ -14,24 +14,18 @@ mod_monthly_count_ui <- function(id) {
   )
 }
 
+# TODO: this module needs unit tests
+
 #' monthly_count Server Functions
 #'
 #' @noRd
-mod_monthly_count_server <- function(id, monthly_counts, selected_row) {
-  stopifnot(is.data.frame(monthly_counts))
-  stopifnot(is.reactive(selected_row))
+mod_monthly_count_server <- function(id, monthly_counts, concept_name) {
+  stopifnot(is.reactive(monthly_counts))
+  stopifnot(is.reactive(concept_name))
 
   moduleServer(id, function(input, output, session) {
-    selected_concept_id <- reactive(selected_row()$concept_id)
-    selected_concept_name <- reactive(selected_row()$concept_name)
-    monthly_counts <- reactive({
-      # When no row is selected, show nothing
-      if (!length(selected_concept_id())) return(NULL)
-      monthly_counts()[monthly_counts()$concept_id == selected_concept_id(), ]
-    })
-
     output$monthly_count_plot <- renderPlot({
-      monthly_count_plot(monthly_counts(), selected_concept_name())
+      monthly_count_plot(monthly_counts(), concept_name())
     })
   })
 }
