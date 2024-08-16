@@ -17,26 +17,22 @@ mod_stat_numeric_ui <- function(id) {
 #' stat_numeric Server Functions
 #'
 #' @noRd
-mod_stat_numeric_server <- function(id, selected_row) {
+mod_stat_numeric_server <- function(id, summary_stats, selected_row) {
+  stopifnot(is.data.frame(summary_stats))
   stopifnot(is.reactive(selected_row))
 
   moduleServer(id, function(input, output, session) {
-    selected_concept <- reactive(selected_row()$name)
-    summary_stat <- reactive({
+    selected_concept_id <- reactive(selected_row()$concept_id)
+    summary_stats <- reactive({
       # When no row is selected, show nothing
-      if (!length(selected_concept())) return(NULL)
-
-      data.frame(
-        concept = selected_concept(),
-        sd = 0.8280661,
-        mean = 5.843
-      )
+      if (!length(selected_concept())) {
+        return(NULL)
+      }
+      summary_stats()[summary_stats()$concept_id == selected_concept_id(), ]
     })
 
     output$stat_numeric_plot <- renderPlot({
-      if (!is.null(summary_stat())) {
-        stat_numeric_plot(summary_stat())
-      }
+      stat_numeric_plot(summary_stats())
     })
   })
 }

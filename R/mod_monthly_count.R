@@ -17,24 +17,21 @@ mod_monthly_count_ui <- function(id) {
 #' monthly_count Server Functions
 #'
 #' @noRd
-mod_monthly_count_server <- function(id, selected_row) {
+mod_monthly_count_server <- function(id, monthly_counts, selected_row) {
+  stopifnot(is.data.frame(monthly_counts))
   stopifnot(is.reactive(selected_row))
 
   moduleServer(id, function(input, output, session) {
-    # TODO:: to be replaced with the actual data
-    monthly_count <- data.frame(
-      date = c("2020-01", "2020-02", "2020-03", "2020-04"),
-      record_count = c(120, 250, 281, 220)
-    )
-
-    # TODO: Filter data on the concept_id from the selected row
-    selected_concept <- reactive(selected_row()$name)
+    selected_concept_id <- reactive(selected_row()$concept_id)
+    selected_concept_name <- reactive(selected_row()$concept_name)
+    monthly_counts <- reactive({
+      # When no row is selected, show nothing
+      if (!length(selected_concept_id())) return(NULL)
+      monthly_counts()[monthly_counts()$concept_id == selected_concept_id(), ]
+    })
 
     output$monthly_count_plot <- renderPlot({
-      ## Only show plot when a concept is selected
-      if (length(selected_concept())) {
-        monthly_count_plot(monthly_count, selected_concept())
-      }
+      monthly_count_plot(monthly_counts(), selected_concept_name())
     })
   })
 }
