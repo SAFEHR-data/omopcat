@@ -49,6 +49,8 @@ as it has good support for R package development and Shiny.
     ```
 
 The `dev/02_dev.R` script contains a few helper functions to get you started.
+
+Calypso test data can be found in [`inst/test_data`](https://github.com/UCLH-Foundry/omop-data-catalogue/tree/main/inst/data).
  
 ### Design
 
