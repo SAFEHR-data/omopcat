@@ -7,6 +7,7 @@
 app_server <- function(input, output, session) {
   # Get the input tables
   concepts_table <- get_concepts_table()
+  ## These need to be reactive so they respond to filtering
   monthly_counts <- get_monthly_counts()
   summary_stats <- get_summary_stats()
 
@@ -14,11 +15,20 @@ app_server <- function(input, output, session) {
   mod_date_range_server("date_range")
 
   selected_row <- mod_datatable_server("totals", selected_data)
-  monthly_counts <- get_monthly_counts()
-  mod_monthly_count_server("monthly_count", monthly_counts, selected_row)
 
-  summary_stats <- get_summary_stats()
-  mod_stat_numeric_server("stat_numeric", summary_stats, selected_row)
+  ## Filter monthly_counts and summary_stats based on selected_row
+  selected_concept_id <- reactive(selected_row()$concept_id)
+  selected_concept_name <- reactive(selected_row()$concept_name)
+  filtered_monthly_counts <- reactive({
+    if (!length(selected_concept_id())) return(NULL)
+    monthly_counts[monthly_counts$concept_id == selected_concept_id(), ]
+  })
+  filtered_summary_stats <- reactive({
+    if (!length(selected_concept_id())) return(NULL)
+    summary_stats[summary_stats$concept_id == selected_concept_id(), ]
+  })
+  mod_monthly_count_server("monthly_count", filtered_monthly_counts, selected_concept_name)
+  mod_stat_numeric_server("stat_numeric", filtered_summary_stats)
 
   mod_export_tab_server("export_tab", selected_data)
 }
