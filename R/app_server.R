@@ -16,15 +16,22 @@ app_server <- function(input, output, session) {
 
   selected_row <- mod_datatable_server("totals", selected_data)
 
+  # TODO: would it make sense to have just one plotting module that handles data filtering and
+  # produces both plots?
+
   ## Filter monthly_counts and summary_stats based on selected_row
   selected_concept_id <- reactive(selected_row()$concept_id)
   selected_concept_name <- reactive(selected_row()$concept_name)
   filtered_monthly_counts <- reactive({
-    if (!length(selected_concept_id())) return(NULL)
+    if (!length(selected_concept_id())) {
+      return(NULL)
+    }
     monthly_counts[monthly_counts$concept_id == selected_concept_id(), ]
   })
   filtered_summary_stats <- reactive({
-    if (!length(selected_concept_id())) return(NULL)
+    if (!length(selected_concept_id())) {
+      return(NULL)
+    }
     summary_stats[summary_stats$concept_id == selected_concept_id(), ]
   })
   mod_monthly_count_server("monthly_count", filtered_monthly_counts, selected_concept_name)
