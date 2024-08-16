@@ -1,29 +1,8 @@
 concept_id,concept_name,domain_id,vocabulary_id,concept_class_id,standard_concept,concept_code
-4078793,Direct current cardioversion,Procedure,SNOMED,Procedure,S,180325003
-4057420,Catheter ablation of tissue of heart,Procedure,SNOMED,Procedure,S,18286008
-40243436,1 ML atropine sulfate 1 MG/ML Injection,Drug,RxNorm,Quant Clinical Drug,S,1190795
-46275916,1 ML epinephrine 1 MG/ML Injection,Drug,RxNorm,Quant Clinical Drug,S,1660014
-40220960,alteplase 100 MG Injection,Drug,RxNorm,Clinical Drug,S,1804799
-1332419,amlodipine 5 MG Oral Tablet,Drug,RxNorm,Clinical Drug,S,197361
-19018935,digoxin 0.125 MG Oral Tablet,Drug,RxNorm,Clinical Drug,S,197604
-4329847,Myocardial infarction,Condition,SNOMED,Clinical Finding,S,22298006
-381316,Cerebrovascular accident,Condition,SNOMED,Clinical Finding,S,230690007
-4336464,Coronary artery bypass graft,Procedure,SNOMED,Procedure,S,232717009
-4108450,Inspiration/expiration time ratio,Measurement,SNOMED,Observable Entity,S,250822000
-4353713,Positive end expiratory pressure,Observation,SNOMED,Observable Entity,S,250854009
-4353717,Ventilator delivered minute volume,Observation,SNOMED,Observable Entity,S,250875001
-4354252,Non-invasive systolic arterial pressure,Measurement,SNOMED,Observable Entity,S,251070002
-4353843,Invasive systolic arterial pressure,Measurement,SNOMED,Observable Entity,S,251071003
-4128111,T - Tumor stage,Observation,SNOMED,Attribute,S,260878002
-4230911,Echocardiography,Procedure,SNOMED,Procedure,S,40701008
-4248525,Lying systolic blood pressure,Measurement,SNOMED,Observable Entity,S,407556006
-4257036,Antenatal hepatitis B blood screening test status,Observation,SNOMED,Clinical Finding,S,408823004
-321042,Cardiac arrest,Condition,SNOMED,Clinical Finding,S,410429000
-4216130,Percutaneous coronary intervention,Procedure,SNOMED,Procedure,S,415070008
-4216746,Positive end expiratory pressure setting,Observation,SNOMED,Observable Entity,S,416595007
-4202451,Percutaneous mechanical thrombectomy of portal vein using fluoroscopic guidance,Procedure,SNOMED,Procedure,S,433112001
-40492359,Insertion of biventricular implantable cardioverter defibrillator,Procedure,SNOMED,Procedure,S,447365002
-313217,Atrial fibrillation,Condition,SNOMED,Clinical Finding,S,49436004
+19133768,acetaminophen 750 MG / hydrocodone bitartrate 7.5 MG Oral Tablet,Drug,RxNorm,Clinical Drug,S,833036
+1310034,3 ML amiodarone hydrochloride 50 MG/ML Prefilled Syringe,Drug,RxNorm,Quant Clinical Drug,S,834357
+40163554,warfarin sodium 5 MG Oral Tablet,Drug,RxNorm,Clinical Drug,S,855332
+40171902,verapamil hydrochloride 40 MG,Drug,RxNorm,Clinical Drug Comp,S,897718
 40213183,"measles, mumps and rubella virus vaccine",Drug,CVX,CVX,S,03
 40213304,"hepatitis B vaccine, pediatric or pediatric/adolescent dosage",Drug,CVX,CVX,S,08
 40213160,"poliovirus vaccine, inactivated",Drug,CVX,CVX,S,10
@@ -42,17 +21,38 @@ concept_id,concept_name,domain_id,vocabulary_id,concept_class_id,standard_concep
 40213296,"hepatitis A vaccine, adult dosage",Drug,CVX,CVX,S,52
 40213320,"human papilloma virus vaccine, quadrivalent",Drug,CVX,CVX,S,62
 40213299,"hepatitis A vaccine, pediatric/adolescent dosage, 2 dose schedule",Drug,CVX,CVX,S,83
-19133768,acetaminophen 750 MG / hydrocodone bitartrate 7.5 MG Oral Tablet,Drug,RxNorm,Clinical Drug,S,833036
-1310034,3 ML amiodarone hydrochloride 50 MG/ML Prefilled Syringe,Drug,RxNorm,Quant Clinical Drug,S,834357
-40163554,warfarin sodium 5 MG Oral Tablet,Drug,RxNorm,Clinical Drug,S,855332
-40171902,verapamil hydrochloride 40 MG,Drug,RxNorm,Clinical Drug Comp,S,897718
-1545959,atorvastatin 80 MG Oral Tablet,Drug,RxNorm,Clinical Drug,S,259255
-19075601,clopidogrel 75 MG Oral Tablet,Drug,RxNorm,Clinical Drug,S,309362
-1539411,simvastatin 20 MG Oral Tablet,Drug,RxNorm,Clinical Drug,S,312961
-19126352,nitroglycerin 0.4 MG/ACTUAT Mucosal Spray,Drug,RxNorm,Clinical Drug,S,705129
+4078793,Direct current cardioversion,Procedure,SNOMED,Procedure,S,180325003
+4057420,Catheter ablation of tissue of heart,Procedure,SNOMED,Procedure,S,18286008
+3001079,Blood group antibody screen [Presence] in Serum or Plasma,Measurement,LOINC,Lab Test,S,890-4
+4329847,Myocardial infarction,Condition,SNOMED,Clinical Finding,S,22298006
+381316,Cerebrovascular accident,Condition,SNOMED,Clinical Finding,S,230690007
+4336464,Coronary artery bypass graft,Procedure,SNOMED,Procedure,S,232717009
+4108450,Inspiration/expiration time ratio,Measurement,SNOMED,Observable Entity,S,250822000
+4353713,Positive end expiratory pressure,Observation,SNOMED,Observable Entity,S,250854009
+4353717,Ventilator delivered minute volume,Observation,SNOMED,Observable Entity,S,250875001
+4354252,Non-invasive systolic arterial pressure,Measurement,SNOMED,Observable Entity,S,251070002
+4353843,Invasive systolic arterial pressure,Measurement,SNOMED,Observable Entity,S,251071003
+4128111,T - Tumor stage,Observation,SNOMED,Attribute,S,260878002
+4230911,Echocardiography,Procedure,SNOMED,Procedure,S,40701008
+4248525,Lying systolic blood pressure,Measurement,SNOMED,Observable Entity,S,407556006
+4257036,Antenatal hepatitis B blood screening test status,Observation,SNOMED,Clinical Finding,S,408823004
+321042,Cardiac arrest,Condition,SNOMED,Clinical Finding,S,410429000
+4216130,Percutaneous coronary intervention,Procedure,SNOMED,Procedure,S,415070008
+4216746,Positive end expiratory pressure setting,Observation,SNOMED,Observable Entity,S,416595007
+4202451,Percutaneous mechanical thrombectomy of portal vein using fluoroscopic guidance,Procedure,SNOMED,Procedure,S,433112001
+40492359,Insertion of biventricular implantable cardioverter defibrillator,Procedure,SNOMED,Procedure,S,447365002
+313217,Atrial fibrillation,Condition,SNOMED,Clinical Finding,S,49436004
 317576,Coronary arteriosclerosis,Condition,SNOMED,Clinical Finding,S,53741008
 45766147,Appearance,Observation,SNOMED,Observable Entity,S,703248002
 45767945,Coronary artery stent,Device,SNOMED,Physical Object,S,705643001
 45772840,Implantable cardiac pacemaker,Device,SNOMED,Physical Object,S,706004007
 4217646,Implantable defibrillator,Device,SNOMED,Physical Object,S,72506001
-3001079,Blood group antibody screen [Presence] in Serum or Plasma,Measurement,LOINC,Lab Test,S,890-4
+1545959,atorvastatin 80 MG Oral Tablet,Drug,RxNorm,Clinical Drug,S,259255
+19075601,clopidogrel 75 MG Oral Tablet,Drug,RxNorm,Clinical Drug,S,309362
+1539411,simvastatin 20 MG Oral Tablet,Drug,RxNorm,Clinical Drug,S,312961
+19126352,nitroglycerin 0.4 MG/ACTUAT Mucosal Spray,Drug,RxNorm,Clinical Drug,S,705129
+40243436,1 ML atropine sulfate 1 MG/ML Injection,Drug,RxNorm,Quant Clinical Drug,S,1190795
+46275916,1 ML epinephrine 1 MG/ML Injection,Drug,RxNorm,Quant Clinical Drug,S,1660014
+40220960,alteplase 100 MG Injection,Drug,RxNorm,Clinical Drug,S,1804799
+1332419,amlodipine 5 MG Oral Tablet,Drug,RxNorm,Clinical Drug,S,197361
+19018935,digoxin 0.125 MG Oral Tablet,Drug,RxNorm,Clinical Drug,S,197604
