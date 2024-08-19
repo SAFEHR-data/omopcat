@@ -1,3 +1,11 @@
+mock_stats <- data.frame(
+  concept_id = rep(c(40213251, 133834, 4057420), each = 2),
+  summary_attribute = rep(c("mean", "sd"), times = 3),
+  value_as_string = rep(NA, 6),
+  value_as_number = c(1.5, 0.5, 2.5, 0.7, 3.5, 0.8)
+)
+
+
 # Application-logic tests ---------------------------------------------------------------------
 mock_concept_row <- reactiveVal()
 
@@ -5,21 +13,23 @@ test_that("mod_stat_numeric_server reacts to changes in the selected concept", {
   testServer(
     mod_stat_numeric_server,
     # Add here your module params
-    args = list(selected_concept = mock_concept_row),
+    args = list(data = mock_stats, selected_concept = mock_concept_row),
     {
       ns <- session$ns
       expect_true(inherits(ns, "function"))
       expect_true(grepl(id, ns("")))
       expect_true(grepl("test", ns("test")))
 
-      mock_concept_row(list(concept_id = 40213251, concept_name = "test"))
+      selected_row <- list(concept_id = 40213251, concept_name = "test")
+      mock_concept_row(selected_row) # update reactive value
       session$flushReact()
-      expect_identical(unique(filtered_summary_stats()$concept_id), 40213251)
+      expect_identical(unique(filtered_summary_stats()$concept_id), selected_row$concept_id)
       expect_equal(nrow(filtered_summary_stats()), 2)
 
-      mock_concept_row(list(concept_id = 133834, concept_name = "test"))
+      selected_row2 <- list(concept_id = 40213251, concept_name = "test")
+      mock_concept_row(selected_row2) # update reactive value
       session$flushReact()
-      expect_identical(unique(filtered_summary_stats()$concept_id), 133834)
+      expect_identical(unique(filtered_summary_stats()$concept_id), selected_row2$concept_id)
       expect_equal(nrow(filtered_summary_stats()), 2)
     }
   )
@@ -28,7 +38,7 @@ test_that("mod_stat_numeric_server reacts to changes in the selected concept", {
 test_that("mod_stat_numeric_server generates an empty plot when no row is selected", {
   testServer(
     mod_stat_numeric_server,
-    args = list(selected_concept = reactiveVal(NULL)),
+    args = list(data = mock_stats, selected_concept = reactiveVal(NULL)),
     {
       # When no concept_id is selected, no plot should be rendered
       expect_length(output$stat_numeric_plot$coordmap$panels[[1]]$mapping, 0)
@@ -48,13 +58,6 @@ test_that("module ui works", {
 
 
 # Business-logic tests ------------------------------------------------------------------------
-
-mock_stats <- data.frame(
-  concept_id = rep(c(40213251, 133834, 4057420), each = 2),
-  summary_attribute = rep(c("mean", "sd"), times = 3),
-  value_as_string = rep(NA, 6),
-  value_as_number = c(1.5, 0.5, 2.5, 0.7, 3.5, 0.8)
-)
 
 test_that("stat_numeric_plot correctly processes data", {
   # GIVEN: a data frame with summary statistics that still needs to be processed before plotting
