@@ -25,6 +25,8 @@ mod_monthly_count_server <- function(id, monthly_counts, concept_name) {
 
   moduleServer(id, function(input, output, session) {
     output$monthly_count_plot <- renderPlot({
+      ## Return empty plot if no data is selected
+      if (is.null(monthly_counts())) return(NULL)
       monthly_count_plot(monthly_counts(), concept_name())
     })
   })

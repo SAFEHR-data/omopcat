@@ -7,8 +7,6 @@
 #' @importFrom ggplot2 ggplot aes geom_bar ggtitle xlab ylab
 #' @noRd
 monthly_count_plot <- function(monthly_counts, plot_title) {
-  if (is.null(monthly_counts)) return(NULL)
-
   stopifnot(is.data.frame(monthly_counts))
   stopifnot(is.character(plot_title))
   stopifnot(all(c("date_year", "date_month", "person_count") %in% colnames(monthly_counts)))
