@@ -17,7 +17,10 @@ mod_monthly_count_ui <- function(id) {
 #' monthly_count Server Functions
 #'
 #' Generates the monthly count plot for a given concept. When no concept was selected,
-#' an empty plot is returned.
+#' an empty plot is generated.
+#'
+#' @param data `data.frame` containing the data to be plotted.
+#' @param selected_concept Reactive value containing the selected concept, used for filtering
 #'
 #' @noRd
 mod_monthly_count_server <- function(id, data, selected_concept) {

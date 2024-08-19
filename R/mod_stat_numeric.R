@@ -19,6 +19,9 @@ mod_stat_numeric_ui <- function(id) {
 #' Generates the boxplot of the summary statistics for a numeric concept.
 #' When no concept was selected, an empty plot is returned.
 #'
+#' @param data `data.frame` containing the data to be plotted.
+#' @param selected_concept Reactive value containing the selected concept, used for filtering
+#'
 #' @noRd
 mod_stat_numeric_server <- function(id, data, selected_concept) {
   stopifnot(is.data.frame(data))
