@@ -26,7 +26,7 @@ test_that("datatable server works", {
       out <- session$getReturned()
       expect_true(is.reactive(out))
       expect_s3_class(out(), "data.frame")
-      expect_true(inherits(output$datatable, "json"))
+      expect_s3_class(output$datatable, "json")
     }
   )
 })
