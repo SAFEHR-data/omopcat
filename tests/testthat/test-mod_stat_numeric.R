@@ -1,25 +1,40 @@
-testServer(
-  mod_stat_numeric_server,
-  # Add here your module params
-  args = list(),
-  {
-    ns <- session$ns
-    expect_true(inherits(ns, "function"))
-    expect_true(grepl(id, ns("")))
-    expect_true(grepl("test", ns("test")))
-    # Here are some examples of tests you can
-    # run on your module
-    # - Testing the setting of inputs
-    # session$setInputs(x = 1)
-    # expect_true(input$x == 1)
-    # - If ever your input updates a reactiveValues
-    # - Note that this reactiveValues must be passed
-    # - to the testServer function via args = list()
-    # expect_true(r$x == 1)
-    # - Testing output
-    # expect_true(inherits(output$tbl$html, "html"))
-  }
-)
+# Application-logic tests ---------------------------------------------------------------------
+mock_concept_row <- reactiveVal()
+
+test_that("mod_stat_numeric_server reacts to changes in the selected concept", {
+  testServer(
+    mod_stat_numeric_server,
+    # Add here your module params
+    args = list(selected_concept = mock_concept_row),
+    {
+      ns <- session$ns
+      expect_true(inherits(ns, "function"))
+      expect_true(grepl(id, ns("")))
+      expect_true(grepl("test", ns("test")))
+
+      mock_concept_row(list(concept_id = 40213251, concept_name = "test"))
+      session$flushReact()
+      expect_identical(unique(filtered_summary_stats()$concept_id), 40213251)
+      expect_equal(nrow(filtered_summary_stats()), 2)
+
+      mock_concept_row(list(concept_id = 133834, concept_name = "test"))
+      session$flushReact()
+      expect_identical(unique(filtered_summary_stats()$concept_id), 133834)
+      expect_equal(nrow(filtered_summary_stats()), 2)
+    }
+  )
+})
+
+test_that("mod_stat_numeric_server generates an empty plot when no row is selected", {
+  testServer(
+    mod_stat_numeric_server,
+    args = list(selected_concept = reactiveVal(NULL)),
+    {
+      # When no concept_id is selected, no plot should be rendered
+      expect_length(output$stat_numeric_plot$coordmap$panels[[1]]$mapping, 0)
+    }
+  )
+})
 
 test_that("module ui works", {
   ui <- mod_stat_numeric_ui(id = "test")
@@ -31,19 +46,24 @@ test_that("module ui works", {
   }
 })
 
+
+# Business-logic tests ------------------------------------------------------------------------
+
+mock_stats <- data.frame(
+  concept_id = rep(c(40213251, 133834, 4057420), each = 2),
+  summary_attribute = rep(c("mean", "sd"), times = 3),
+  value_as_string = rep(NA, 6),
+  value_as_number = c(1.5, 0.5, 2.5, 0.7, 3.5, 0.8)
+)
+
 test_that("stat_numeric_plot correctly processes data", {
   # GIVEN: a data frame with summary statistics that still needs to be processed before plotting
   # WHEN: stat_numeric_plot is called with this data
   # THEN: the data is first processed correctly and a plot is generated without errors
-  mock_stats <- data.frame(
-    concept_id = c(40213251, 40213251),
-    summary_attribute = c("mean", "sd"),
-    value_as_string = c(NA, NA),
-    value_as_number = c(1.5, 0.5)
-  )
+  mock_stats <- mock_stats[mock_stats$concept_id == 40213251, ]
   expected_data <- data.frame(concept_id = 40213251, mean = 1.5, sd = 0.5)
 
-  p <- stat_numeric_plot(mock_stats)
+  p <- stat_numeric_plot(mock_stats, plot_title = "test")
   expect_identical(as.data.frame(p$data), expected_data)
 })
 
@@ -58,5 +78,5 @@ test_that("stat_numeric_plot only works for a single concept", {
     value_as_number = c(1.5, 0.5, 2.5, 0.7)
   )
 
-  expect_error(stat_numeric_plot(mock_stats), "Expecting a single concept ID")
+  expect_error(stat_numeric_plot(mock_stats, plot_title = "test"), "Expecting a single concept ID")
 })
