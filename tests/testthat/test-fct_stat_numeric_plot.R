@@ -4,7 +4,7 @@ test_that("stat_numeric_plot correctly processes data", {
   # THEN: the data is first processed correctly and a plot is generated without errors
   mock_stats <- data.frame(
     concept_id = c(40213251, 40213251),
-    summary_attribbute = c("mean", "sd"),
+    summary_attribute = c("mean", "sd"),
     value_as_string = c(NA, NA),
     value_as_number = c(1.5, 0.5)
   )
@@ -20,7 +20,7 @@ test_that("stat_numeric_plot only works for a single concept", {
   # THEN: an error is thrown because the function only works for a single concept
   mock_stats <- data.frame(
     concept_id = rep(c(40213251, 40213252), each = 2),
-    summary_attribbute = c("mean", "sd", "mean", "sd"),
+    summary_attribute = c("mean", "sd", "mean", "sd"),
     value_as_string = c(NA, NA, NA, NA),
     value_as_number = c(1.5, 0.5, 2.5, 0.7)
   )

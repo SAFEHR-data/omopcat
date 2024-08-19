@@ -50,7 +50,7 @@ get_summary_stats <- function() {
     return(
       data.frame(
         concept_id = rep(c(40213251, 133834, 4057420), each = 2),
-        summary_attribbute = rep(c("mean", "sd"), times = 3),
+        summary_attribute = rep(c("mean", "sd"), times = 3),
         value_as_string = rep(NA, 6),
         value_as_number = c(1.5, 0.5, 2.5, 0.7, 3.5, 0.8)
       )
