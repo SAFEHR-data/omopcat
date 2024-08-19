@@ -13,7 +13,8 @@ Imports:
     shiny (>= 1.9.1),
     DBI,
     duckdb,
-    glue
+    glue,
+    tidyr
 Suggests:
     devtools,
     usethis,

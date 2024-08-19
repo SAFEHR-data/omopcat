@@ -6,10 +6,10 @@
 #'
 #' @importFrom ggplot2 ggplot aes geom_boxplot
 #' @noRd
-stat_numeric_plot <- function(summary_stat) {
+stat_numeric_plot <- function(summary_stats) {
   mean <- sd <- concept_id <- NULL
-  # FIXME: need to convert data to proper format for the plot
-  ggplot(summary_stat, aes(x = concept_id)) +
+  processed_stats <- .process_summary_stats(summary_stats)
+  ggplot(processed_stats, aes(x = concept_id)) +
     geom_boxplot(
       aes(
         lower = mean - sd,
@@ -20,4 +20,14 @@ stat_numeric_plot <- function(summary_stat) {
       ),
       stat = "identity"
     )
+}
+
+.process_summary_stats <- function(summary_stats) {
+  # We expect only single concept ID at this point
+  stopifnot("Expecting a single concept ID" = length(unique(summary_stats$concept_id)) == 1)
+  tidyr::pivot_wider(summary_stats,
+    id_cols = "concept_id",
+    names_from = "summary_attribbute",
+    values_from = "value_as_number"
+  )
 }
