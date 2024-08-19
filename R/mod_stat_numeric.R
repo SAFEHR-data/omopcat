@@ -14,23 +14,35 @@ mod_stat_numeric_ui <- function(id) {
   )
 }
 
-# TODO: this module needs unit tests
-
 #' stat_numeric Server Functions
 #'
 #' Generates the boxplot of the summary statistics for a numeric concept.
 #' When no concept was selected, an empty plot is returned.
 #'
 #' @noRd
-mod_stat_numeric_server <- function(id, summary_stats, concept_name) {
-  stopifnot(is.reactive(summary_stats))
-  stopifnot(is.reactive(concept_name))
+mod_stat_numeric_server <- function(id, selected_concept) {
+  stopifnot(is.reactive(selected_concept))
+
+  ## Load in summary stats data
+  summary_stats <- get_summary_stats()
 
   moduleServer(id, function(input, output, session) {
+    # Filter data based on the selected row
+    selected_concept_id <- reactive(selected_concept()$concept_id)
+    selected_concept_name <- reactive(selected_concept()$concept_name)
+
+    ## When no row selected, return an empty plot
+    filtered_summary_stats <- reactive({
+      if (!length(selected_concept_id())) {
+        return(NULL)
+      }
+      summary_stats[summary_stats$concept_id == selected_concept_id(), ]
+    })
+
     output$stat_numeric_plot <- renderPlot({
       ## Return empty plot if no data is selected
-      if (is.null(summary_stats())) return(NULL)
-      stat_numeric_plot(summary_stats(), concept_name())
+      if (is.null(filtered_summary_stats())) return(NULL)
+      stat_numeric_plot(filtered_summary_stats(), selected_concept_name())
     })
   })
 }

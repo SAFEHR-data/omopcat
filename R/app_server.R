@@ -8,7 +8,6 @@ app_server <- function(input, output, session) {
   # Get the input tables
   concepts_table <- get_concepts_table()
   monthly_counts <- get_monthly_counts()
-  summary_stats <- get_summary_stats()
 
   selected_data <- mod_select_concepts_server("select_concepts", concepts_table)
   mod_date_range_server("date_range")
@@ -27,14 +26,8 @@ app_server <- function(input, output, session) {
     }
     monthly_counts[monthly_counts$concept_id == selected_concept_id(), ]
   })
-  filtered_summary_stats <- reactive({
-    if (!length(selected_concept_id())) {
-      return(NULL)
-    }
-    summary_stats[summary_stats$concept_id == selected_concept_id(), ]
-  })
   mod_monthly_count_server("monthly_count", filtered_monthly_counts, selected_concept_name)
-  mod_stat_numeric_server("stat_numeric", filtered_summary_stats, selected_concept_name)
+  mod_stat_numeric_server("stat_numeric", selected_row)
 
   mod_export_tab_server("export_tab", selected_data)
 }
