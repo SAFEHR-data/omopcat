@@ -14,23 +14,31 @@ mod_monthly_count_ui <- function(id) {
   )
 }
 
-# TODO: this module needs unit tests
-
 #' monthly_count Server Functions
 #'
 #' Generates the monthly count plot for a given concept. When no concept was selected,
 #' an empty plot is returned.
 #'
 #' @noRd
-mod_monthly_count_server <- function(id, monthly_counts, concept_name) {
-  stopifnot(is.reactive(monthly_counts))
-  stopifnot(is.reactive(concept_name))
+mod_monthly_count_server <- function(id, data, selected_concept) {
+  stopifnot(is.data.frame(data))
+  stopifnot(is.reactive(selected_concept))
+
 
   moduleServer(id, function(input, output, session) {
+    ## Filter data based on selected_row
+    selected_concept_id <- reactive(selected_concept()$concept_id)
+    selected_concept_name <- reactive(selected_concept()$concept_name)
+    filtered_monthly_counts <- reactive({
+      if (!length(selected_concept_id())) {
+        return(NULL)
+      }
+      data[data$concept_id == selected_concept_id(), ]
+    })
     output$monthly_count_plot <- renderPlot({
       ## Return empty plot if no data is selected
-      if (is.null(monthly_counts())) return(NULL)
-      monthly_count_plot(monthly_counts(), concept_name())
+      if (is.null(filtered_monthly_counts())) return(NULL)
+      monthly_count_plot(filtered_monthly_counts(), selected_concept_name())
     })
   })
 }
