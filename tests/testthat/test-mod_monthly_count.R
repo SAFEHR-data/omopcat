@@ -7,6 +7,7 @@ mock_monthly_counts <- data.frame(
 )
 
 # Application-logic tests ---------------------------------------------------------------------
+
 mock_concept_row <- reactiveVal()
 
 test_that("mod_monthly_count_server reacts to changes in the selected concept", {
@@ -52,4 +53,21 @@ test_that("module ui works", {
   for (i in c("id")) {
     expect_true(i %in% names(fmls))
   }
+})
+
+
+# Business-logic tests ------------------------------------------------------------------------
+
+test_that("monthly_count_plot correctly parses dates", {
+  mock_counts <- mock_monthly_counts[mock_monthly_counts$concept_id == 40213251, ]
+  expected_data <- mock_counts
+  expected_data$date <- as.Date(paste0(
+    expected_data$date_year, "-", expected_data$date_month, "-01"
+  ))
+
+  p <- monthly_count_plot(mock_counts, plot_title = "test")
+  expect_s3_class(p, "ggplot")
+  expect_identical(as.data.frame(p$data), expected_data)
+  expect_false(is.null(p$mapping))
+  expect_false(is.null(p$layers))
 })
