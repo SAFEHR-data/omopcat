@@ -1,6 +1,6 @@
 #' monthly_count UI Function
 #'
-#' @description A shiny Module.
+#' Displays the monthly count plot.
 #'
 #' @param id,input,output,session Internal parameters for {shiny}.
 #'
@@ -17,6 +17,9 @@ mod_monthly_count_ui <- function(id) {
 # TODO: this module needs unit tests
 
 #' monthly_count Server Functions
+#'
+#' Generates the monthly count plot for a given concept. When no concept was selected,
+#' an empty plot is returned.
 #'
 #' @noRd
 mod_monthly_count_server <- function(id, monthly_counts, concept_name) {

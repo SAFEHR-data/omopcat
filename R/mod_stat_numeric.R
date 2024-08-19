@@ -1,6 +1,6 @@
 #' stat_numeric UI Function
 #'
-#' @description A shiny Module.
+#' Displays the boxplot of the summary statistics for a numeric concept.
 #'
 #' @param id,input,output,session Internal parameters for {shiny}.
 #'
@@ -17,6 +17,9 @@ mod_stat_numeric_ui <- function(id) {
 # TODO: this module needs unit tests
 
 #' stat_numeric Server Functions
+#'
+#' Generates the boxplot of the summary statistics for a numeric concept.
+#' When no concept was selected, an empty plot is returned.
 #'
 #' @noRd
 mod_stat_numeric_server <- function(id, summary_stats) {

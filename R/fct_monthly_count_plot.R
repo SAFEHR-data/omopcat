@@ -2,6 +2,14 @@
 #'
 #' Generates a bar plot of the number of records per month for a given concept.
 #'
+#' Expects the input data to have the following columns:
+#' - `date_year`: The year of the date.
+#' - `date_month`: The month of the date.
+#' - `person_count`: The number of records for the given month.
+#'
+#' @param monthly_counts A data frame containing the monthly counts.
+#' @param plot_title The title for the plot.
+#'
 #' @return A ggplot2 object containing the bar plot, or `NULL` if no data is provided.
 #'
 #' @importFrom ggplot2 ggplot aes geom_bar ggtitle xlab ylab

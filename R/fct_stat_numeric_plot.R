@@ -1,14 +1,23 @@
 #' stat_numeric_plot
 #'
-#' @description A fct function
+#' Generates a boxplot of the summary statistics for a numeric concept.
+#' Uses pre-calculated `mean` and `sd` to generate the boxplot.
 #'
-#' @return The return value, if any, from executing the function.
+#' Expects the input data to have the following columns:
+#' - `concept_id`: The concept ID.
+#' - `summary_attribute`: The type of the summary attribute, e.g. `mean` or `sd`.
+#' - `value_as_number`: The value of the summary attribute as a numeric value.
+#'
+#' @param summary_stats A data frame containing the summary statistics.
+#'
+#' @return A `ggplot2` object.
 #'
 #' @importFrom ggplot2 ggplot aes geom_boxplot
 #' @noRd
 stat_numeric_plot <- function(summary_stats) {
-  mean <- sd <- concept_id <- NULL
   processed_stats <- .process_summary_stats(summary_stats)
+
+  mean <- sd <- concept_id <- NULL
   ggplot(processed_stats, aes(x = concept_id)) +
     geom_boxplot(
       aes(
