@@ -18,6 +18,8 @@ mod_datatable_ui <- function(id) {
 #'
 #' @param data A reactive data.frame containing the data to be displayed
 #'
+#' @return The selected row as a reactive object
+#'
 #' @noRd
 mod_datatable_server <- function(id, data) {
   stopifnot(is.reactive(data))
@@ -28,5 +30,7 @@ mod_datatable_server <- function(id, data) {
       selected = 1,
       target = "row"
     ))
+
+    reactive(data()[input$datatable_rows_selected, ])
   })
 }
