@@ -36,6 +36,8 @@ stat_numeric_plot <- function(summary_stats, plot_title) {
 
 .process_summary_stats <- function(summary_stats) {
   # We expect only single concept ID at this point
+  # NOTE: this might change when we support bundles of concepts, in which case we might want to
+  # display the entire batch in one plot
   stopifnot("Expecting a single concept ID" = length(unique(summary_stats$concept_id)) == 1)
   stopifnot(c("concept_id", "summary_attribute", "value_as_number") %in% names(summary_stats))
 
