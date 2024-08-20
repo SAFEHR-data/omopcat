@@ -117,17 +117,17 @@ analyse_summary_stats <- function(cdm) {
 
   # Function to analyse a categorical column - present in observation and measurement
   # by joining value_as_concept_id to cdm$concept by concept_id
-  analyse_categorical_column <- function(cdm, table, concept, value) {
+  analyse_categorical_column <- function(cdm, table, concept) {
     # Rename columns and remove empty values
     table <- table |>
-      select(concept_id = {{ concept }}, value = {{ value }}) |>
-      filter(!is.na(value)) |>
+      select(concept_id = {{ concept }}) |>
+      # beware CDM docs: NULL=no categorical result, 0=categorical result but no mapping
+      filter(value_as_concept_id != 0 & !is.null(value_as_concept_id)) |>
       collect()
     # count freq and join to concept table to get name
     df_freq_val_as_concept_named <- table |>
-      # beware CDM docs: NULL=no categorical result, 0=categorical result but no mapping
-      filter(value_as_concept_id != 0 & !is.null(value_as_concept_id)) |>
-      count(concept_id, value) |>
+      count(concept_id, value_as_concept_id) |>
+      collect() |>
       left_join(select(cdm$concept, concept_id, concept_name),
                 by = c('value_as_concept_id' = 'concept_id')) |>
       mutate(concept_id = concept_id,
@@ -146,8 +146,8 @@ analyse_summary_stats <- function(cdm) {
     cdm$measurement |> analyse_numeric_column(measurement_concept_id, value_as_number),
     cdm$observation |> analyse_numeric_column(observation_concept_id, value_as_number),
     #categorical results
-    cdm$measurement |> analyse_categorical_column(cdm, measurement_concept_id, value_as_concept_id),
-    cdm$observation |> analyse_categorical_column(cdm, observation_concept_id, value_as_concept_id)
+    cdm$measurement |> analyse_categorical_column(cdm, measurement_concept_id),
+    cdm$observation |> analyse_categorical_column(cdm, observation_concept_id)
   )
 }
 
