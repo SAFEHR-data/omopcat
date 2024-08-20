@@ -22,9 +22,8 @@ write_results <- function(con, table) {
 }
 
 # Write all results to the test data folder
-con |> write_results("calypso_concepts")
-con |> write_results("calypso_monthly_counts")
-con |> write_results("calypso_summary_stats")
+table_names <- c("calypso_concepts", "calypso_monthly_counts", "calypso_summary_stats")
+purrr::walk(table_names, write_results, con = con)
 
 # Clean up
 DBI::dbDisconnect(con)
