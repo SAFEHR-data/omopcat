@@ -120,7 +120,7 @@ analyse_summary_stats <- function(cdm) {
   analyse_categorical_column <- function(cdm, table, concept) {
     # Rename columns and remove empty values
     table <- table |>
-      select(concept_id = {{ concept }}) |>
+      rename(concept_id = {{ concept }}) |>
       # beware CDM docs: NULL=no categorical result, 0=categorical result but no mapping
       filter(value_as_concept_id != 0 & !is.null(value_as_concept_id)) |>
       collect()
