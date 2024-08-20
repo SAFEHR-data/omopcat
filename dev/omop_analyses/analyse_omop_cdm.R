@@ -128,7 +128,7 @@ analyse_summary_stats <- function(cdm) {
       filter(value_as_concept_id != 0 & !is.null(value_as_concept_id))
 
     # count freq and join to concept table to get name
-    df_freq_val_as_concept_named <- table |>
+    df_freq_val_as_concept_named <- categorical_data |>
       count(concept_id, value_as_concept_id) |>
       left_join(select(cdm$concept, concept_id, concept_name),
                 by = c('value_as_concept_id' = 'concept_id')) |>
