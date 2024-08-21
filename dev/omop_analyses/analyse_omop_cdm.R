@@ -8,6 +8,7 @@ version <- Sys.getenv("TEST_DB_OMOP_VERSION")
 con <- DBI::dbConnect(duckdb::duckdb(
   dbdir = glue::glue("{dir}/{name}_{version}_1.0.duckdb")
 ))
+withr::defer(DBI::dbDisconnect(con))
 
 # Function to execute one or more SQL queries and clear results
 create_results_tables <- function(con, sql) {

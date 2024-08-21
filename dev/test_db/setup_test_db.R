@@ -9,6 +9,7 @@ con <- DBI::dbConnect(
     )
   )
 )
+withr::defer(DBI::dbDisconnect(con))
 
 # Use 'cdm_from_con' to load the dataset and verify integrity
 CDMConnector::cdm_from_con(
