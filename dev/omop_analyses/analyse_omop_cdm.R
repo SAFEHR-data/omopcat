@@ -77,7 +77,7 @@ analyse_monthly_counts <- function(cdm) {
       )
   }
   # Combine results for all tables
-  bind_rows(
+  out <- bind_rows(
     cdm$condition_occurrence |> analyse_table(condition_concept_id, condition_start_date),
     cdm$drug_exposure |> analyse_table(drug_concept_id, drug_exposure_start_date),
     cdm$procedure_occurrence |> analyse_table(procedure_concept_id, procedure_date),
@@ -86,6 +86,14 @@ analyse_monthly_counts <- function(cdm) {
     cdm$observation |> analyse_table(observation_concept_id, observation_date),
     cdm$specimen |> analyse_table(specimen_concept_id, specimen_date)
   )
+
+  # Map concept names to the concept IDs
+  concept_names <- select(cdm$concept, concept_id, concept_name) |>
+    filter(concept_id %in% out$concept_id) |>
+    collect()
+  out |>
+    left_join(concept_names, by = c("concept_id" = "concept_id")) |>
+    select(concept_id, concept_name, everything())
 }
 
 # Function to analyse a numeric column
