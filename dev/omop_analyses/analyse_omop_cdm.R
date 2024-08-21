@@ -20,7 +20,7 @@ create_results_tables <- function(con, sql) {
 
 # Function to produce the 'calypso_concepts' table
 # from a list of concept ids
-analyse_concepts <- function(cdm, concepts) {
+get_concepts_table <- function(cdm, concepts) {
   # Extract columns from concept table
   cdm$concept |>
     filter(concept_id %in% concepts) |>
@@ -37,7 +37,7 @@ analyse_concepts <- function(cdm, concepts) {
 }
 
 # Function to produce the 'calypso_monthly_counts' table
-analyse_monthly_counts <- function(cdm) {
+calculate_monthly_counts <- function(cdm) {
   # Function to analyse a column from a specific table
   # for each month
   analyse_table <- function(table, concept, date) {
@@ -98,7 +98,7 @@ analyse_monthly_counts <- function(cdm) {
 
 # Function to analyse a numeric column
 # by calculating the mean and the standard deviation
-analyse_numeric_concepts <- function(.data) {
+summarise_numeric_concepts <- function(.data) {
   # Calculate mean and sd
   stats <- .data |>
     group_by(concept_id) |>
@@ -115,7 +115,7 @@ analyse_numeric_concepts <- function(.data) {
 
 # Function to analyse a categorical column - present in observation and measurement
 # by joining value_as_concept_id to cdm$concept by concept_id
-analyse_categorical_concepts <- function(.data) {
+summarise_categorical_concepts <- function(.data) {
   # Calculate frequencies
   frequencies <- .data |>
     count(concept_id, value_as_concept_id)
@@ -141,13 +141,13 @@ summarise_concepts <- function(.data, concept_name) {
   # beware CDM docs: NULL=no categorical result, 0=categorical result but no mapping
   categorical_concepts <- filter(.data, !is.null(value_as_concept_id) & value_as_concept_id != 0)
 
-  numeric_stats <- analyse_numeric_concepts(numeric_concepts) |> collect()
-  categorical_stats <- analyse_categorical_concepts(categorical_concepts) |> collect()
+  numeric_stats <- summarise_numeric_concepts(numeric_concepts) |> collect()
+  categorical_stats <- summarise_categorical_concepts(categorical_concepts) |> collect()
   bind_rows(numeric_stats, categorical_stats)
 }
 
 # Function to produce the 'calypso_summary_stats' table
-analyse_summary_stats <- function(cdm) {
+calculate_summary_stats <- function(cdm) {
   table_names <- c("measurement", "observation")
   concept_names <- c("measurement_concept_id", "observation_concept_id")
 
@@ -205,12 +205,12 @@ cdm <- CDMConnector::cdm_from_con(
 )
 
 # Generate monthly counts and write it to the DB
-monthly_counts <- analyse_monthly_counts(cdm)
+monthly_counts <- calculate_monthly_counts(cdm)
 monthly_counts |>
   write_results(con, "calypso_monthly_counts")
 
 # Generate summary stats and write it to the DB
-summary_stats <- analyse_summary_stats(cdm)
+summary_stats <- calculate_summary_stats(cdm)
 summary_stats |>
   write_results(con, "calypso_summary_stats")
 
@@ -218,5 +218,5 @@ summary_stats |>
 ids <- unique(c(monthly_counts$concept_id, summary_stats$concept_id))
 
 # Retrieve concept properties from the list of ids
-analyse_concepts(cdm, ids) |>
+get_concepts_table(cdm, ids) |>
   write_results(con, "calypso_concepts")
