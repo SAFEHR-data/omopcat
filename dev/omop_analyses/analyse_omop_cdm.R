@@ -90,74 +90,65 @@ analyse_monthly_counts <- function(cdm) {
 
 # Function to analyse a numeric column
 # by calculating the mean and the standard deviation
-analyse_numeric_concepts <- function(table, concept, value) {
-  # Rename columns and remove empty values
-  table <- table |>
-    select(concept_id = {{ concept }}, value = {{ value }}) |>
-    filter(!is.na(value)) |>
-    collect()
-  # Calculate mean
-  df_mean <- table |>
+analyse_numeric_concepts <- function(.data) {
+  # Calculate mean and sd
+  stats <- .data |>
     group_by(concept_id) |>
-    reframe(
-      summary_attribute = "mean",
-      value_as_number = mean(value)
+    summarise(mean = mean(value_as_number), sd = sd(value_as_number))
+
+  # Wrangle output to expected format and collect
+  stats |>
+    pivot_longer(
+      cols = c(mean, sd),
+      names_to = "summary_attribute",
+      values_to = "value_as_number"
     )
-  # Calculate standard deviation
-  df_sd <- table |>
-    group_by(concept_id) |>
-    reframe(
-      summary_attribute = "sd",
-      value_as_number = sd(value)
-    )
-  # Combine mean and standard deviation
-  bind_rows(df_mean, df_sd)
 }
 
 # Function to analyse a categorical column - present in observation and measurement
 # by joining value_as_concept_id to cdm$concept by concept_id
-analyse_categorical_concepts <- function(cdm, table, concept) {
-  # Rename columns and remove empty values
-  table <- table |>
-    select(concept_id = {{ concept }}, value_as_concept_id) |>
-    # beware CDM docs: NULL=no categorical result, 0=categorical result but no mapping
-    filter(value_as_concept_id != 0 & !is.null(value_as_concept_id))
-
-  concept_names <- select(cdm$concept, concept_id, concept_name)
-
+analyse_categorical_concepts <- function(.data) {
   # Calculate frequencies
-  frequencies <- table |>
-    count(concept_id, value_as_concept_id) |>
-    # Join to concept table to get the name linked to the value_as_concept_id
-    left_join(concept_names, by = c("value_as_concept_id" = "concept_id"))
+  frequencies <- .data |>
+    count(concept_id, value_as_concept_id)
 
-  # Wrangle output into the expected format
+  # Wrangle output into the expected format and collect
   frequencies |>
     mutate(summary_attribute = "frequency") |>
     select(
       concept_id,
       summary_attribute,
-      value_as_string = concept_name,
-      value_as_number = n
-    ) |>
-    collect()
+      value_as_number = n,
+      value_as_concept_id
+    )
 }
 
+summarise_concepts <- function(.data, concept_name) {
+  stopifnot(inherits(.data, "tbl"))
+  stopifnot(is.character(concept_name))
+
+  .data <- rename(.data, concept_id = all_of(concept_name))
+
+  numeric_concepts <- filter(.data, !is.na(value_as_number))
+  # beware CDM docs: NULL=no categorical result, 0=categorical result but no mapping
+  categorical_concepts <- filter(.data, !is.null(value_as_concept_id) & value_as_concept_id != 0)
+
+  numeric_stats <- analyse_numeric_concepts(numeric_concepts) |> collect()
+  categorical_stats <- analyse_categorical_concepts(categorical_concepts) |> collect()
+  bind_rows(numeric_stats, categorical_stats)
+}
 
 # Function to produce the 'calypso_summary_stats' table
 analyse_summary_stats <- function(cdm) {
+  table_names <- c("measurement", "observation")
+  concept_names <- c("measurement_concept_id", "observation_concept_id")
+
+  # Combine results for all tables
+  stats <- map2(table_names, concept_names, ~ summarise_concepts(cdm[[.x]], .y))
+  stats <- bind_rows(stats)
   # TODO as agreed 2024-08-16 enable concept_name here and in analyse_numeric_column
   # OR could join concept_name at end of analyse_summary_stats()
 
-  # Combine results for all columns
-  bind_rows(
-    # numeric results
-    cdm$measurement |> analyse_numeric_concepts(measurement_concept_id, value_as_number),
-    cdm$observation |> analyse_numeric_concepts(observation_concept_id, value_as_number),
-    # categorical results
-    cdm |> analyse_categorical_concepts("measurement"),
-    cdm |> analyse_categorical_concepts("observation")
-  )
 }
 
 # Function to write result to the results schema
