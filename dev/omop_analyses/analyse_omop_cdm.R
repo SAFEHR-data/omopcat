@@ -90,7 +90,7 @@ analyse_monthly_counts <- function(cdm) {
 
 # Function to analyse a numeric column
 # by calculating the mean and the standard deviation
-analyse_numeric_column <- function(table, concept, value) {
+analyse_numeric_concepts <- function(table, concept, value) {
   # Rename columns and remove empty values
   table <- table |>
     select(concept_id = {{ concept }}, value = {{ value }}) |>
@@ -116,7 +116,7 @@ analyse_numeric_column <- function(table, concept, value) {
 
 # Function to analyse a categorical column - present in observation and measurement
 # by joining value_as_concept_id to cdm$concept by concept_id
-analyse_categorical_column <- function(cdm, table, concept) {
+analyse_categorical_concepts <- function(cdm, table, concept) {
   # Rename columns and remove empty values
   table <- table |>
     select(concept_id = {{ concept }}, value_as_concept_id) |>
@@ -152,11 +152,11 @@ analyse_summary_stats <- function(cdm) {
   # Combine results for all columns
   bind_rows(
     # numeric results
-    cdm$measurement |> analyse_numeric_column(measurement_concept_id, value_as_number),
-    cdm$observation |> analyse_numeric_column(observation_concept_id, value_as_number),
+    cdm$measurement |> analyse_numeric_concepts(measurement_concept_id, value_as_number),
+    cdm$observation |> analyse_numeric_concepts(observation_concept_id, value_as_number),
     # categorical results
-    cdm |> analyse_categorical_column("measurement"),
-    cdm |> analyse_categorical_column("observation")
+    cdm |> analyse_categorical_concepts("measurement"),
+    cdm |> analyse_categorical_concepts("observation")
   )
 }
 
