@@ -1,14 +1,25 @@
 #' stat_numeric_plot
 #'
-#' @description A fct function
+#' Generates a boxplot of the summary statistics for a numeric concept.
+#' Uses pre-calculated `mean` and `sd` to generate the boxplot.
 #'
-#' @return The return value, if any, from executing the function.
+#' Expects the input data to have the following columns:
+#' - `concept_id`: The concept ID.
+#' - `summary_attribute`: The type of the summary attribute, e.g. `mean` or `sd`.
+#' - `value_as_number`: The value of the summary attribute as a numeric value.
+#'
+#' @param summary_stats A `data.frame` containing the summary statistics.
+#' @param plot_title A `character`, to be used as title of the plot.
+#'
+#' @return A `ggplot2` object.
 #'
 #' @importFrom ggplot2 ggplot aes geom_boxplot
 #' @noRd
-stat_numeric_plot <- function(summary_stat) {
-  mean <- sd <- concept <- NULL
-  ggplot(summary_stat, aes(x = concept)) +
+stat_numeric_plot <- function(summary_stats, plot_title) {
+  processed_stats <- .process_summary_stats(summary_stats)
+
+  mean <- sd <- concept_id <- NULL
+  ggplot(processed_stats, aes(x = factor(concept_id))) +
     geom_boxplot(
       aes(
         lower = mean - sd,
@@ -18,5 +29,21 @@ stat_numeric_plot <- function(summary_stat) {
         ymax = mean + 3 * sd
       ),
       stat = "identity"
-    )
+    ) +
+    xlab(NULL) +
+    ggtitle(plot_title)
+}
+
+.process_summary_stats <- function(summary_stats) {
+  # We expect only single concept ID at this point
+  # NOTE: this might change when we support bundles of concepts, in which case we might want to
+  # display the entire batch in one plot
+  stopifnot("Expecting a single concept ID" = length(unique(summary_stats$concept_id)) == 1)
+  stopifnot(c("concept_id", "summary_attribute", "value_as_number") %in% names(summary_stats))
+
+  tidyr::pivot_wider(summary_stats,
+    id_cols = "concept_id",
+    names_from = "summary_attribute",
+    values_from = "value_as_number"
+  )
 }
