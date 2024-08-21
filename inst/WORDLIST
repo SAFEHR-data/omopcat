@@ -1,5 +1,11 @@
+CMD
 Catalogue
 Lifecycle
 OMOP
+RStudio
+UI
 catalogue
+duckdb
 golem
+lockfile
+tidyverse
