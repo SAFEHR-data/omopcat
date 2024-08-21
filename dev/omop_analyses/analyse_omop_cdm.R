@@ -102,7 +102,7 @@ summarise_numeric_concepts <- function(.data) {
   # Calculate mean and sd
   stats <- .data |>
     group_by(concept_id) |>
-    summarise(mean = mean(value_as_number), sd = sd(value_as_number))
+    summarise(mean = mean(value_as_number, na.rm = TRUE), sd = sd(value_as_number, na.rm = TRUE))
 
   # Wrangle output to expected format
   stats |>
