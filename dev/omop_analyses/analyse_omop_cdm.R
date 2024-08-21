@@ -88,64 +88,65 @@ analyse_monthly_counts <- function(cdm) {
   )
 }
 
+# Function to analyse a numeric column
+# by calculating the mean and the standard deviation
+analyse_numeric_column <- function(table, concept, value) {
+  # Rename columns and remove empty values
+  table <- table |>
+    select(concept_id = {{ concept }}, value = {{ value }}) |>
+    filter(!is.na(value)) |>
+    collect()
+  # Calculate mean
+  df_mean <- table |>
+    group_by(concept_id) |>
+    reframe(
+      summary_attribute = "mean",
+      value_as_number = mean(value)
+    )
+  # Calculate standard deviation
+  df_sd <- table |>
+    group_by(concept_id) |>
+    reframe(
+      summary_attribute = "sd",
+      value_as_number = sd(value)
+    )
+  # Combine mean and standard deviation
+  bind_rows(df_mean, df_sd)
+}
+
+# Function to analyse a categorical column - present in observation and measurement
+# by joining value_as_concept_id to cdm$concept by concept_id
+analyse_categorical_column <- function(cdm, name_of_table) {
+  name_of_id_col <- paste0(name_of_table, "_concept_id")
+
+  # Rename columns and remove empty values
+  categorical_data <- cdm[[name_of_table]] |>
+    rename_with(~"concept_id", all_of(name_of_id_col)) |>
+    # beware CDM docs: NULL=no categorical result, 0=categorical result but no mapping
+    filter(value_as_concept_id != 0 & !is.null(value_as_concept_id))
+
+  # count freq and join to concept table to get name
+  df_freq_val_as_concept_named <- categorical_data |>
+    count(concept_id, value_as_concept_id) |>
+    left_join(select(cdm$concept, concept_id, concept_name),
+      by = c("value_as_concept_id" = "concept_id")
+    ) |>
+    mutate(
+      concept_id = concept_id,
+      # TODO as agreed 2024-08-16 enable concept_name here and in analyse_numeric_column
+      # OR could join concept_name at end of analyse_summary_stats()
+      # concept_name = concept_name,
+      summary_attribute = "frequency",
+      value_as_string = concept_name,
+      value_as_number = n,
+      .keep = "none"
+    ) |>
+    collect()
+}
+
+
 # Function to produce the 'calypso_summary_stats' table
 analyse_summary_stats <- function(cdm) {
-  # Function to analyse a numeric column
-  # by calculation the mean and the standard deviation
-  analyse_numeric_column <- function(table, concept, value) {
-    # Rename columns and remove empty values
-    table <- table |>
-      select(concept_id = {{ concept }}, value = {{ value }}) |>
-      filter(!is.na(value)) |>
-      collect()
-    # Calculate mean
-    df_mean <- table |>
-      group_by(concept_id) |>
-      reframe(
-        summary_attribute = "mean",
-        value_as_number = mean(value)
-      )
-    # Calculate standard deviation
-    df_sd <- table |>
-      group_by(concept_id) |>
-      reframe(
-        summary_attribute = "sd",
-        value_as_number = sd(value)
-      )
-    # Combine mean and standard deviation
-    bind_rows(df_mean, df_sd)
-  }
-
-  # Function to analyse a categorical column - present in observation and measurement
-  # by joining value_as_concept_id to cdm$concept by concept_id
-  analyse_categorical_column <- function(cdm, name_of_table) {
-    name_of_id_col <- paste0(name_of_table, "_concept_id")
-
-    # Rename columns and remove empty values
-    categorical_data <- cdm[[name_of_table]] |>
-      rename_with(~"concept_id", all_of(name_of_id_col)) |>
-      # beware CDM docs: NULL=no categorical result, 0=categorical result but no mapping
-      filter(value_as_concept_id != 0 & !is.null(value_as_concept_id))
-
-    # count freq and join to concept table to get name
-    df_freq_val_as_concept_named <- categorical_data |>
-      count(concept_id, value_as_concept_id) |>
-      left_join(select(cdm$concept, concept_id, concept_name),
-        by = c("value_as_concept_id" = "concept_id")
-      ) |>
-      mutate(
-        concept_id = concept_id,
-        # TODO as agreed 2024-08-16 enable concept_name here and in analyse_numeric_column
-        # OR could join concept_name at end of analyse_summary_stats()
-        # concept_name = concept_name,
-        summary_attribute = "frequency",
-        value_as_string = concept_name,
-        value_as_number = n,
-        .keep = "none"
-      ) |>
-      collect()
-  }
-
   # Combine results for all columns
   bind_rows(
     # numeric results
