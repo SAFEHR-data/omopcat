@@ -139,7 +139,7 @@ analyse_summary_stats <- function(cdm) {
         # concept_name = concept_name,
         summary_attribute = "frequency",
         value_as_string = concept_name,
-        value = n,
+        value_as_number = n,
         .keep = "none"
       ) |>
       collect()
