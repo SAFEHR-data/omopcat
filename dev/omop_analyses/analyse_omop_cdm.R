@@ -104,7 +104,7 @@ summarise_numeric_concepts <- function(.data) {
     group_by(concept_id) |>
     summarise(mean = mean(value_as_number), sd = sd(value_as_number))
 
-  # Wrangle output to expected format and collect
+  # Wrangle output to expected format
   stats |>
     pivot_longer(
       cols = c(mean, sd),
@@ -120,7 +120,7 @@ summarise_categorical_concepts <- function(.data) {
   frequencies <- .data |>
     count(concept_id, value_as_concept_id)
 
-  # Wrangle output into the expected format and collect
+  # Wrangle output into the expected format
   frequencies |>
     mutate(summary_attribute = "frequency") |>
     select(
