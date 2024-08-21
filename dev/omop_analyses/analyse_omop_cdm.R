@@ -116,30 +116,29 @@ analyse_numeric_column <- function(table, concept, value) {
 
 # Function to analyse a categorical column - present in observation and measurement
 # by joining value_as_concept_id to cdm$concept by concept_id
-analyse_categorical_column <- function(cdm, name_of_table) {
-  name_of_id_col <- paste0(name_of_table, "_concept_id")
-
+analyse_categorical_column <- function(cdm, table, concept) {
   # Rename columns and remove empty values
-  categorical_data <- cdm[[name_of_table]] |>
-    rename_with(~"concept_id", all_of(name_of_id_col)) |>
+  table <- table |>
+    select(concept_id = {{ concept }}, value_as_concept_id) |>
     # beware CDM docs: NULL=no categorical result, 0=categorical result but no mapping
     filter(value_as_concept_id != 0 & !is.null(value_as_concept_id))
 
-  # count freq and join to concept table to get name
-  df_freq_val_as_concept_named <- categorical_data |>
+  concept_names <- select(cdm$concept, concept_id, concept_name)
+
+  # Calculate frequencies
+  frequencies <- table |>
     count(concept_id, value_as_concept_id) |>
-    left_join(select(cdm$concept, concept_id, concept_name),
-      by = c("value_as_concept_id" = "concept_id")
-    ) |>
-    mutate(
-      concept_id = concept_id,
-      # TODO as agreed 2024-08-16 enable concept_name here and in analyse_numeric_column
-      # OR could join concept_name at end of analyse_summary_stats()
-      # concept_name = concept_name,
-      summary_attribute = "frequency",
+    # Join to concept table to get the name linked to the value_as_concept_id
+    left_join(concept_names, by = c("value_as_concept_id" = "concept_id"))
+
+  # Wrangle output into the expected format
+  frequencies |>
+    mutate(summary_attribute = "frequency") |>
+    select(
+      concept_id,
+      summary_attribute,
       value_as_string = concept_name,
-      value_as_number = n,
-      .keep = "none"
+      value_as_number = n
     ) |>
     collect()
 }
@@ -147,6 +146,9 @@ analyse_categorical_column <- function(cdm, name_of_table) {
 
 # Function to produce the 'calypso_summary_stats' table
 analyse_summary_stats <- function(cdm) {
+  # TODO as agreed 2024-08-16 enable concept_name here and in analyse_numeric_column
+  # OR could join concept_name at end of analyse_summary_stats()
+
   # Combine results for all columns
   bind_rows(
     # numeric results
