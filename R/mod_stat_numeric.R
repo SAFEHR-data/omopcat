@@ -1,6 +1,6 @@
 #' stat_numeric UI Function
 #'
-#' @description A shiny Module.
+#' Displays the boxplot of the summary statistics for a numeric concept.
 #'
 #' @param id,input,output,session Internal parameters for {shiny}.
 #'
@@ -16,18 +16,34 @@ mod_stat_numeric_ui <- function(id) {
 
 #' stat_numeric Server Functions
 #'
+#' Generates the boxplot of the summary statistics for a numeric concept.
+#' When no concept was selected, an empty plot is returned.
+#'
+#' @param data `data.frame` containing the data to be plotted.
+#' @param selected_concept Reactive value containing the selected concept, used for filtering
+#'
 #' @noRd
-mod_stat_numeric_server <- function(id) {
+mod_stat_numeric_server <- function(id, data, selected_concept) {
+  stopifnot(is.data.frame(data))
+  stopifnot(is.reactive(selected_concept))
+
   moduleServer(id, function(input, output, session) {
-    summary_stat <- data.frame(
-      concept = "SELECTED ROW",
-      sd = 0.8280661,
-      mean = 5.843
-    )
+    # Filter data based on the selected row
+    selected_concept_id <- reactive(selected_concept()$concept_id)
+    selected_concept_name <- reactive(selected_concept()$concept_name)
+
+    ## When no row selected, return an empty plot
+    filtered_summary_stats <- reactive({
+      if (!length(selected_concept_id())) {
+        return(NULL)
+      }
+      data[data$concept_id == selected_concept_id(), ]
+    })
 
     output$stat_numeric_plot <- renderPlot({
-      # TODO: move this to a separate function
-      stat_numeric_plot(summary_stat)
+      ## Return empty plot if no data is selected
+      if (is.null(filtered_summary_stats())) return(NULL)
+      stat_numeric_plot(filtered_summary_stats(), selected_concept_name())
     })
   })
 }

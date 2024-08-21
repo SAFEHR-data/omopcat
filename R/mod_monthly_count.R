@@ -1,6 +1,6 @@
 #' monthly_count UI Function
 #'
-#' @description A shiny Module.
+#' Displays the monthly count plot.
 #'
 #' @param id,input,output,session Internal parameters for {shiny}.
 #'
@@ -16,18 +16,32 @@ mod_monthly_count_ui <- function(id) {
 
 #' monthly_count Server Functions
 #'
+#' Generates the monthly count plot for a given concept. When no concept was selected,
+#' an empty plot is generated.
+#'
+#' @param data `data.frame` containing the data to be plotted.
+#' @param selected_concept Reactive value containing the selected concept, used for filtering
+#'
 #' @noRd
-mod_monthly_count_server <- function(id) {
+mod_monthly_count_server <- function(id, data, selected_concept) {
+  stopifnot(is.data.frame(data))
+  stopifnot(is.reactive(selected_concept))
+
+
   moduleServer(id, function(input, output, session) {
-    # TODO: how to get the data?
-    # Need to get the input data and filter it based on the selected timeframe and selected row
-    # see https://stackoverflow.com/a/77039776/11801854
-    monthly_count <- data.frame(
-      date = c("2020-01", "2020-02", "2020-03", "2020-04"),
-      record_count = c(120, 250, 281, 220)
-    )
+    ## Filter data based on selected_row
+    selected_concept_id <- reactive(selected_concept()$concept_id)
+    selected_concept_name <- reactive(selected_concept()$concept_name)
+    filtered_monthly_counts <- reactive({
+      if (!length(selected_concept_id())) {
+        return(NULL)
+      }
+      data[data$concept_id == selected_concept_id(), ]
+    })
     output$monthly_count_plot <- renderPlot({
-      monthly_count_plot(monthly_count, "SELECTED ROW")
+      ## Return empty plot if no data is selected
+      if (is.null(filtered_monthly_counts())) return(NULL)
+      monthly_count_plot(filtered_monthly_counts(), selected_concept_name())
     })
   })
 }
