@@ -146,9 +146,19 @@ analyse_summary_stats <- function(cdm) {
   # Combine results for all tables
   stats <- map2(table_names, concept_names, ~ summarise_concepts(cdm[[.x]], .y))
   stats <- bind_rows(stats)
-  # TODO as agreed 2024-08-16 enable concept_name here and in analyse_numeric_column
-  # OR could join concept_name at end of analyse_summary_stats()
 
+  # Map concept names to the concept_ids
+  concept_names <- select(cdm$concept, concept_id, concept_name) |>
+    filter(concept_id %in% c(stats$concept_id, stats$value_as_concept_id)) |>
+    collect()
+  stats |>
+    # Order is important here, first we get the names for the value_as_concept_ids
+    # from the categorical data summaries and record it as `value_as_string`
+    left_join(concept_names, by = c("value_as_concept_id" = "concept_id")) |>
+    rename(value_as_string = concept_name) |>
+    # Then we get the names for the main concept_ids
+    left_join(concept_names, by = c("concept_id" = "concept_id")) |>
+    select(concept_id, concept_name, -value_as_concept_id, everything())
 }
 
 # Function to write result to the results schema
