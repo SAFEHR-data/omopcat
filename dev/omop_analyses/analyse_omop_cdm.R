@@ -166,7 +166,7 @@ calculate_summary_stats <- function(cdm) {
     rename(value_as_string = concept_name) |>
     # Then we get the names for the main concept_ids
     left_join(concept_names, by = c("concept_id" = "concept_id")) |>
-    select(concept_id, concept_name, -value_as_concept_id, everything())
+    select(concept_id, concept_name, !value_as_concept_id)
 }
 
 # Function to write result to the results schema
