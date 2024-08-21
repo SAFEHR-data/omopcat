@@ -1,4 +1,3 @@
-
 library(tidyverse)
 
 dir <- Sys.getenv("EUNOMIA_DATA_FOLDER")
@@ -7,7 +6,8 @@ version <- Sys.getenv("TEST_DB_OMOP_VERSION")
 
 # Connect to the duckdb test database
 con <- DBI::dbConnect(duckdb::duckdb(
-  dbdir = glue::glue("{dir}/{name}_{version}_1.0.duckdb")))
+  dbdir = glue::glue("{dir}/{name}_{version}_1.0.duckdb")
+))
 
 # Function to execute one or more SQL queries and clear results
 create_results_tables <- function(con, sql) {
@@ -118,7 +118,6 @@ analyse_summary_stats <- function(cdm) {
   # Function to analyse a categorical column - present in observation and measurement
   # by joining value_as_concept_id to cdm$concept by concept_id
   analyse_categorical_column <- function(cdm, name_of_table) {
-
     name_of_id_col <- paste0(name_of_table, "_concept_id")
 
     # Rename columns and remove empty values
@@ -131,24 +130,27 @@ analyse_summary_stats <- function(cdm) {
     df_freq_val_as_concept_named <- categorical_data |>
       count(concept_id, value_as_concept_id) |>
       left_join(select(cdm$concept, concept_id, concept_name),
-                by = c('value_as_concept_id' = 'concept_id')) |>
-      mutate(concept_id = concept_id,
-             #TODO as agreed 2024-08-16 enable concept_name here and in analyse_numeric_column
-             #OR could join concept_name at end of analyse_summary_stats()
-             #concept_name = concept_name,
-             summary_attribute = "frequency",
-             value_as_string = concept_name,
-             value = n,
-             .keep="none") |>
+        by = c("value_as_concept_id" = "concept_id")
+      ) |>
+      mutate(
+        concept_id = concept_id,
+        # TODO as agreed 2024-08-16 enable concept_name here and in analyse_numeric_column
+        # OR could join concept_name at end of analyse_summary_stats()
+        # concept_name = concept_name,
+        summary_attribute = "frequency",
+        value_as_string = concept_name,
+        value = n,
+        .keep = "none"
+      ) |>
       collect()
   }
 
   # Combine results for all columns
   bind_rows(
-    #numeric results
+    # numeric results
     cdm$measurement |> analyse_numeric_column(measurement_concept_id, value_as_number),
     cdm$observation |> analyse_numeric_column(observation_concept_id, value_as_number),
-    #categorical results
+    # categorical results
     cdm |> analyse_categorical_column("measurement"),
     cdm |> analyse_categorical_column("observation")
   )
@@ -199,12 +201,8 @@ summary_stats <- analyse_summary_stats(cdm)
 summary_stats |>
   write_results(con, "calypso_summary_stats")
 
-# Get list of concept ids
-ids <- bind_rows(
-  { monthly_counts |> select(concept_id) },
-  { summary_stats |> select(concept_id) }
-) |> distinct()
-ids <- ids$concept_id
+# Get all distinct concept ids
+ids <- unique(c(monthly_counts$concept_id, summary_stats$concept_id))
 
 # Retrieve concept properties from the list of ids
 analyse_concepts(cdm, ids) |>
