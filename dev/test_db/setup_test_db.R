@@ -17,7 +17,3 @@ CDMConnector::cdm_from_con(
   write_schema = Sys.getenv("TEST_DB_RESULTS_SCHEMA"),
   cdm_name = Sys.getenv("TEST_DB_NAME")
 )
-
-# Clean up
-DBI::dbDisconnect(con)
-rm(con)

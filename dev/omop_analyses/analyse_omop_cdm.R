@@ -207,22 +207,3 @@ ids <- unique(c(monthly_counts$concept_id, summary_stats$concept_id))
 # Retrieve concept properties from the list of ids
 analyse_concepts(cdm, ids) |>
   write_results(con, "calypso_concepts")
-
-# Clean up
-DBI::dbDisconnect(con)
-rm(create_results_tables)
-rm(analyse_concepts)
-rm(analyse_monthly_counts)
-rm(analyse_summary_stats)
-rm(write_results)
-rm(monthly_counts)
-rm(summary_stats)
-rm(ids)
-rm(cdm)
-rm(con)
-rm(sql)
-rm(dir)
-rm(name)
-rm(version)
-
-detach("package:tidyverse", unload = TRUE)
