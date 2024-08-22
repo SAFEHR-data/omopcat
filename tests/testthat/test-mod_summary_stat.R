@@ -9,9 +9,9 @@ mock_stats <- data.frame(
 # Application-logic tests ---------------------------------------------------------------------
 mock_concept_row <- reactiveVal()
 
-test_that("mod_stat_numeric_server reacts to changes in the selected concept", {
+test_that("mod_summary_stat_server reacts to changes in the selected concept", {
   testServer(
-    mod_stat_numeric_server,
+    mod_summary_stat_server,
     # Add here your module params
     args = list(data = mock_stats, selected_concept = mock_concept_row),
     {
@@ -35,22 +35,22 @@ test_that("mod_stat_numeric_server reacts to changes in the selected concept", {
   )
 })
 
-test_that("mod_stat_numeric_server generates an empty plot when no row is selected", {
+test_that("mod_summary_stat_server generates an empty plot when no row is selected", {
   testServer(
-    mod_stat_numeric_server,
+    mod_summary_stat_server,
     args = list(data = mock_stats, selected_concept = reactiveVal(NULL)),
     {
       # When no concept_id is selected, no plot should be rendered
-      expect_length(output$stat_numeric_plot$coordmap$panels[[1]]$mapping, 0)
+      expect_length(output$summary_stat_plot$coordmap$panels[[1]]$mapping, 0)
     }
   )
 })
 
 test_that("module ui works", {
-  ui <- mod_stat_numeric_ui(id = "test")
+  ui <- mod_summary_stat_ui(id = "test")
   golem::expect_shinytaglist(ui)
   # Check that formals have not been removed
-  fmls <- formals(mod_stat_numeric_ui)
+  fmls <- formals(mod_summary_stat_ui)
   for (i in c("id")) {
     expect_true(i %in% names(fmls))
   }
@@ -59,20 +59,20 @@ test_that("module ui works", {
 
 # Business-logic tests ------------------------------------------------------------------------
 
-test_that("stat_numeric_plot correctly processes data", {
+test_that("summary_stat_plot correctly processes data", {
   # GIVEN: a data frame with summary statistics that still needs to be processed before plotting
-  # WHEN: stat_numeric_plot is called with this data
+  # WHEN: summary_stat_plot is called with this data
   # THEN: the data is first processed correctly and a plot is generated without errors
   mock_stats <- mock_stats[mock_stats$concept_id == 40213251, ]
   expected_data <- data.frame(concept_id = 40213251, mean = 1.5, sd = 0.5)
 
-  p <- stat_numeric_plot(mock_stats, plot_title = "test")
+  p <- summary_stat_plot(mock_stats, plot_title = "test")
   expect_identical(as.data.frame(p$data), expected_data)
 })
 
-test_that("stat_numeric_plot only works for a single concept", {
+test_that("summary_stat_plot only works for a single concept", {
   # GIVEN: a data frame with summary statistics for multiple concepts
-  # WHEN: stat_numeric_plot is called with this data
+  # WHEN: summary_stat_plot is called with this data
   # THEN: an error is thrown because the function only works for a single concept
   mock_stats <- data.frame(
     concept_id = rep(c(40213251, 40213252), each = 2),
@@ -81,5 +81,5 @@ test_that("stat_numeric_plot only works for a single concept", {
     value_as_number = c(1.5, 0.5, 2.5, 0.7)
   )
 
-  expect_error(stat_numeric_plot(mock_stats, plot_title = "test"), "Expecting a single concept ID")
+  expect_error(summary_stat_plot(mock_stats, plot_title = "test"), "Expecting a single concept ID")
 })
