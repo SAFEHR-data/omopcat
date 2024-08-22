@@ -23,8 +23,13 @@ mod_date_range_ui <- function(id) {
 
 #' date_range Server Functions
 #'
+#' @return A reactive `Date` vector of length 2 with the selected start and end dates.
+#'
 #' @noRd
 mod_date_range_server <- function(id) {
   moduleServer(id, function(input, output, session) {
+    return(reactive({
+      input$date_range
+    }))
   })
 }
