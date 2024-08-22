@@ -54,10 +54,12 @@ Calypso test data can be found in [`inst/test_data`](https://github.com/UCLH-Fou
 
 If you want to recreate a test dataset, you can run the following R scripts:
 
-    - `dev/test_db/setup_test_db.R`
-    - `dev/test_db/insert_dummy_tables.R`
-    - `dev/omop_analyses/analyse_omop_cdm.R`
-    - `dev/test_db/produce_test_data.R`
+    ```r
+    source(here::here("dev/test_db/setup_test_db.R"))
+    source(here::here("dev/test_db/insert_dummy_tables.R"))
+    source(here::here("dev/omop_analyses/analyse_omop_cdm.R"))
+    source(here::here("dev/test_db/produce_test_data.R"))
+    ```
 
 ### Updating the `renv` lockfile
 
