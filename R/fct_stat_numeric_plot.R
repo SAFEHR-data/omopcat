@@ -34,6 +34,22 @@ stat_numeric_plot <- function(summary_stats, plot_title) {
     ggtitle(plot_title)
 }
 
+#' stat_categorical_plot
+#'
+#' Generates a bar plot of the category frequencies for a categorical concept.
+#' Uses pre-calculated frequencies to generate the plot.
+#'
+#' Expects the input data to have the following columns:
+#' - `concept_id`: The concept ID.
+#' - `summary_attribute`: The type of the summary attribute, should be 'frequency'.
+#' - `value_as_string`: The name of the category
+#' - `value_as_number`: The value of the summary attribute as a numeric value.
+#'
+#' @param summary_stats A `data.frame` containing the summary statistics.
+#' @param plot_title A `character`, to be used as title of the plot.
+#'
+#' @return A `ggplot2` object.
+#'
 #' @importFrom ggplot2 ggplot aes geom_col labs
 #' @noRd
 stat_categorical_plot <- function(summary_stats, plot_title) {
