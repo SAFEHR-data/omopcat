@@ -1,4 +1,4 @@
-#' stat_numeric UI Function
+#' summary_stat UI Function
 #'
 #' Displays the boxplot of the summary statistics for a numeric concept.
 #'
@@ -7,14 +7,14 @@
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
-mod_stat_numeric_ui <- function(id) {
+mod_summary_stat_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    plotOutput(ns("stat_numeric_plot"), height = 250)
+    plotOutput(ns("summary_stat_plot"), height = 250)
   )
 }
 
-#' stat_numeric Server Functions
+#' summary_stat Server Functions
 #'
 #' Generates the boxplot of the summary statistics for a numeric concept.
 #' When no concept was selected, an empty plot is returned.
@@ -23,7 +23,7 @@ mod_stat_numeric_ui <- function(id) {
 #' @param selected_concept Reactive value containing the selected concept, used for filtering
 #'
 #' @noRd
-mod_stat_numeric_server <- function(id, data, selected_concept) {
+mod_summary_stat_server <- function(id, data, selected_concept) {
   stopifnot(is.data.frame(data))
   stopifnot(is.reactive(selected_concept))
 
@@ -40,10 +40,12 @@ mod_stat_numeric_server <- function(id, data, selected_concept) {
       data[data$concept_id == selected_concept_id(), ]
     })
 
-    output$stat_numeric_plot <- renderPlot({
+    output$summary_stat_plot <- renderPlot({
       ## Return empty plot if no data is selected
-      if (is.null(filtered_summary_stats())) return(NULL)
-      stat_numeric_plot(filtered_summary_stats(), selected_concept_name())
+      if (is.null(filtered_summary_stats())) {
+        return(NULL)
+      }
+      summary_stat_plot(filtered_summary_stats(), selected_concept_name())
     })
   })
 }

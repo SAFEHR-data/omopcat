@@ -18,7 +18,7 @@ app_server <- function(input, output, session) {
   # TODO: refactor monthly_count and stat_numeric modules into a single module
   # https://github.com/UCLH-Foundry/omop-data-catalogue/issues/30
   mod_monthly_count_server("monthly_count", monthly_counts, selected_row)
-  mod_stat_numeric_server("stat_numeric", summary_stats, selected_row)
+  mod_summary_stat_server("summary_stat", summary_stats, selected_row)
 
   mod_export_tab_server("export_tab", selected_data)
 }

@@ -22,7 +22,7 @@ app_ui <- function(request) {
         card(mod_datatable_ui("totals")),
         layout_columns(
           card(mod_monthly_count_ui("monthly_count")),
-          card(mod_stat_numeric_ui("stat_numeric"))
+          card(mod_summary_stat_ui("summary_stat"))
         )
       ),
       nav_panel(
