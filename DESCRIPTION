@@ -15,7 +15,8 @@ Imports:
     duckdb,
     glue,
     tidyr,
-    withr
+    withr,
+    forcats
 Suggests:
     devtools,
     usethis,
