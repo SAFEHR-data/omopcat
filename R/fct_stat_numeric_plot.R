@@ -1,3 +1,22 @@
+#' summary_stat_plot
+#'
+#' Wrapper function to generate a plot for a summary statistic depending on its type
+#' (categorical or numeric).
+#'
+#' @param summary_stats A `data.frame` containing the summary statistics.
+#' @param plot_tile A `character`, to be used as title of the plot.
+#'
+#' @return A `ggplot2` object.
+#'
+#' @noRd
+summary_stat_plot <- function(summary_stats, plot_tile) {
+  if (.is_categorical(summary_stats)) {
+    stat_categorical_plot(summary_stats, plot_tile)
+  } else {
+    stat_numeric_plot(summary_stats, plot_tile)
+  }
+}
+
 #' stat_numeric_plot
 #'
 #' Generates a boxplot of the summary statistics for a numeric concept.
