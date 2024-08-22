@@ -4,16 +4,16 @@
 #' (categorical or numeric).
 #'
 #' @param summary_stats A `data.frame` containing the summary statistics.
-#' @param plot_tile A `character`, to be used as title of the plot.
+#' @param plot_title A `character`, to be used as title of the plot.
 #'
 #' @return A `ggplot2` object.
 #'
 #' @noRd
-summary_stat_plot <- function(summary_stats, plot_tile) {
+summary_stat_plot <- function(summary_stats, plot_title) {
   if (.is_categorical(summary_stats)) {
-    stat_categorical_plot(summary_stats, plot_tile)
+    stat_categorical_plot(summary_stats, plot_title)
   } else {
-    stat_numeric_plot(summary_stats, plot_tile)
+    stat_numeric_plot(summary_stats, plot_title)
   }
 }
 
