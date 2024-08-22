@@ -52,7 +52,7 @@ stat_categorical_plot <- function(summary_stats, plot_title) {
 
   value_as_string <- value_as_number <- NULL
   ggplot(summary_stats, aes(value_as_string, value_as_number)) +
-    geom_col(aes(fill = value_as_string)) +
+    geom_col(aes(fill = value_as_string), show.legend = FALSE) +
     labs(x = "Category", y = "Frequency") +
     ggtitle(plot_title)
 }
