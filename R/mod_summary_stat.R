@@ -41,10 +41,9 @@ mod_summary_stat_server <- function(id, data, selected_concept) {
     })
 
     output$summary_stat_plot <- renderPlot({
-      ## Return empty plot if no data is selected
-      if (is.null(filtered_summary_stats())) {
-        return(NULL)
-      }
+      ## Return empty plot if no data is selected or if no data is available for the selected concept
+      if (is.null(filtered_summary_stats())) return(NULL)
+      if (nrow(filtered_summary_stats()) == 0) return(NULL)
       summary_stat_plot(filtered_summary_stats(), selected_concept_name())
     })
   })

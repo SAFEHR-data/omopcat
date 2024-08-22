@@ -39,8 +39,9 @@ mod_monthly_count_server <- function(id, data, selected_concept) {
       data[data$concept_id == selected_concept_id(), ]
     })
     output$monthly_count_plot <- renderPlot({
-      ## Return empty plot if no data is selected
+      ## Return empty plot if no data is selected or if no data is available for the selected concept
       if (is.null(filtered_monthly_counts())) return(NULL)
+      if (nrow(filtered_monthly_counts()) == 0) return(NULL)
       monthly_count_plot(filtered_monthly_counts(), selected_concept_name())
     })
   })

@@ -45,6 +45,18 @@ test_that("mod_monthly_count_server generates an empty plot when no row is selec
   )
 })
 
+test_that("mod_monthly_count_server generates an empty plot when no data is available for the selected concept", {
+  testServer(
+    mod_monthly_count_server,
+    args = list(data = mock_monthly_counts, selected_concept = mock_concept_row),
+    {
+      mock_concept_row(list(concept_id = 9999999, concept_name = "idontexist"))
+      session$flushReact()
+      expect_length(output$monthly_count_plot$coordmap$panels[[1]]$mapping, 0)
+    }
+  )
+})
+
 test_that("module ui works", {
   ui <- mod_monthly_count_ui(id = "test")
   golem::expect_shinytaglist(ui)
