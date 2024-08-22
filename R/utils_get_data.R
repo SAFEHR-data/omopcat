@@ -6,17 +6,18 @@
 get_concepts_table <- function() {
   if (golem::app_dev()) {
     return(data.frame(
-      concept_id = c(40213251, 133834, 4057420),
+      concept_id = c(40213251, 133834, 4057420, 1234567),
       concept_name = c(
         "varicella virus vaccine",
         "Atopic dermatitis",
-        "Catheter ablation of tissue of heart"
+        "Catheter ablation of tissue of heart",
+        "Dummy categorical"
       ),
-      domain_id = c("Drug", "Condition", "Procedure"),
-      vocabulary_id = c("CVX", "SNOMED", "SNOMED"),
-      concept_class_id = c("CVX", "Clinical Finding", "Procedure"),
-      standard_concept = c("S", "S", "S"),
-      concept_code = c("21", "24079001", "18286008")
+      domain_id = c("Drug", "Condition", "Procedure", "Observation"),
+      vocabulary_id = c("CVX", "SNOMED", "SNOMED", "TEST"),
+      concept_class_id = c("CVX", "Clinical Finding", "Procedure", "TEST"),
+      standard_concept = c("S", "S", "S", "S"),
+      concept_code = c("21", "24079001", "18286008", "000")
     ))
   }
 
@@ -49,10 +50,10 @@ get_summary_stats <- function() {
   if (golem::app_dev()) {
     return(
       data.frame(
-        concept_id = rep(c(40213251, 133834, 4057420), each = 2),
-        summary_attribute = rep(c("mean", "sd"), times = 3),
-        value_as_string = rep(NA, 6),
-        value_as_number = c(1.5, 0.5, 2.5, 0.7, 3.5, 0.8)
+        concept_id = c(rep(c(40213251, 133834, 4057420), each = 2), rep(1234567, 3)),
+        summary_attribute = c(rep(c("mean", "sd"), times = 3), rep("frequency", 3)),
+        value_as_string = c(rep(NA, 6), paste0("cat_", seq(3))),
+        value_as_number = c(1.5, 0.5, 2.5, 0.7, 3.5, 0.8, c(42, 23, 68))
       )
     )
   }
