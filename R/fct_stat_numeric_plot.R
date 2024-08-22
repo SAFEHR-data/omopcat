@@ -16,7 +16,7 @@
 #' @importFrom ggplot2 ggplot aes geom_boxplot
 #' @noRd
 stat_numeric_plot <- function(summary_stats, plot_title) {
-  processed_stats <- .process_summary_stats(summary_stats)
+  processed_stats <- .process_numeric_stats(summary_stats)
 
   mean <- sd <- concept_id <- NULL
   ggplot(processed_stats, aes(x = factor(concept_id))) +
@@ -34,7 +34,30 @@ stat_numeric_plot <- function(summary_stats, plot_title) {
     ggtitle(plot_title)
 }
 
-.process_summary_stats <- function(summary_stats) {
+#' @importFrom ggplot2 ggplot aes geom_col labs
+#' @noRd
+stat_categorical_plot <- function(summary_stats, plot_title) {
+  # We expect only single concept ID at this point
+  # NOTE: this might change when we support bundles of concepts, in which case we might want to
+  # display the entire batch in one plot
+  stopifnot("Expecting a single concept ID" = length(unique(summary_stats$concept_id)) == 1)
+  stopifnot(c("concept_id", "value_as_string", "value_as_number") %in% names(summary_stats))
+
+  summary_stats$value_as_string <- as.factor(summary_stats$value_as_string)
+  # Reorder factor levels by frequency
+  summary_stats$value_as_string <- forcats::fct_reorder(
+    summary_stats$value_as_string, summary_stats$value_as_number,
+    .desc = TRUE
+  )
+
+  value_as_string <- value_as_number <- NULL
+  ggplot(summary_stats, aes(value_as_string, value_as_number)) +
+    geom_col(aes(fill = value_as_string)) +
+    labs(x = "Category", y = "Frequency") +
+    ggtitle(plot_title)
+}
+
+.process_numeric_stats <- function(summary_stats) {
   # We expect only single concept ID at this point
   # NOTE: this might change when we support bundles of concepts, in which case we might want to
   # display the entire batch in one plot
@@ -46,4 +69,8 @@ stat_numeric_plot <- function(summary_stats, plot_title) {
     names_from = "summary_attribute",
     values_from = "value_as_number"
   )
+}
+
+.is_categorical <- function(summary_stats) {
+  "frequency" %in% summary_stats$summary_attribute
 }
