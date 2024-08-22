@@ -11,10 +11,10 @@ con <- DBI::dbConnect(
 )
 
 # Function to write results from a table to the test data folder
-write_results <- function(con, table) {
+write_results <- function(con, table, order_by = "") {
   schema <- Sys.getenv("TEST_DB_RESULTS_SCHEMA")
   # Get all rows from the table
-  query <- glue::glue("SELECT * FROM {schema}.{table};")
+  query <- glue::glue("SELECT * FROM {schema}.{table} {order_by};")
   # Run the query and write results
   con |>
     DBI::dbGetQuery(query) |>
@@ -22,8 +22,9 @@ write_results <- function(con, table) {
 }
 
 # Write all results to the test data folder
-table_names <- c("calypso_concepts", "calypso_monthly_counts", "calypso_summary_stats")
-purrr::walk(table_names, write_results, con = con)
+con |> write_results("calypso_concepts", "ORDER BY concept_id")
+con |> write_results("calypso_monthly_counts", "ORDER BY concept_id, date_year, date_month")
+con |> write_results("calypso_summary_stats", "ORDER BY concept_id, summary_attribute")
 
 # Clean up
 DBI::dbDisconnect(con)
