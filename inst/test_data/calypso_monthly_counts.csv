@@ -2779,8 +2779,8 @@ concept_id,concept_name,date_year,date_month,person_count,records_per_person
 1545959,atorvastatin 80 MG Oral Tablet,2023,2,2,1
 1545959,atorvastatin 80 MG Oral Tablet,2023,4,2,1
 1545959,atorvastatin 80 MG Oral Tablet,2023,5,1,1
-3001079,Blood group antibody screen [Presence] in Serum or Plasma,2018,3,1,6
-3001079,Blood group antibody screen [Presence] in Serum or Plasma,2020,5,1,6
+3001079,Blood group antibody screen [Presence] in Serum or Plasma,2018,3,1,1
+3001079,Blood group antibody screen [Presence] in Serum or Plasma,2020,5,1,1
 4057420,Catheter ablation of tissue of heart,1955,4,2,1
 4057420,Catheter ablation of tissue of heart,1955,11,1,1
 4057420,Catheter ablation of tissue of heart,1960,4,1,1
@@ -3350,10 +3350,10 @@ concept_id,concept_name,date_year,date_month,person_count,records_per_person
 4078793,Direct current cardioversion,2023,4,53,2.3962264150943398
 4078793,Direct current cardioversion,2023,5,51,1.8627450980392157
 4078793,Direct current cardioversion,2023,6,22,1.7727272727272727
-4108450,Inspiration/expiration time ratio,2001,6,1,6
-4108450,Inspiration/expiration time ratio,2019,9,1,6
-4128111,T - Tumor stage,2020,11,1,6
-4128111,T - Tumor stage,2020,12,1,6
+4108450,Inspiration/expiration time ratio,2001,6,1,1
+4108450,Inspiration/expiration time ratio,2019,9,1,1
+4128111,T - Tumor stage,2020,11,1,1
+4128111,T - Tumor stage,2020,12,1,1
 4202451,Percutaneous mechanical thrombectomy of portal vein using fluoroscopic guidance,1964,12,1,1
 4202451,Percutaneous mechanical thrombectomy of portal vein using fluoroscopic guidance,1969,3,1,1
 4202451,Percutaneous mechanical thrombectomy of portal vein using fluoroscopic guidance,1973,8,1,1
@@ -3873,8 +3873,8 @@ concept_id,concept_name,date_year,date_month,person_count,records_per_person
 4216130,Percutaneous coronary intervention,2023,2,2,1
 4216130,Percutaneous coronary intervention,2023,4,2,1
 4216130,Percutaneous coronary intervention,2023,5,1,1
-4216746,Positive end expiratory pressure setting,2008,9,1,6
-4216746,Positive end expiratory pressure setting,2011,3,1,6
+4216746,Positive end expiratory pressure setting,2008,9,1,1
+4216746,Positive end expiratory pressure setting,2011,3,1,1
 4217646,Implantable defibrillator,1926,8,1,1
 4217646,Implantable defibrillator,1929,12,1,1
 4217646,Implantable defibrillator,1931,3,1,1
@@ -4686,14 +4686,14 @@ concept_id,concept_name,date_year,date_month,person_count,records_per_person
 4230911,Echocardiography,2023,4,13,1
 4230911,Echocardiography,2023,5,5,1
 4230911,Echocardiography,2023,6,1,1
-4248525,Lying systolic blood pressure,2015,4,1,6
-4248525,Lying systolic blood pressure,2019,5,1,6
-4248525,Lying systolic blood pressure,2019,10,1,6
-4248525,Lying systolic blood pressure,2020,6,1,6
-4248525,Lying systolic blood pressure,2021,10,1,6
-4257036,Antenatal hepatitis B blood screening test status,2014,11,1,6
-4257036,Antenatal hepatitis B blood screening test status,2017,2,1,6
-4257036,Antenatal hepatitis B blood screening test status,2018,9,1,6
+4248525,Lying systolic blood pressure,2015,4,1,1
+4248525,Lying systolic blood pressure,2019,5,1,1
+4248525,Lying systolic blood pressure,2019,10,1,1
+4248525,Lying systolic blood pressure,2020,6,1,1
+4248525,Lying systolic blood pressure,2021,10,1,1
+4257036,Antenatal hepatitis B blood screening test status,2014,11,1,1
+4257036,Antenatal hepatitis B blood screening test status,2017,2,1,1
+4257036,Antenatal hepatitis B blood screening test status,2018,9,1,1
 4329847,Myocardial infarction,1941,6,1,1
 4329847,Myocardial infarction,1942,12,1,1
 4329847,Myocardial infarction,1943,8,1,1
@@ -5304,24 +5304,24 @@ concept_id,concept_name,date_year,date_month,person_count,records_per_person
 4336464,Coronary artery bypass graft,2023,2,2,1
 4336464,Coronary artery bypass graft,2023,4,2,1
 4336464,Coronary artery bypass graft,2023,5,1,1
-4353713,Positive end expiratory pressure,2018,1,1,6
-4353713,Positive end expiratory pressure,2019,2,1,6
-4353713,Positive end expiratory pressure,2021,7,1,6
-4353717,Ventilator delivered minute volume,2016,10,1,6
-4353717,Ventilator delivered minute volume,2021,5,1,6
-4353717,Ventilator delivered minute volume,2022,12,1,6
-4353843,Invasive systolic arterial pressure,2002,3,1,6
-4353843,Invasive systolic arterial pressure,2015,9,1,6
-4353843,Invasive systolic arterial pressure,2021,9,1,6
-4353843,Invasive systolic arterial pressure,2021,10,1,6
-4353843,Invasive systolic arterial pressure,2021,12,1,6
-4353843,Invasive systolic arterial pressure,2023,4,1,6
-4354252,Non-invasive systolic arterial pressure,2018,1,1,6
-4354252,Non-invasive systolic arterial pressure,2019,8,1,6
-4354252,Non-invasive systolic arterial pressure,2020,8,1,6
-4354252,Non-invasive systolic arterial pressure,2021,2,1,6
-4354252,Non-invasive systolic arterial pressure,2021,6,1,6
-4354252,Non-invasive systolic arterial pressure,2021,11,1,6
+4353713,Positive end expiratory pressure,2018,1,1,1
+4353713,Positive end expiratory pressure,2019,2,1,1
+4353713,Positive end expiratory pressure,2021,7,1,1
+4353717,Ventilator delivered minute volume,2016,10,1,1
+4353717,Ventilator delivered minute volume,2021,5,1,1
+4353717,Ventilator delivered minute volume,2022,12,1,1
+4353843,Invasive systolic arterial pressure,2002,3,1,1
+4353843,Invasive systolic arterial pressure,2015,9,1,1
+4353843,Invasive systolic arterial pressure,2021,9,1,1
+4353843,Invasive systolic arterial pressure,2021,10,1,1
+4353843,Invasive systolic arterial pressure,2021,12,1,1
+4353843,Invasive systolic arterial pressure,2023,4,1,1
+4354252,Non-invasive systolic arterial pressure,2018,1,1,1
+4354252,Non-invasive systolic arterial pressure,2019,8,1,1
+4354252,Non-invasive systolic arterial pressure,2020,8,1,1
+4354252,Non-invasive systolic arterial pressure,2021,2,1,1
+4354252,Non-invasive systolic arterial pressure,2021,6,1,1
+4354252,Non-invasive systolic arterial pressure,2021,11,1,1
 19018935,digoxin 0.125 MG Oral Tablet,1970,3,1,1
 19018935,digoxin 0.125 MG Oral Tablet,1970,9,1,2
 19018935,digoxin 0.125 MG Oral Tablet,1971,9,1,1
@@ -11502,7 +11502,7 @@ concept_id,concept_name,date_year,date_month,person_count,records_per_person
 40492359,Insertion of biventricular implantable cardioverter defibrillator,2022,12,1,1
 40492359,Insertion of biventricular implantable cardioverter defibrillator,2023,2,1,1
 40492359,Insertion of biventricular implantable cardioverter defibrillator,2023,4,1,1
-45766147,Appearance,2022,6,1,6
+45766147,Appearance,2022,6,1,1
 45767945,Coronary artery stent,1941,6,1,1
 45767945,Coronary artery stent,1942,12,1,1
 45767945,Coronary artery stent,1943,8,1,1
