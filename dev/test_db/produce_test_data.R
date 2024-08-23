@@ -21,7 +21,8 @@ read_table <- function(con, table) {
   query <- glue::glue("SELECT * FROM {schema}.{table}")
   # Run the query and write results
   con |>
-    DBI::dbGetQuery(query)
+    DBI::dbGetQuery(query) |>
+    arrange(across(everything()))
 }
 
 # Get the relevant tables and filter
