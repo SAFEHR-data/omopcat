@@ -30,8 +30,7 @@ write_table <- function(data, con, table) {
       table = table
     ),
     value = data,
-    append = TRUE,
-    overwrite = FALSE
+    overwrite = TRUE
   )
 }
 
