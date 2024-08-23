@@ -1,9 +1,12 @@
-
 # PRODUCED FOR A SPECIFIC DATASET:
 # synthea-allergies-10k
 # (but could work for others)
 
-library(tidyverse)
+cli::cli_h1("Inserting dummy tables")
+
+suppressPackageStartupMessages(
+  library(tidyverse)
+)
 
 dir <- Sys.getenv("EUNOMIA_DATA_FOLDER")
 name <- Sys.getenv("TEST_DB_NAME")
@@ -13,6 +16,8 @@ version <- Sys.getenv("TEST_DB_OMOP_VERSION")
 con <- DBI::dbConnect(
   duckdb::duckdb(dbdir = glue::glue("{dir}/{name}_{version}_1.0.duckdb"))
 )
+
+withr::defer(DBI::dbDisconnect(con))
 
 # Function to write data to a table in the cdm schema
 write_table <- function(data, con, table) {
@@ -30,10 +35,10 @@ write_table <- function(data, con, table) {
   )
 }
 
-read_csv(here::here("dev/test_db/dummy/measurement.csv")) |>
+read_csv(here::here("dev/test_db/dummy/measurement.csv"), show_col_types = FALSE) |>
   write_table(con, "measurement")
 
-read_csv(here::here("dev/test_db/dummy/observation.csv")) |>
+read_csv(here::here("dev/test_db/dummy/observation.csv"), show_col_types = FALSE) |>
   write_table(con, "observation")
 
 # Load the CMD object to verify integrity of the schema
@@ -45,3 +50,4 @@ CDMConnector::cdm_from_con(
   cdm_name = name
 )
 
+cli::cli_alert_success("Dummy tables inserted successfully")
