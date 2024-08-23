@@ -11,7 +11,7 @@ test_that("Test data files are consistent", {
   # To use expect_snapshot_file(), need to save the output to a temporary file
   save_csv <- function(x) {
     path <- tempfile(fileext = ".csv")
-    write.csv(x, file = path)
+    readr::write_csv(x, file = path)
     path
   }
   expect_snapshot_file(save_csv(get_concepts_table()), "concepts_table.csv")
