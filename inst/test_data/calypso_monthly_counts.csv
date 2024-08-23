@@ -1,23 +1,23 @@
 concept_id,concept_name,date_year,date_month,person_count,records_per_person
+3001079,Blood group antibody screen [Presence] in Serum or Plasma,2020,5,1,1
+4108450,Inspiration/expiration time ratio,2019,9,1,1
+4128111,T - Tumor stage,2020,11,1,1
+4128111,T - Tumor stage,2020,12,1,1
+4248525,Lying systolic blood pressure,2019,5,1,1
 4248525,Lying systolic blood pressure,2019,10,1,1
 4248525,Lying systolic blood pressure,2020,6,1,1
-4354252,Non-invasive systolic arterial pressure,2019,8,1,1
 4248525,Lying systolic blood pressure,2021,10,1,1
-4353843,Invasive systolic arterial pressure,2023,4,1,1
-4128111,T - Tumor stage,2020,11,1,1
-4353843,Invasive systolic arterial pressure,2021,10,1,1
-3001079,Blood group antibody screen [Presence] in Serum or Plasma,2020,5,1,1
-4354252,Non-invasive systolic arterial pressure,2021,11,1,1
-4353843,Invasive systolic arterial pressure,2021,12,1,1
-4354252,Non-invasive systolic arterial pressure,2021,6,1,1
-4108450,Inspiration/expiration time ratio,2019,9,1,1
-4354252,Non-invasive systolic arterial pressure,2020,8,1,1
-4248525,Lying systolic blood pressure,2019,5,1,1
-4353843,Invasive systolic arterial pressure,2021,9,1,1
-4128111,T - Tumor stage,2020,12,1,1
-4354252,Non-invasive systolic arterial pressure,2021,2,1,1
-45766147,Appearance,2022,6,1,1
-4353717,Ventilator delivered minute volume,2021,5,1,1
 4353713,Positive end expiratory pressure,2019,2,1,1
-4353717,Ventilator delivered minute volume,2022,12,1,1
 4353713,Positive end expiratory pressure,2021,7,1,1
+4353717,Ventilator delivered minute volume,2021,5,1,1
+4353717,Ventilator delivered minute volume,2022,12,1,1
+4353843,Invasive systolic arterial pressure,2021,9,1,1
+4353843,Invasive systolic arterial pressure,2021,10,1,1
+4353843,Invasive systolic arterial pressure,2021,12,1,1
+4353843,Invasive systolic arterial pressure,2023,4,1,1
+4354252,Non-invasive systolic arterial pressure,2019,8,1,1
+4354252,Non-invasive systolic arterial pressure,2020,8,1,1
+4354252,Non-invasive systolic arterial pressure,2021,2,1,1
+4354252,Non-invasive systolic arterial pressure,2021,6,1,1
+4354252,Non-invasive systolic arterial pressure,2021,11,1,1
+45766147,Appearance,2022,6,1,1
