@@ -1,5 +1,5 @@
 test_that("daterange module returns the selected dates as a reactive", {
-testServer(mod_date_range_server, {
+  testServer(mod_date_range_server, {
     ns <- session$ns
     expect_true(inherits(ns, "function"))
     expect_true(grepl(id, ns("")))
@@ -13,8 +13,7 @@ testServer(mod_date_range_server, {
     expect_true(is.reactive(returned_dates))
     expect_s3_class(returned_dates(), "Date")
     expect_identical(returned_dates(), expected_dates)
-  }
-)
+  })
 })
 
 test_that("module ui works", {
