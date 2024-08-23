@@ -1,20 +1,17 @@
 concept_id,concept_name,summary_attribute,value_as_number,value_as_string
-3001079,Blood group antibody screen [Presence] in Serum or Plasma,frequency,2,Not present
-4108450,Inspiration/expiration time ratio,mean,0.6666666666666666,NA
-4108450,Inspiration/expiration time ratio,sd,0,NA
-4128111,T - Tumor stage,frequency,1,NA
-4128111,T - Tumor stage,frequency,1,NA
-4216746,Positive end expiratory pressure setting,mean,8,NA
-4216746,Positive end expiratory pressure setting,sd,0,NA
 4248525,Lying systolic blood pressure,mean,132.8,NA
-4248525,Lying systolic blood pressure,sd,21.25323504786977,NA
-4257036,Antenatal hepatitis B blood screening test status,frequency,3,Hepatitis B screening offered
-4353713,Positive end expiratory pressure,mean,5.666666666666667,NA
-4353713,Positive end expiratory pressure,sd,1.1547005383792517,NA
-4353717,Ventilator delivered minute volume,mean,12.799999999999999,NA
-4353717,Ventilator delivered minute volume,sd,3.469870314579495,NA
+4354252,Non-invasive systolic arterial pressure,mean,123.66666666666667,NA
+4108450,Inspiration/expiration time ratio,mean,0.6666666666666666,NA
 4353843,Invasive systolic arterial pressure,mean,128.83333333333334,NA
 4353843,Invasive systolic arterial pressure,sd,23.65938855225694,NA
-4354252,Non-invasive systolic arterial pressure,mean,123.66666666666667,NA
 4354252,Non-invasive systolic arterial pressure,sd,9.993331109628395,NA
+4248525,Lying systolic blood pressure,sd,21.25323504786977,NA
+4108450,Inspiration/expiration time ratio,sd,0,NA
+4128111,T - Tumor stage,frequency,1,NA
+3001079,Blood group antibody screen [Presence] in Serum or Plasma,frequency,2,Not present
+4128111,T - Tumor stage,frequency,1,NA
+4353717,Ventilator delivered minute volume,mean,12.799999999999999,NA
+4353713,Positive end expiratory pressure,mean,5.666666666666667,NA
+4353713,Positive end expiratory pressure,sd,1.1547005383792517,NA
+4353717,Ventilator delivered minute volume,sd,3.469870314579495,NA
 45766147,Appearance,frequency,1,Well nourished
