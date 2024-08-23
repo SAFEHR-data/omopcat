@@ -8,7 +8,7 @@ version <- Sys.getenv("TEST_DB_OMOP_VERSION")
 # Connect to the duckdb test database
 con <- DBI::dbConnect(
   duckdb::duckdb(dbdir = glue::glue("{dir}/{name}_{version}_1.0.duckdb"))
-)
+withr::defer(DBI::dbDisconnect(con))
 
 # Function to write results from a table to the test data folder
 write_results <- function(con, table, order_by = "") {
