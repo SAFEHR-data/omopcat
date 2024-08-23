@@ -45,12 +45,3 @@ CDMConnector::cdm_from_con(
   cdm_name = name
 )
 
-# Clean up
-DBI::dbDisconnect(con)
-rm(write_table)
-rm(con)
-rm(dir)
-rm(name)
-rm(version)
-
-detach("package:tidyverse", unload = TRUE)
