@@ -1,4 +1,3 @@
-
 library(tidyverse)
 
 dir <- Sys.getenv("EUNOMIA_DATA_FOLDER")
@@ -7,7 +6,9 @@ version <- Sys.getenv("TEST_DB_OMOP_VERSION")
 
 # Connect to the duckdb test database
 con <- DBI::dbConnect(duckdb::duckdb(
-  dbdir = glue::glue("{dir}/{name}_{version}_1.0.duckdb")))
+  dbdir = glue::glue("{dir}/{name}_{version}_1.0.duckdb")
+))
+withr::defer(DBI::dbDisconnect(con))
 
 # Function to execute one or more SQL queries and clear results
 create_results_tables <- function(con, sql) {
@@ -19,7 +20,7 @@ create_results_tables <- function(con, sql) {
 
 # Function to produce the 'calypso_concepts' table
 # from a list of concept ids
-analyse_concepts <- function(cdm, concepts) {
+get_concepts_table <- function(cdm, concepts) {
   # Extract columns from concept table
   cdm$concept |>
     filter(concept_id %in% concepts) |>
@@ -36,7 +37,7 @@ analyse_concepts <- function(cdm, concepts) {
 }
 
 # Function to produce the 'calypso_monthly_counts' table
-analyse_monthly_counts <- function(cdm) {
+calculate_monthly_counts <- function(cdm) {
   # Function to analyse a column from a specific table
   # for each month
   analyse_table <- function(table, concept, date) {
@@ -76,7 +77,7 @@ analyse_monthly_counts <- function(cdm) {
       )
   }
   # Combine results for all tables
-  bind_rows(
+  out <- bind_rows(
     cdm$condition_occurrence |> analyse_table(condition_concept_id, condition_start_date),
     cdm$drug_exposure |> analyse_table(drug_concept_id, drug_exposure_start_date),
     cdm$procedure_occurrence |> analyse_table(procedure_concept_id, procedure_date),
@@ -85,40 +86,87 @@ analyse_monthly_counts <- function(cdm) {
     cdm$observation |> analyse_table(observation_concept_id, observation_date),
     cdm$specimen |> analyse_table(specimen_concept_id, specimen_date)
   )
+
+  # Map concept names to the concept IDs
+  concept_names <- select(cdm$concept, concept_id, concept_name) |>
+    filter(concept_id %in% out$concept_id) |>
+    collect()
+  out |>
+    left_join(concept_names, by = c("concept_id" = "concept_id")) |>
+    select(concept_id, concept_name, everything())
+}
+
+# Function to analyse a numeric column
+# by calculating the mean and the standard deviation
+summarise_numeric_concepts <- function(.data) {
+  # Calculate mean and sd
+  stats <- .data |>
+    group_by(concept_id) |>
+    summarise(mean = mean(value_as_number, na.rm = TRUE), sd = sd(value_as_number, na.rm = TRUE))
+
+  # Wrangle output to expected format
+  stats |>
+    pivot_longer(
+      cols = c(mean, sd),
+      names_to = "summary_attribute",
+      values_to = "value_as_number"
+    )
+}
+
+# Function to analyse a categorical column - present in observation and measurement
+# by joining value_as_concept_id to cdm$concept by concept_id
+summarise_categorical_concepts <- function(.data) {
+  # Calculate frequencies
+  frequencies <- .data |>
+    count(concept_id, value_as_concept_id)
+
+  # Wrangle output into the expected format
+  frequencies |>
+    mutate(summary_attribute = "frequency") |>
+    select(
+      concept_id,
+      summary_attribute,
+      value_as_number = n,
+      value_as_concept_id
+    )
+}
+
+summarise_concepts <- function(.data, concept_name) {
+  stopifnot(inherits(.data, "tbl"))
+  stopifnot(is.character(concept_name))
+
+  .data <- rename(.data, concept_id = all_of(concept_name))
+
+  numeric_concepts <- filter(.data, !is.na(value_as_number))
+  # beware CDM docs: NULL=no categorical result, 0=categorical result but no mapping
+  categorical_concepts <- filter(.data, !is.null(value_as_concept_id) & value_as_concept_id != 0)
+
+  numeric_stats <- summarise_numeric_concepts(numeric_concepts) |> collect()
+  categorical_stats <- summarise_categorical_concepts(categorical_concepts) |> collect()
+  bind_rows(numeric_stats, categorical_stats)
 }
 
 # Function to produce the 'calypso_summary_stats' table
-analyse_summary_stats <- function(cdm) {
-  # Function to analyse a numeric column
-  # by calculation the mean and the standard deviation
-  analyse_numeric_column <- function(table, concept, value) {
-    # Rename columns and remove empty values
-    table <- table |>
-      select(concept_id = {{ concept }}, value = {{ value }}) |>
-      filter(!is.na(value)) |>
-      collect()
-    # Calculate mean
-    df_mean <- table |>
-      group_by(concept_id) |>
-      reframe(
-        summary_attribute = "mean",
-        value_as_number = mean(value)
-      )
-    # Calculate standard deviation
-    df_sd <- table |>
-      group_by(concept_id) |>
-      reframe(
-        summary_attribute = "sd",
-        value_as_number = sd(value)
-      )
-    # Combine mean and standard deviation
-    bind_rows(df_mean, df_sd)
-  }
-  # Combine results for all columns
-  bind_rows(
-    cdm$measurement |> analyse_numeric_column(measurement_concept_id, value_as_number),
-    cdm$observation |> analyse_numeric_column(observation_concept_id, value_as_number)
-  )
+calculate_summary_stats <- function(cdm) {
+  table_names <- c("measurement", "observation")
+  concept_names <- c("measurement_concept_id", "observation_concept_id")
+
+  # Combine results for all tables
+  stats <- map2(table_names, concept_names, ~ summarise_concepts(cdm[[.x]], .y))
+  stats <- bind_rows(stats)
+
+  # Map concept names to the concept_ids
+  concept_names <- select(cdm$concept, concept_id, concept_name) |>
+    filter(concept_id %in% c(stats$concept_id, stats$value_as_concept_id)) |>
+    collect()
+  stats |>
+    # Order is important here, first we get the names for the value_as_concept_ids
+    # from the categorical data summaries and record it as `value_as_string`
+    left_join(concept_names, by = c("value_as_concept_id" = "concept_id")) |>
+    rename(value_as_string = concept_name) |>
+    # Then we get the names for the main concept_ids
+    left_join(concept_names, by = c("concept_id" = "concept_id")) |>
+    select(concept_id, concept_name, !value_as_concept_id)
 }
 
 # Function to write result to the results schema
@@ -157,41 +205,18 @@ cdm <- CDMConnector::cdm_from_con(
 )
 
 # Generate monthly counts and write it to the DB
-monthly_counts <- analyse_monthly_counts(cdm)
+monthly_counts <- calculate_monthly_counts(cdm)
 monthly_counts |>
   write_results(con, "calypso_monthly_counts")
 
 # Generate summary stats and write it to the DB
-summary_stats <- analyse_summary_stats(cdm)
+summary_stats <- calculate_summary_stats(cdm)
 summary_stats |>
   write_results(con, "calypso_summary_stats")
 
-# Get list of concept ids
-ids <- bind_rows(
-  { monthly_counts |> select(concept_id) },
-  { summary_stats |> select(concept_id) }
-) |> distinct()
-ids <- ids$concept_id
+# Get all distinct concept ids
+ids <- unique(c(monthly_counts$concept_id, summary_stats$concept_id))
 
 # Retrieve concept properties from the list of ids
-analyse_concepts(cdm, ids) |>
+get_concepts_table(cdm, ids) |>
   write_results(con, "calypso_concepts")
-
-# Clean up
-DBI::dbDisconnect(con)
-rm(create_results_tables)
-rm(analyse_concepts)
-rm(analyse_monthly_counts)
-rm(analyse_summary_stats)
-rm(write_results)
-rm(monthly_counts)
-rm(summary_stats)
-rm(ids)
-rm(cdm)
-rm(con)
-rm(sql)
-rm(dir)
-rm(name)
-rm(version)
-
-detach("package:tidyverse", unload = TRUE)

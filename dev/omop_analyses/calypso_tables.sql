@@ -14,6 +14,7 @@ CREATE TABLE @resultsDatabaseSchema.calypso_concepts (
 
 CREATE TABLE @resultsDatabaseSchema.calypso_monthly_counts (
     concept_id BIGINT,
+    concept_name VARCHAR,
     date_year INTEGER,
     date_month INTEGER,
     person_count BIGINT,
@@ -22,6 +23,7 @@ CREATE TABLE @resultsDatabaseSchema.calypso_monthly_counts (
 
 CREATE TABLE @resultsDatabaseSchema.calypso_summary_stats (
     concept_id BIGINT,
+    concept_name VARCHAR,
     summary_attribute VARCHAR,
     value_as_string VARCHAR,
     value_as_number DOUBLE
