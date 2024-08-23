@@ -1,20 +1,20 @@
 concept_id,concept_name,summary_attribute,value_as_string,value_as_number
-3001079,Blood group antibody screen [Presence] in Serum or Plasma,frequency,Not present,10
+3001079,Blood group antibody screen [Presence] in Serum or Plasma,frequency,Not present,12
 4108450,Inspiration/expiration time ratio,mean,NA,0.6666666865348816
 4108450,Inspiration/expiration time ratio,sd,NA,0
-4128111,T - Tumor stage,frequency,NA,5
-4128111,T - Tumor stage,frequency,NA,5
+4128111,T - Tumor stage,frequency,NA,6
+4128111,T - Tumor stage,frequency,NA,6
 4216746,Positive end expiratory pressure setting,mean,NA,8
 4216746,Positive end expiratory pressure setting,sd,NA,0
 4248525,Lying systolic blood pressure,mean,NA,132.8
-4248525,Lying systolic blood pressure,sd,NA,19.40146042612943
-4257036,Antenatal hepatitis B blood screening test status,frequency,Hepatitis B screening offered,15
+4248525,Lying systolic blood pressure,sd,NA,19.334443091415178
+4257036,Antenatal hepatitis B blood screening test status,frequency,Hepatitis B screening offered,18
 4353713,Positive end expiratory pressure,mean,NA,5.666666666666667
-4353713,Positive end expiratory pressure,sd,NA,0.9759000729485332
+4353713,Positive end expiratory pressure,sd,NA,0.9701425001453319
 4353717,Ventilator delivered minute volume,mean,NA,12.799999872843424
-4353717,Ventilator delivered minute volume,sd,NA,2.9325751858598283
+4353717,Ventilator delivered minute volume,sd,NA,2.915273706331873
 4353843,Invasive systolic arterial pressure,mean,NA,128.83333333333334
-4353843,Invasive systolic arterial pressure,sd,NA,21.967190791368107
+4353843,Invasive systolic arterial pressure,sd,NA,21.904337470008077
 4354252,Non-invasive systolic arterial pressure,mean,NA,123.66666666666667
-4354252,Non-invasive systolic arterial pressure,sd,NA,9.27857499958849
-45766147,Appearance,frequency,Well nourished,5
+4354252,Non-invasive systolic arterial pressure,sd,NA,9.252026804976303
+45766147,Appearance,frequency,Well nourished,6
