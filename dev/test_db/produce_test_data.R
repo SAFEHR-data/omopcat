@@ -1,8 +1,6 @@
 cli::cli_h1("Producing test data")
 
-suppressPackageStartupMessages(
-  library(tidyverse)
-)
+library(dplyr)
 
 dir <- Sys.getenv("EUNOMIA_DATA_FOLDER")
 name <- Sys.getenv("TEST_DB_NAME")
@@ -29,8 +27,7 @@ write_results <- function(con, table) {
 }
 
 # Write all results to the test data folder
-con |> write_results("calypso_concepts", "ORDER BY concept_id")
-con |> write_results("calypso_monthly_counts", "ORDER BY concept_id, date_year, date_month")
-con |> write_results("calypso_summary_stats", "ORDER BY concept_id, summary_attribute")
+table_names <- c("calypso_concepts", "calypso_monthly_counts", "calypso_summary_stats")
+purrr::walk(table_names, write_results, con = con)
 
 cli::cli_alert_success("Test data produced")
