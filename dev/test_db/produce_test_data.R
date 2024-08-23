@@ -26,13 +26,4 @@ con |> write_results("calypso_concepts", "ORDER BY concept_id")
 con |> write_results("calypso_monthly_counts", "ORDER BY concept_id, date_year, date_month")
 con |> write_results("calypso_summary_stats", "ORDER BY concept_id, summary_attribute")
 
-# Clean up
-DBI::dbDisconnect(con)
-rm(write_results)
-rm(con)
-rm(dir)
-rm(name)
-rm(version)
-
-detach("package:tidyverse", unload = TRUE)
 
