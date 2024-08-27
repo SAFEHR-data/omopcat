@@ -28,22 +28,21 @@ mod_monthly_count_server <- function(id, data, selected_concept, selected_dates)
   stopifnot(is.reactive(selected_concept))
   stopifnot(is.reactive(selected_dates))
 
-
   moduleServer(id, function(input, output, session) {
-    ## Filter data based on selected concept and datea range
+    ## Filter data based on selected concept and date range
     selected_concept_id <- reactive(selected_concept()$concept_id)
     selected_concept_name <- reactive(selected_concept()$concept_name)
     filtered_monthly_counts <- reactive({
       if (is.null(selected_concept_id())) {
         return(NULL)
       }
-      req(selected_dates()) # we expect always to have dates selected
       out <- data[data$concept_id == selected_concept_id(), ]
+
+      req(selected_dates()) # we expect always to have dates selected
       .filter_dates(out, selected_dates())
     })
 
     output$monthly_count_plot <- renderPlot({
-
       ## Return empty plot if no data is selected
       if (is.null(filtered_monthly_counts()) || nrow(filtered_monthly_counts()) == 0) {
         return(NULL)
@@ -55,15 +54,13 @@ mod_monthly_count_server <- function(id, data, selected_concept, selected_dates)
 }
 
 
-
 .filter_dates <- function(monthly_counts, date_range) {
-  range_years <- lubridate::year(date_range)
-  range_months <- lubridate::month(date_range)
+  date_range <- as.Date(date_range)
+  if (date_range[2] < date_range[1]) {
+    stop("Invalid date range, end date is before start date")
+  }
 
-  date_year <- date_month <- NULL
-  dplyr::filter(
-    monthly_counts,
-    date_year >= range_years[1] & date_year <= range_years[2],
-    date_month >= range_months[1] & date_month <= range_months[2]
-  )
+  dates <- lubridate::make_date(year = monthly_counts$date_year, month = monthly_counts$date_month)
+  keep_dates <- dplyr::between(dates, date_range[1], date_range[2])
+  dplyr::filter(monthly_counts, keep_dates)
 }
