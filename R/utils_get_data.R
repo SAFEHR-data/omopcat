@@ -31,12 +31,12 @@ get_monthly_counts <- function() {
     return(
       data.frame(
         concept_id = c(
-          rep(c(40213251, 133834, 4057420), each = 3)
+          rep(c(40213251, 133834, 4057420, 1234567), each = 3)
         ),
-        date_year = c(2019L, 2020L, 2020L, 2019L, 2020L, 2020L, 2020L, 2019L, 2019L),
-        date_month = c(4L, 3L, 5L, 5L, 8L, 4L, 11L, 6L, 3L),
-        person_count = c(1, 1, 3, 4, 2, 3, 2, 4, 1),
-        records_per_person = c(1, 1, 1, 1, 1, 1, 1, 1, 1)
+        date_year = c(2019L, 2020L, 2020L, 2019L, 2020L, 2020L, 2020L, 2019L, 2019L, 2021L, 2020L, 2019L),
+        date_month = c(4L, 3L, 5L, 5L, 8L, 4L, 11L, 6L, 3L, 1L, 2L, 3L),
+        person_count = c(1, 1, 3, 4, 2, 3, 2, 4, 1, 23, 12, 42),
+        records_per_person = c(1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 2, 1)
       )
     )
   }
