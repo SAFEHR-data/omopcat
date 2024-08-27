@@ -9,12 +9,13 @@ mock_monthly_counts <- data.frame(
 # Application-logic tests ---------------------------------------------------------------------
 
 mock_concept_row <- reactiveVal()
+mock_date_range <- reactiveVal(c("2000-01-01", "2200-12-31"))
 
 test_that("mod_monthly_count_server reacts to changes in the selected concept", {
   testServer(
     mod_monthly_count_server,
     # Add here your module params
-    args = list(data = mock_monthly_counts, selected_concept = mock_concept_row),
+    args = list(data = mock_monthly_counts, selected_concept = mock_concept_row, selected_dates = mock_date_range),
     {
       ns <- session$ns
       expect_true(inherits(ns, "function"))
@@ -34,10 +35,37 @@ test_that("mod_monthly_count_server reacts to changes in the selected concept", 
   )
 })
 
+test_that("mod_monthly_count_server reacts to changes in the selected date range", {
+  testServer(
+    mod_monthly_count_server,
+    # Add here your module params
+    args = list(data = mock_monthly_counts, selected_concept = mock_concept_row, selected_dates = mock_date_range),
+    {
+      ns <- session$ns
+      expect_true(inherits(ns, "function"))
+      expect_true(grepl(id, ns("")))
+      expect_true(grepl("test", ns("test")))
+
+      mock_concept_row(list(concept_id = 40213251, concept_name = "test")) # update reactive value
+
+      selected_dates <- c("2019-01-01", "2019-12-31")
+      mock_date_range(selected_dates)
+      session$flushReact()
+      expect_true(all(filtered_monthly_counts()$date_year == 2019))
+
+      ## Case when no data for given range
+      selected_dates2 <- c("3019-01-01", "3019-12-31")
+      mock_date_range(selected_dates2)
+      session$flushReact()
+      expect_equal(nrow(filtered_monthly_counts()), 0)
+    }
+  )
+})
+
 test_that("mod_monthly_count_server generates an empty plot when no row is selected", {
   testServer(
     mod_monthly_count_server,
-    args = list(data = mock_monthly_counts, selected_concept = reactiveVal(NULL)),
+    args = list(data = mock_monthly_counts, selected_concept = reactiveVal(NULL), selected_dates = mock_date_range),
     {
       # When no concept_id is selected, no plot should be rendered
       expect_length(output$monthly_count_plot$coordmap$panels[[1]]$mapping, 0)

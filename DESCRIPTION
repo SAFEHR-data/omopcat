@@ -16,7 +16,9 @@ Imports:
     glue,
     tidyr,
     withr,
-    forcats
+    forcats,
+    lubridate,
+    dplyr
 Suggests:
     devtools,
     usethis,
@@ -25,7 +27,6 @@ Suggests:
     spelling,
     here,
     CDMConnector,
-    lubridate,
     lintr
 Encoding: UTF-8
 LazyData: true

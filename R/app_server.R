@@ -14,10 +14,11 @@ app_server <- function(input, output, session) {
   mod_date_range_server("date_range")
 
   selected_row <- mod_datatable_server("totals", selected_data)
+  selected_dates <- mod_date_range_server("date_range")
 
-  # TODO: refactor monthly_count and stat_numeric modules into a single module
+  # TODO: refactor monthly_count and summary_stat modules into a single module?n
   # https://github.com/UCLH-Foundry/omop-data-catalogue/issues/30
-  mod_monthly_count_server("monthly_count", monthly_counts, selected_row)
+  mod_monthly_count_server("monthly_count", monthly_counts, selected_row, selected_dates)
   mod_summary_stat_server("summary_stat", summary_stats, selected_row)
 
   mod_export_tab_server("export_tab", selected_data)
