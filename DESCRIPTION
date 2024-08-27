@@ -17,6 +17,7 @@ Imports:
     tidyr,
     withr,
     forcats,
+    readr,
     lubridate,
     dplyr
 Suggests:

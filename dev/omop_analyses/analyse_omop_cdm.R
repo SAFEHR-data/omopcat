@@ -1,4 +1,8 @@
-library(tidyverse)
+cli::cli_h1("Generating summarys statistics")
+
+suppressPackageStartupMessages(
+  library(tidyverse)
+)
 
 dir <- Sys.getenv("EUNOMIA_DATA_FOLDER")
 name <- Sys.getenv("TEST_DB_NAME")
@@ -180,8 +184,7 @@ write_results <- function(data, con, table) {
       table = table
     ),
     value = data,
-    append = TRUE,
-    overwrite = FALSE
+    overwrite = TRUE
   )
 }
 
@@ -220,3 +223,5 @@ ids <- unique(c(monthly_counts$concept_id, summary_stats$concept_id))
 # Retrieve concept properties from the list of ids
 get_concepts_table(cdm, ids) |>
   write_results(con, "calypso_concepts")
+
+cli::cli_alert_success("Summary statistics generated successfully")

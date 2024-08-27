@@ -1,3 +1,4 @@
+cli::cli_h1("Setting up test database")
 
 # Create an duckdb database from Eunomia datasets
 con <- DBI::dbConnect(
@@ -18,3 +19,5 @@ CDMConnector::cdm_from_con(
   write_schema = Sys.getenv("TEST_DB_RESULTS_SCHEMA"),
   cdm_name = Sys.getenv("TEST_DB_NAME")
 )
+
+cli::cli_alert_success("Test database setup successfully")
