@@ -3,3 +3,7 @@
 
 # duckdb databases
 *.duckdb
+
+# duckdb temp files
+# (in case of failure)
+*.duckdb.wal
