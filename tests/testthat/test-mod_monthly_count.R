@@ -9,7 +9,7 @@ mock_monthly_counts <- data.frame(
 # Application-logic tests ---------------------------------------------------------------------
 
 mock_concept_row <- reactiveVal()
-mock_date_range <- reactiveVal(c("2000-01-01", "2200-12-31"))
+mock_date_range <- reactiveVal(c("2019-04-01", "2024-08-01"))
 
 test_that("mod_monthly_count_server reacts to changes in the selected concept", {
   testServer(
@@ -62,12 +62,48 @@ test_that("mod_monthly_count_server reacts to changes in the selected date range
   )
 })
 
+test_that("Date filtering works as expected", {
+  testServer(
+    mod_monthly_count_server,
+    args = list(data = mock_monthly_counts, selected_concept = mock_concept_row, selected_dates = mock_date_range),
+    {
+      # We have data for this concept from 2019-04 to 2020-05
+      mock_concept_row(list(concept_id = 40213251, concept_name = "test")) # update reactive value
+
+      # Test boundary dates, we only care up to the month level
+      selected_dates <- c("2019-04-01", "2020-05-01")
+      mock_date_range(selected_dates)
+      session$flushReact()
+      expect_equal(nrow(filtered_monthly_counts()), 3)
+
+      # This checks a previous bug where a row with date_month larger than the date range months
+      # would always get removed while it should be kept in case the year is within the range
+      # e.g. 2019-04 should be kept when the range is 2019-01 to 2020-01
+      selected_dates2 <- c("2019-01-01", "2020-01-01")
+      mock_date_range(selected_dates2)
+      session$flushReact()
+      expect_equal(nrow(filtered_monthly_counts()), 1)
+    }
+  )
+})
+
 test_that("mod_monthly_count_server generates an empty plot when no row is selected", {
   testServer(
     mod_monthly_count_server,
     args = list(data = mock_monthly_counts, selected_concept = reactiveVal(NULL), selected_dates = mock_date_range),
     {
       # When no concept_id is selected, no plot should be rendered
+      expect_length(output$monthly_count_plot$coordmap$panels[[1]]$mapping, 0)
+    }
+  )
+})
+
+test_that("mod_monthly_count_server generates an empty plot when no data is available for the selected concept", {
+  testServer(
+    mod_monthly_count_server,
+    args = list(data = mock_monthly_counts, selected_concept = mock_concept_row, selected_dates = mock_date_range),
+    {
+      mock_concept_row(list(concept_id = 9999999, concept_name = "idontexist"))
       expect_length(output$monthly_count_plot$coordmap$panels[[1]]$mapping, 0)
     }
   )
@@ -98,4 +134,9 @@ test_that("monthly_count_plot correctly parses dates", {
   expect_identical(as.data.frame(p$data), expected_data)
   expect_false(is.null(p$mapping))
   expect_false(is.null(p$layers))
+})
+
+test_that("Date range filtering fails for invalid date range", {
+  selected_dates <- c("2020-01-01", "2019-01-01")
+  expect_error(.filter_dates(monthly_counts, selected_dates), "Invalid date range, end date is before start date")
 })
