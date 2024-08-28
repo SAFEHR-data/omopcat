@@ -1,4 +1,0 @@
-docker build -f Dockerfile_base --progress=plain -t calypso_base .
-docker build -f Dockerfile --progress=plain -t calypso:latest .
-docker run -p 80:80 calypso:latest
-# then go to 127.0.0.1:80
