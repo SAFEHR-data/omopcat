@@ -30,8 +30,22 @@ get_summary_stats <- function() {
   .read_db_table("calypso_summary_stats")
 }
 
+.connect_to_db <- function() {
+  dir <- Sys.getenv("CALYPSO_DATA_PATH")
+  name <- Sys.getenv("CALYPSO_DB_NAME")
+  version <- Sys.getenv("CALYPSO_DB_OMOP_VERSION")
+
+  db_file <- glue::glue("{dir}/{name}_{version}_1.0.duckdb")
+  if (!file.exists(db_file)) {
+    cli::cli_abort("Database file {.file {db_file}} does not exist.")
+  }
+
+  # Connect to the duckdb database
+  DBI::dbConnect(duckdb::duckdb(dbdir = db_file))
+}
+
 .read_db_table <- function(table_name) {
-  con <- connect_to_test_db()
+  con <- .connect_to_db()
   withr::defer(DBI::dbDisconnect(con))
   DBI::dbReadTable(con, table_name)
 }
