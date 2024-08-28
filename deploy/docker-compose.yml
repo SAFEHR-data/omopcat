@@ -1,0 +1,14 @@
+services:
+  shiny:
+    build: .
+    image: calypso:latest
+    platform: linux/amd64
+    restart: unless-stopped
+    environment:
+      - CALYPSO_DATA_PATH=/etc/calypso/data
+      - CALYPSO_DB_NAME=${CALYPSO_DB_NAME}
+      - CALYPSO_DB_OMOP_VERSION=${CALYPSO_DB_OMOP_VERSION}
+    volumes:
+      - ../${CALYPSO_DATA_PATH}:/etc/calypso/data
+    ports:
+      - 3838:3838
