@@ -13,6 +13,11 @@ run_app <- function(
     enableBookmarking = NULL,
     uiPattern = "/",
     ...) {
+  # Synchronise environment variable settings and golem options for running in prod
+  if (get_golem_config("app_prod")) {
+    options("golem.app.prod" = TRUE)
+  }
+
   with_golem_options(
     app = shinyApp(
       ui = app_ui,
