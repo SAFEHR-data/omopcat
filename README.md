@@ -7,6 +7,16 @@
 
 The goal of calypso is to provide a summary of OMOP data and display it in a public data catalogue
 
+## Overview
+
+1. [Installation](#installation)
+2. [Development](#development)
+    - [Set up](#set-up)
+    - [Updating the `renv` lockfile](#updating-the-renv-lockfile)
+    - [Design](#design)
+    - [Coding style](#coding-style)
+3. [Deployment](./deploy/README.md)
+
 ## Installation
 
 You can install the development version of calypso from within R like so:
@@ -120,3 +130,7 @@ lintr::lint_package()
 ```
 
 (or have it [run automatically in your IDE](https://lintr.r-lib.org/articles/editors.html)).
+
+## Deployment
+
+See the [deployment docs](./deploy/README.md).

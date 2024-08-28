@@ -1,0 +1,19 @@
+FROM rocker/shiny-verse:4.4.1
+SHELL ["/bin/bash", "-o", "pipefail", "-e", "-u", "-x", "-c"]
+
+RUN mkdir -p /usr/local/lib/R/etc/ /usr/lib/R/etc/
+
+# Set R options
+RUN echo "options(renv.config.pak.enabled = FALSE, repos = c(CRAN = 'https://cran.rstudio.com/'), download.file.method = 'libcurl', Ncpus = 4)" |\
+    tee /usr/local/lib/R/etc/Rprofile.site | \
+    tee /usr/lib/R/etc/Rprofile.site
+
+# Install renv
+RUN R -e 'install.packages("remotes")' && \
+    R -e 'remotes::install_version("renv", version = "1.0.7")'
+
+# Restore renv environment
+RUN mkdir /app
+WORKDIR /app
+COPY renv.lock.prod renv.lock
+RUN R -e 'renv::restore()'
