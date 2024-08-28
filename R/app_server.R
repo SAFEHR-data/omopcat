@@ -17,7 +17,7 @@ app_server <- function(input, output, session) {
   selected_dates <- mod_date_range_server("date_range")
 
   # TODO: refactor monthly_count and summary_stat modules into a single module?n
-  # https://github.com/UCLH-Foundry/omop-data-catalogue/issues/30
+  # https://github.com/SAFEHR-data/omop-data-catalogue/issues/30
   mod_monthly_count_server("monthly_count", monthly_counts, selected_row, selected_dates)
   mod_summary_stat_server("summary_stat", summary_stats, selected_row)
 
