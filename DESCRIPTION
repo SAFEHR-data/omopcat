@@ -19,7 +19,8 @@ Imports:
     forcats,
     readr,
     lubridate,
-    dplyr
+    dplyr,
+    cli
 Suggests:
     devtools,
     usethis,
