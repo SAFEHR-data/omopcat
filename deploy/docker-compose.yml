@@ -5,6 +5,7 @@ services:
     platform: linux/amd64
     restart: unless-stopped
     environment:
+      - GOLEM_CONFIG_ACTIVE=${GOLEM_CONFIG_ACTIVE}
       - CALYPSO_DATA_PATH=/etc/calypso/data
       - CALYPSO_DB_NAME=${CALYPSO_DB_NAME}
       - CALYPSO_DB_OMOP_VERSION=${CALYPSO_DB_OMOP_VERSION}
