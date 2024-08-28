@@ -9,10 +9,7 @@ get_concepts_table <- function() {
       readr::read_csv(app_sys("test_data", "calypso_concepts.csv"), show_col_types = FALSE)
     )
   }
-
-  con <- connect_to_test_db()
-  withr::defer(DBI::dbDisconnect(con))
-  DBI::dbReadTable(con, "calypso_concepts")
+  .read_db_table("calypso_concepts")
 }
 
 get_monthly_counts <- function() {
@@ -21,10 +18,7 @@ get_monthly_counts <- function() {
       readr::read_csv(app_sys("test_data", "calypso_monthly_counts.csv"), show_col_types = FALSE)
     )
   }
-
-  con <- connect_to_test_db()
-  withr::defer(DBI::dbDisconnect(con))
-  DBI::dbReadTable(con, "calypso_monthly_counts")
+  .read_db_table("calypso_monthly_counts")
 }
 
 get_summary_stats <- function() {
@@ -33,8 +27,11 @@ get_summary_stats <- function() {
       readr::read_csv(app_sys("test_data", "calypso_summary_stats.csv"), show_col_types = FALSE)
     )
   }
+  .read_db_table("calypso_summary_stats")
+}
 
+.read_db_table <- function(table_name) {
   con <- connect_to_test_db()
   withr::defer(DBI::dbDisconnect(con))
-  DBI::dbReadTable(con, "calypso_summary_stats")
+  DBI::dbReadTable(con, table_name)
 }
