@@ -33,9 +33,13 @@ is only expected to be rebuilt in case of major dependency changes.
 Note that the `calypso` image also includes a `renv::restore()` step, so any dependencies not present
 in the base image will still be installed.
 
-## Run Docker container
+## Run with `docker compose`
+
+Define the environment variables in `.env`, using `.env.sample` as a template.
+Then run:
 
 ```shell
-docker run -p 3838:3838 calypso:latest
-# then go to 127.0.0.1:80
+docker compose up --build
 ```
+
+to launch the app.
