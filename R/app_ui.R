@@ -11,7 +11,7 @@ app_ui <- function(request) {
 
     # The UI logic
     page_navbar(
-      title = "calypso - PROTOTYPE",
+      title = .app_title(),
       sidebar = sidebar(
         title = "Filtering options",
         mod_select_concepts_ui("select_concepts"),
@@ -56,4 +56,12 @@ golem_add_external_resources <- function() {
     # Add here other external resources
     # for example, you can add shinyalert::useShinyalert()
   )
+}
+
+.app_title <- function() {
+  title <- glue::glue('calypso v{get_golem_config("golem_version")}')
+  if (golem::app_dev()) {
+    title <- glue::glue("{title} (dev)")
+  }
+  title
 }
