@@ -15,7 +15,15 @@ mod_plots_ui <- function(id) {
   )
 }
 
-#' plots Server Functions
+#' plots Server function
+#'
+#' Generates the plot of the requested `type`. When no concept is selected, or no data is available,
+#' an error is raised.
+#'
+#' @param data `data.frame` containing the data to be plotted.
+#' @param selected_concept Reactive value containing the selected concept, used for filtering
+#' @param selected_dates Optional reactive value if date filtering needs to be applied
+#' @param type The type of plot to be generated.
 #'
 #' @noRd
 mod_plots_server <- function(id, selected_concept, selected_dates = NULL,
