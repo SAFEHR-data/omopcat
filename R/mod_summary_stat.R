@@ -34,16 +34,16 @@ mod_summary_stat_server <- function(id, data, selected_concept) {
 
     ## When no row selected, return an empty plot
     filtered_summary_stats <- reactive({
-      if (!length(selected_concept_id())) {
-        return(NULL)
-      }
+      req(length(selected_concept_name()) > 0)
       data[data$concept_id == selected_concept_id(), ]
     })
 
     output$summary_stat_plot <- renderPlot({
       ## Return empty plot if no data is selected or if no data is available for the selected concept
-      if (is.null(filtered_summary_stats())) return(NULL)
-      if (nrow(filtered_summary_stats()) == 0) return(NULL)
+      req(filtered_summary_stats())
+      if (nrow(filtered_summary_stats()) == 0) {
+        # TODO: produce warning that no data is available
+      }
       summary_stat_plot(filtered_summary_stats(), selected_concept_name())
     })
   })

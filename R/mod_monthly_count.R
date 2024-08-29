@@ -33,21 +33,19 @@ mod_monthly_count_server <- function(id, data, selected_concept, selected_dates)
     selected_concept_id <- reactive(selected_concept()$concept_id)
     selected_concept_name <- reactive(selected_concept()$concept_name)
     filtered_monthly_counts <- reactive({
-      if (is.null(selected_concept_id())) {
-        return(NULL)
-      }
+      req(length(selected_concept_name()) > 0)
       out <- data[data$concept_id == selected_concept_id(), ]
 
-      req(selected_dates()) # we expect always to have dates selected
+      req(selected_dates())
       .filter_dates(out, selected_dates())
     })
 
     output$monthly_count_plot <- renderPlot({
       ## Return empty plot if no data is selected
-      if (is.null(filtered_monthly_counts()) || nrow(filtered_monthly_counts()) == 0) {
-        return(NULL)
+      req(filtered_monthly_counts())
+      if (nrow(filtered_monthly_counts()) == 0) {
+        # TODO: produce warning that no data is available
       }
-
       monthly_count_plot(filtered_monthly_counts(), selected_concept_name())
     })
   })
