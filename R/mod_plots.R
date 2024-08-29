@@ -2,6 +2,7 @@
 #'
 #' Shiny module responsible for producing the summary plots
 #' UI elements for the dashboard
+#'
 #' @param id,input,output,session Internal parameters for {shiny}.
 #'
 #' @noRd
@@ -36,9 +37,3 @@ mod_plots_server <- function(id) {
     })
   })
 }
-
-## To be copied in the UI
-# mod_plots_ui("plots_1")
-
-## To be copied in the server
-# mod_plots_server("plots_1")
