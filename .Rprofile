@@ -23,3 +23,7 @@ Sys.setenv(TEST_DB_OMOP_VERSION = "5.3")
 Sys.setenv(TEST_DB_CDM_SCHEMA = "main")
 # Schema name for results
 Sys.setenv(TEST_DB_RESULTS_SCHEMA = "main")
+# Low frequency threshold for stats
+Sys.setenv(LOW_FREQUENCY_THRESHOLD = "5")
+# Low frequency replacement value for stats
+Sys.setenv(LOW_FREQUENCY_REPLACEMENT = "2.5")
