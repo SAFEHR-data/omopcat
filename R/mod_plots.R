@@ -10,30 +10,67 @@
 #' @importFrom shiny NS tagList
 mod_plots_ui <- function(id) {
   ns <- NS(id)
-  # Return as list so we can arrange the UI elements in the main app_ui function
-  list(
-    monthly_counts = tagList(plotOutput(ns("monthly_count_plot"), height = 250)),
-    summary_stats = tagList(plotOutput(ns("summary_stat_plot"), height = 250))
+  tagList(
+    plotOutput(ns("summary_plot"), height = 250)
   )
 }
 
 #' plots Server Functions
 #'
 #' @noRd
-mod_plots_server <- function(id) {
+mod_plots_server <- function(id, selected_concept, selected_dates = NULL,
+                             type = c("monthly_counts", "summary_stats")) {
+  stopifnot(is.reactive(selected_concept))
+  stopifnot(is.reactive(selected_dates) || is.null(selected_dates))
+
+  plot_func <- switch(type,
+    monthly_counts = monthly_count_plot,
+    summary_stats = summary_stat_plot,
+    cli::cli_abort("Invalid type: {type}")
+  )
+  data <- switch(type,
+    monthly_counts = get_monthly_counts(),
+    summary_stats = get_summary_stats(),
+    cli::cli_abort("Invalid type: {type}")
+  )
+
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-    output$monthly_count_plot <- renderPlot({
-      input$newplot
-      # Add a little noise to the cars data
-      cars2 <- cars + rnorm(nrow(cars))
-      plot(cars2)
+
+    selected_concept_id <- reactive(selected_concept()$concept_id)
+    selected_concept_name <- reactive(selected_concept()$concept_name)
+
+    ## Filter data based on selected concept and date range
+    filtered_data <- reactive({
+      req(length(selected_concept_name()) > 0)
+      out <- data[data$concept_id == selected_concept_id(), ]
+
+      if (!is.null(selected_dates)) {
+        req(selected_dates())
+        out <- .filter_dates(out, selected_dates())
+      }
+      out
     })
-    output$summary_stat_plot <- renderPlot({
-      input$newplot
-      # Add a little noise to the cars data
-      cars2 <- cars + rnorm(nrow(cars))
-      plot(cars2)
+
+    output$summary_plot <- renderPlot({
+      ## Return empty plot if no data is available
+      req(filtered_data())
+      if (nrow(filtered_data()) == 0) {
+        stop("No data available for the selected date range")
+      }
+      plot_func(filtered_data(), selected_concept_name())
     })
   })
+}
+
+
+.filter_dates <- function(x, date_range) {
+  date_range <- as.Date(date_range)
+  if (date_range[2] < date_range[1]) {
+    stop("Invalid date range, end date is before start date")
+  }
+
+  dates <- lubridate::make_date(year = x$date_year, month = x$date_month)
+  keep_dates <- dplyr::between(dates, date_range[1], date_range[2])
+  dplyr::filter(x, keep_dates)
 }
