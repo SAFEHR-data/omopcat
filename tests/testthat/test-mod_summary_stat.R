@@ -35,13 +35,14 @@ test_that("mod_summary_stat_server reacts to changes in the selected concept", {
   )
 })
 
-test_that("mod_summary_stat_server generates an empty plot when no row is selected", {
+test_that("mod_summary_stat_server fails when input is missing", {
   testServer(
     mod_summary_stat_server,
     args = list(data = mock_stats, selected_concept = reactiveVal(NULL)),
     {
-      # When no concept_id is selected, no plot should be rendered
-      expect_length(output$summary_stat_plot$coordmap$panels[[1]]$mapping, 0)
+      # When no concept_id is selected, no output should be generated
+      # shiny::req() silently returns an error when the input is missing
+      expect_error(output$summary_stat_plot)
     }
   )
 })

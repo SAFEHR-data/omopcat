@@ -87,13 +87,19 @@ test_that("Date filtering works as expected", {
   )
 })
 
-test_that("mod_monthly_count_server generates an empty plot when no row is selected", {
+test_that("mod_monthly_count_server fails when input is missing", {
   testServer(
     mod_monthly_count_server,
     args = list(data = mock_monthly_counts, selected_concept = reactiveVal(NULL), selected_dates = mock_date_range),
     {
-      # When no concept_id is selected, no plot should be rendered
-      expect_length(output$monthly_count_plot$coordmap$panels[[1]]$mapping, 0)
+      # When no concept_id is selected, no output should be generated
+      # shiny::req() silently returns an error when the input is missing
+      expect_error(output$monthly_count_plot)
+
+      # Same for mising dates
+      mock_date_range(NULL)
+      session$flushReact()
+      expect_error(output$monthly_count_plot)
     }
   )
 })
