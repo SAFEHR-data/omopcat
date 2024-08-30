@@ -15,37 +15,25 @@
 #' @import dplyr
 calculate_monthly_counts <- function(omop_table, concept, date) {
   # Extract year and month from date column
-  omop_table <- omop_table |>
-    mutate(
-      concept_id = {{ concept }},
-      date_year = lubridate::year({{ date }}),
-      date_month = lubridate::month({{ date }})
-    )
-  # Get total count for each month
-  total_count <- omop_table |>
-    select(concept_id, date_year, date_month) |>
-    collect() |>
-    group_by(date_year, date_month, concept_id) |>
-    count(name = "total_count")
-  # Get number of unique patients per concept for each month
-  person_count <- omop_table |>
-    select(concept_id, date_year, date_month, person_id) |>
-    collect() |>
-    group_by(date_year, date_month, concept_id) |>
-    reframe(person_count = n_distinct(person_id))
-  # Get number of records per person for each month
+  omop_table <- mutate(omop_table,
+    concept_id = {{ concept }},
+    date_year = lubridate::year({{ date }}),
+    date_month = lubridate::month({{ date }})
+  )
+
   omop_table |>
-    select(concept_id, date_year, date_month) |>
-    distinct() |>
-    collect() |>
-    inner_join(total_count, join_by(date_year, date_month, concept_id)) |>
-    inner_join(person_count, join_by(date_year, date_month, concept_id)) |>
-    mutate(records_per_person = (total_count / person_count)) |>
+    group_by(date_year, date_month, concept_id) |>
+    summarise(
+      person_count = n_distinct(person_id),
+      records_per_person = n() / n_distinct(person_id)
+    ) |>
     select(
       concept_id,
       date_year,
       date_month,
       person_count,
       records_per_person
-    )
+    ) |>
+    ## Collect in case we're dealing with a database-stored table
+    collect()
 }
