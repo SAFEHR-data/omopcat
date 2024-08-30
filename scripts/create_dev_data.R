@@ -15,7 +15,7 @@ Sys.setenv(TEST_DB_CDM_SCHEMA = "main")
 # Schema name for results
 Sys.setenv(TEST_DB_RESULTS_SCHEMA = "main")
 
-source(here::here("scripts/test_db/setup_test_db.R"))
-source(here::here("scripts/test_db/insert_dummy_tables.R"))
-source(here::here("scripts/omop_analyses/analyse_omop_cdm.R"))
-source(here::here("scripts/test_db/produce_test_data.R"))
+source(here::here("scripts/setup_test_db.R"))
+source(here::here("scripts/insert_dummy_tables.R"))
+source(here::here("scripts/analyse_omop_cdm.R"))
+source(here::here("scripts/produce_test_data.R"))
