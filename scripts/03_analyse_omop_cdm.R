@@ -163,7 +163,7 @@ cdm <- CDMConnector::cdm_from_con(
 )
 
 # Generate monthly counts and write it to the DB
-monthly_counts <- calculate_monthly_counts(cdm)
+monthly_counts <- process_monthly_counts(cdm)
 monthly_counts |>
   write_table(con, "calypso_monthly_counts", schema = Sys.getenv("TEST_DB_RESULTS_SCHEMA"))
 
