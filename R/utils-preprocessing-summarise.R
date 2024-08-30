@@ -37,3 +37,66 @@ calculate_monthly_counts <- function(omop_table, concept, date) {
     ## Collect in case we're dealing with a database-stored table
     collect()
 }
+
+#' Calculate summary statistics for an OMOP table
+#'
+#' Calculates the mean snd standard deviation for numeric concepts and the
+#' frequency for categorical concepts.
+#'
+#' @param omop_table A table from the OMOP CDM
+#' @param concept_name The name of the concept ID column
+#'
+#' @return A `data.frame` with the following columns:
+#'  - `concept_id`: The concept ID
+#'  - `summary_attribute`: The summary attribute (e.g. "mean", "sd", "frequency")
+#'  - `value_as_number`: The value of the summary attribute
+#'  - `value_as_concept_id`: In case of a categorical concept, the concept ID for each category
+#' @export
+#' @importFrom dplyr rename filter collect bind_rows
+calculate_summary_stats <- function(omop_table, concept_name) {
+  stopifnot(is.character(concept_name))
+
+  omop_table <- rename(omop_table, concept_id = all_of(concept_name))
+
+  numeric_concepts <- filter(omop_table, !is.na(value_as_number))
+  # beware CDM docs: NULL=no categorical result, 0=categorical result but no mapping
+  categorical_concepts <- filter(omop_table, !is.null(value_as_concept_id) & value_as_concept_id != 0)
+
+  numeric_stats <- .summarise_numeric_concepts(numeric_concepts) |> collect()
+  categorical_stats <- .summarise_categorical_concepts(categorical_concepts) |> collect()
+  bind_rows(numeric_stats, categorical_stats)
+}
+
+#' @importFrom dplyr group_by summarise
+#' @importFrom stats sd
+.summarise_numeric_concepts <- function(omop_table) {
+  # Calculate mean and sd
+  stats <- omop_table |>
+    group_by(concept_id) |>
+    summarise(mean = mean(value_as_number, na.rm = TRUE), sd = sd(value_as_number, na.rm = TRUE))
+
+  # Wrangle output to expected format
+  stats |>
+    tidyr::pivot_longer(
+      cols = c(mean, sd),
+      names_to = "summary_attribute",
+      values_to = "value_as_number"
+    )
+}
+
+#' @importFrom dplyr count mutate select
+.summarise_categorical_concepts <- function(omop_table) {
+  # Calculate frequencies
+  frequencies <- omop_table |>
+    count(concept_id, value_as_concept_id)
+
+  # Wrangle output into the expected format
+  frequencies |>
+    mutate(summary_attribute = "frequency") |>
+    select(
+      concept_id,
+      summary_attribute,
+      value_as_number = n,
+      value_as_concept_id
+    )
+}
