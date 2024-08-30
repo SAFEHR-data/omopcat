@@ -67,63 +67,13 @@ process_monthly_counts <- function(cdm) {
     select(concept_id, concept_name, everything())
 }
 
-# Function to analyse a numeric column
-# by calculating the mean and the standard deviation
-summarise_numeric_concepts <- function(.data) {
-  # Calculate mean and sd
-  stats <- .data |>
-    group_by(concept_id) |>
-    summarise(mean = mean(value_as_number, na.rm = TRUE), sd = sd(value_as_number, na.rm = TRUE))
-
-  # Wrangle output to expected format
-  stats |>
-    pivot_longer(
-      cols = c(mean, sd),
-      names_to = "summary_attribute",
-      values_to = "value_as_number"
-    )
-}
-
-# Function to analyse a categorical column - present in observation and measurement
-# by joining value_as_concept_id to cdm$concept by concept_id
-summarise_categorical_concepts <- function(.data) {
-  # Calculate frequencies
-  frequencies <- .data |>
-    count(concept_id, value_as_concept_id)
-
-  # Wrangle output into the expected format
-  frequencies |>
-    mutate(summary_attribute = "frequency") |>
-    select(
-      concept_id,
-      summary_attribute,
-      value_as_number = n,
-      value_as_concept_id
-    )
-}
-
-summarise_concepts <- function(.data, concept_name) {
-  stopifnot(inherits(.data, "tbl"))
-  stopifnot(is.character(concept_name))
-
-  .data <- rename(.data, concept_id = all_of(concept_name))
-
-  numeric_concepts <- filter(.data, !is.na(value_as_number))
-  # beware CDM docs: NULL=no categorical result, 0=categorical result but no mapping
-  categorical_concepts <- filter(.data, !is.null(value_as_concept_id) & value_as_concept_id != 0)
-
-  numeric_stats <- summarise_numeric_concepts(numeric_concepts) |> collect()
-  categorical_stats <- summarise_categorical_concepts(categorical_concepts) |> collect()
-  bind_rows(numeric_stats, categorical_stats)
-}
-
 # Function to produce the 'calypso_summary_stats' table
-calculate_summary_stats <- function(cdm) {
+process_summary_stats <- function(cdm) {
   table_names <- c("measurement", "observation")
   concept_names <- c("measurement_concept_id", "observation_concept_id")
 
   # Combine results for all tables
-  stats <- map2(table_names, concept_names, ~ summarise_concepts(cdm[[.x]], .y))
+  stats <- map2(table_names, concept_names, ~ calculate_summary_stats(cdm[[.x]], .y))
   stats <- bind_rows(stats)
 
   # Map concept names to the concept_ids
@@ -168,7 +118,7 @@ monthly_counts |>
   write_table(con, "calypso_monthly_counts", schema = Sys.getenv("TEST_DB_RESULTS_SCHEMA"))
 
 # Generate summary stats and write it to the DB
-summary_stats <- calculate_summary_stats(cdm)
+summary_stats <- process_summary_stats(cdm)
 summary_stats |>
   write_table(con, "calypso_summary_stats", schema = Sys.getenv("TEST_DB_RESULTS_SCHEMA"))
 
