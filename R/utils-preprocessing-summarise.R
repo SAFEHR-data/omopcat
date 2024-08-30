@@ -12,7 +12,7 @@
 #'   - `person_count`: The number of unique patients per concept for each month
 #'   - `records_per_person`: The average number of records per person per concept for each month
 #' @export
-#' @import dplyr
+#' @importFrom dplyr mutate group_by summarise select n n_distinct collect
 calculate_monthly_counts <- function(omop_table, concept, date) {
   # Extract year and month from date column
   omop_table <- mutate(omop_table,
