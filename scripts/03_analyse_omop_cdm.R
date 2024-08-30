@@ -12,15 +12,7 @@ name <- Sys.getenv("TEST_DB_NAME")
 version <- Sys.getenv("TEST_DB_OMOP_VERSION")
 
 db_path <- glue::glue("{dir}/{name}_{version}_1.0.duckdb")
-if (!file.exists(db_path)) {
-  cli::cli_abort("Database file {.file {db_path}} not found")
-}
-
-# Connect to the duckdb test database
-con <- DBI::dbConnect(
-  duckdb::duckdb(dbdir = db_path)
-)
-withr::defer(DBI::dbDisconnect(con))
+con <- connect_to_db(db_path)
 
 
 # Functions -----------------------------------------------------------------------------------
@@ -185,21 +177,6 @@ calculate_summary_stats <- function(cdm) {
     select(concept_id, concept_name, !value_as_concept_id)
 }
 
-# Function to write result to the results schema
-write_results <- function(data, con, table) {
-  # Insert data into the specified table
-  # (in the results schema)
-  DBI::dbWriteTable(
-    conn = con,
-    name = DBI::Id(
-      schema = Sys.getenv("TEST_DB_RESULTS_SCHEMA"),
-      table = table
-    ),
-    value = data,
-    overwrite = TRUE
-  )
-}
-
 
 # Calculate summary stats ---------------------------------------------------------------------
 
@@ -225,18 +202,18 @@ cdm <- CDMConnector::cdm_from_con(
 # Generate monthly counts and write it to the DB
 monthly_counts <- calculate_monthly_counts(cdm)
 monthly_counts |>
-  write_results(con, "calypso_monthly_counts")
+  write_table(con, "calypso_monthly_counts", schema = Sys.getenv("TEST_DB_RESULTS_SCHEMA"))
 
 # Generate summary stats and write it to the DB
 summary_stats <- calculate_summary_stats(cdm)
 summary_stats |>
-  write_results(con, "calypso_summary_stats")
+  write_table(con, "calypso_summary_stats", schema = Sys.getenv("TEST_DB_RESULTS_SCHEMA"))
 
 # Get all distinct concept ids
 ids <- unique(c(monthly_counts$concept_id, summary_stats$concept_id))
 
 # Retrieve concept properties from the list of ids
 get_concepts_table(cdm, ids) |>
-  write_results(con, "calypso_concepts")
+  write_table(con, "calypso_concepts", schema = Sys.getenv("TEST_DB_RESULTS_SCHEMA"))
 
 cli::cli_alert_success("Summary statistics generated successfully")

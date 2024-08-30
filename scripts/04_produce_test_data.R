@@ -5,6 +5,7 @@ cli::cli_h1("Producing test data")
 
 suppressPackageStartupMessages({
   library(dplyr)
+  library(calypso)
 })
 
 dir <- Sys.getenv("EUNOMIA_DATA_FOLDER")
@@ -12,36 +13,20 @@ name <- Sys.getenv("TEST_DB_NAME")
 version <- Sys.getenv("TEST_DB_OMOP_VERSION")
 
 db_path <- glue::glue("{dir}/{name}_{version}_1.0.duckdb")
-if (!file.exists(db_path)) {
-  cli::cli_abort("Database file {.file {db_path}} not found")
-}
-
 out_path <- here::here("inst/dev_data")
 stopifnot(dir.exists(out_path))
 
-# Connect to the duckdb test database
-con <- DBI::dbConnect(
-  duckdb::duckdb(dbdir = db_path)
-)
-withr::defer(DBI::dbDisconnect(con))
+con <- connect_to_db(db_path)
 
 
 # Produce test data ---------------------------------------------------------------------------
 
-# Function to write results from a table to the test data folder
-read_table <- function(con, table) {
-  schema <- Sys.getenv("TEST_DB_RESULTS_SCHEMA")
-  # Get all rows from the table
-  query <- glue::glue("SELECT * FROM {schema}.{table}")
-  # Run the query and write results
-  con |>
-    DBI::dbGetQuery(query) |>
-    arrange(across(everything()))
-}
-
 # Get the relevant tables and filter
 table_names <- c("calypso_concepts", "calypso_monthly_counts", "calypso_summary_stats")
-tables <- purrr::map(table_names, read_table, con = con)
+tables <- purrr::map(
+  table_names, read_table_sorted,
+  con = con, schema = Sys.getenv("TEST_DB_RESULTS_SCHEMA")
+)
 names(tables) <- table_names
 
 # Keep only concepts for which we have summary statistics

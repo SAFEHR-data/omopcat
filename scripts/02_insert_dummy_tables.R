@@ -8,38 +8,15 @@ cli::cli_h1("Inserting dummy tables")
 # Setup ---------------------------------------------------------------------------------------
 
 library(readr)
+library(calypso)
 
 dir <- Sys.getenv("EUNOMIA_DATA_FOLDER")
 name <- Sys.getenv("TEST_DB_NAME")
 version <- Sys.getenv("TEST_DB_OMOP_VERSION")
 
 db_path <- glue::glue("{dir}/{name}_{version}_1.0.duckdb")
-if (!file.exists(db_path)) {
-  cli::cli_abort("Database file {.file {db_path}} not found")
-}
 
-# Connect to the duckdb test database
-con <- DBI::dbConnect(
-  duckdb::duckdb(dbdir = db_path)
-)
-
-withr::defer(DBI::dbDisconnect(con))
-
-
-# Function to write data to a table in the cdm schema
-write_table <- function(data, con, table) {
-  # Insert data into the specified table
-  # (in the cdm schema)
-  DBI::dbWriteTable(
-    conn = con,
-    name = DBI::Id(
-      schema = Sys.getenv("TEST_DB_CDM_SCHEMA"),
-      table = table
-    ),
-    value = data,
-    overwrite = TRUE
-  )
-}
+con <- connect_to_db(db_path)
 
 
 # Insert dummy tables -------------------------------------------------------------------------
@@ -57,7 +34,7 @@ dummy_measurements <- read_csv(
     value_as_concept_id = col_double(),
   )
 )
-write_table(dummy_measurements, con, "measurement")
+write_table(dummy_measurements, con, "measurement", schema = Sys.getenv("TEST_DB_CDM_SCHEMA"))
 
 dummy_observations <- read_csv(here::here(
   "data-raw/test_db/dummy/observation.csv"),
@@ -71,7 +48,7 @@ dummy_observations <- read_csv(here::here(
       value_as_concept_id = col_double(),
     )
 )
-write_table(dummy_observations, con, "observation")
+write_table(dummy_observations, con, "observation", schema = Sys.getenv("TEST_DB_CDM_SCHEMA"))
 
 # Sanity check: read the data back and make sure its consistent
 db_measurements <- DBI::dbReadTable(con, "measurement")
