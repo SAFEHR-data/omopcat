@@ -4,18 +4,27 @@
 
 cli::cli_h1("Inserting dummy tables")
 
+
+# Setup ---------------------------------------------------------------------------------------
+
 library(readr)
 
 dir <- Sys.getenv("EUNOMIA_DATA_FOLDER")
 name <- Sys.getenv("TEST_DB_NAME")
 version <- Sys.getenv("TEST_DB_OMOP_VERSION")
 
+db_path <- glue::glue("{dir}/{name}_{version}_1.0.duckdb")
+if (!file.exists(db_path)) {
+  cli::cli_abort("Database file {.file {db_path}} not found")
+}
+
 # Connect to the duckdb test database
 con <- DBI::dbConnect(
-  duckdb::duckdb(dbdir = glue::glue("{dir}/{name}_{version}_1.0.duckdb"))
+  duckdb::duckdb(dbdir = db_path)
 )
 
 withr::defer(DBI::dbDisconnect(con))
+
 
 # Function to write data to a table in the cdm schema
 write_table <- function(data, con, table) {
@@ -32,10 +41,13 @@ write_table <- function(data, con, table) {
   )
 }
 
+
+# Insert dummy tables -------------------------------------------------------------------------
+
 ## Load dummy data and write tables to database
 ## We explicitly set the column types for columns that are needed later down the pipeline
 dummy_measurements <- read_csv(
-  here::here("dev/test_db/dummy/measurement.csv"),
+  here::here("data-raw/test_db/dummy/measurement.csv"),
   col_types = cols(
     measurement_id = col_double(),
     person_id = col_double(),
@@ -48,7 +60,7 @@ dummy_measurements <- read_csv(
 write_table(dummy_measurements, con, "measurement")
 
 dummy_observations <- read_csv(here::here(
-  "dev/test_db/dummy/observation.csv"),
+  "data-raw/test_db/dummy/observation.csv"),
   col_types = cols(
       observation_id = col_double(),
       person_id = col_double(),

@@ -1,5 +1,8 @@
 cli::cli_h1("Generating summarys statistics")
 
+
+# Setup ---------------------------------------------------------------------------------------
+
 suppressPackageStartupMessages(
   library(tidyverse)
 )
@@ -8,11 +11,19 @@ dir <- Sys.getenv("EUNOMIA_DATA_FOLDER")
 name <- Sys.getenv("TEST_DB_NAME")
 version <- Sys.getenv("TEST_DB_OMOP_VERSION")
 
+db_path <- glue::glue("{dir}/{name}_{version}_1.0.duckdb")
+if (!file.exists(db_path)) {
+  cli::cli_abort("Database file {.file {db_path}} not found")
+}
+
 # Connect to the duckdb test database
-con <- DBI::dbConnect(duckdb::duckdb(
-  dbdir = glue::glue("{dir}/{name}_{version}_1.0.duckdb")
-))
+con <- DBI::dbConnect(
+  duckdb::duckdb(dbdir = db_path)
+)
 withr::defer(DBI::dbDisconnect(con))
+
+
+# Functions -----------------------------------------------------------------------------------
 
 # Function to execute one or more SQL queries and clear results
 create_results_tables <- function(con, sql) {
@@ -21,6 +32,7 @@ create_results_tables <- function(con, sql) {
   # Clear results
   DBI::dbClearResult(result)
 }
+
 
 # Function to produce the 'calypso_concepts' table
 # from a list of concept ids
@@ -188,12 +200,15 @@ write_results <- function(data, con, table) {
   )
 }
 
+
+# Calculate summary stats ---------------------------------------------------------------------
+
 # Retrieve SQL query to create Calypso tables
 # (using the results schema)
 sql <- gsub(
   "@resultsDatabaseSchema",
   Sys.getenv("TEST_DB_RESULTS_SCHEMA"),
-  readr::read_file(here::here("dev/omop_analyses/calypso_tables.sql"))
+  readr::read_file(here::here("scripts/calypso_tables.sql"))
 )
 
 # Create the Calypso tables to the results schema

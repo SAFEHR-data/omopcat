@@ -1,5 +1,8 @@
 cli::cli_h1("Producing test data")
 
+
+# Setup ---------------------------------------------------------------------------------------
+
 suppressPackageStartupMessages({
   library(dplyr)
 })
@@ -8,11 +11,22 @@ dir <- Sys.getenv("EUNOMIA_DATA_FOLDER")
 name <- Sys.getenv("TEST_DB_NAME")
 version <- Sys.getenv("TEST_DB_OMOP_VERSION")
 
+db_path <- glue::glue("{dir}/{name}_{version}_1.0.duckdb")
+if (!file.exists(db_path)) {
+  cli::cli_abort("Database file {.file {db_path}} not found")
+}
+
+out_path <- here::here("inst/dev_data")
+stopifnot(dir.exists(out_path))
+
 # Connect to the duckdb test database
 con <- DBI::dbConnect(
-  duckdb::duckdb(dbdir = glue::glue("{dir}/{name}_{version}_1.0.duckdb"))
+  duckdb::duckdb(dbdir = db_path)
 )
 withr::defer(DBI::dbDisconnect(con))
+
+
+# Produce test data ---------------------------------------------------------------------------
 
 # Function to write results from a table to the test data folder
 read_table <- function(con, table) {
@@ -44,7 +58,7 @@ tables <- purrr::map(tables, ~ .x[.x$concept_id %in% filtered_monthly$concept_id
 
 # Write all results to the test data folder
 purrr::iwalk(tables, function(tbl, name) {
-  path <- here::here(glue::glue("inst/test_data/{name}.csv"))
+  path <- glue::glue("{out_path}/{name}.csv")
   cli::cli_alert_info("Writing {name} to {path}")
   readr::write_csv(tbl, file = path)
 })
