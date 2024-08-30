@@ -1,8 +1,8 @@
 # Sanity checks
 test_that("Test data files exist", {
-  expect_true(file.exists(app_sys("test_data", "calypso_concepts.csv")))
-  expect_true(file.exists(app_sys("test_data", "calypso_monthly_counts.csv")))
-  expect_true(file.exists(app_sys("test_data", "calypso_summary_stats.csv")))
+  expect_true(file.exists(app_sys("dev_data", "calypso_concepts.csv")))
+  expect_true(file.exists(app_sys("dev_data", "calypso_monthly_counts.csv")))
+  expect_true(file.exists(app_sys("dev_data", "calypso_summary_stats.csv")))
 })
 
 # These tests act as proxy tests for the pre-processing scripts that generate the test data

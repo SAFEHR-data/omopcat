@@ -6,7 +6,7 @@
 get_concepts_table <- function() {
   if (golem::app_dev()) {
     return(
-      readr::read_csv(app_sys("test_data", "calypso_concepts.csv"), show_col_types = FALSE)
+      readr::read_csv(app_sys("dev_data", "calypso_concepts.csv"), show_col_types = FALSE)
     )
   }
   .read_db_table("calypso_concepts")
@@ -15,7 +15,7 @@ get_concepts_table <- function() {
 get_monthly_counts <- function() {
   if (golem::app_dev()) {
     return(
-      readr::read_csv(app_sys("test_data", "calypso_monthly_counts.csv"), show_col_types = FALSE)
+      readr::read_csv(app_sys("dev_data", "calypso_monthly_counts.csv"), show_col_types = FALSE)
     )
   }
   .read_db_table("calypso_monthly_counts")
@@ -24,7 +24,7 @@ get_monthly_counts <- function() {
 get_summary_stats <- function() {
   if (golem::app_dev()) {
     return(
-      readr::read_csv(app_sys("test_data", "calypso_summary_stats.csv"), show_col_types = FALSE)
+      readr::read_csv(app_sys("dev_data", "calypso_summary_stats.csv"), show_col_types = FALSE)
     )
   }
   .read_db_table("calypso_summary_stats")
