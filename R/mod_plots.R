@@ -43,8 +43,6 @@ mod_plots_server <- function(id, selected_concept, selected_dates = NULL,
   )
 
   moduleServer(id, function(input, output, session) {
-    ns <- session$ns
-
     selected_concept_id <- reactive(selected_concept()$concept_id)
     selected_concept_name <- reactive(selected_concept()$concept_name)
 
