@@ -3,9 +3,10 @@ cli::cli_h1("Generating summarys statistics")
 
 # Setup ---------------------------------------------------------------------------------------
 
-suppressPackageStartupMessages(
+suppressPackageStartupMessages({
   library(tidyverse)
-)
+  library(calypso)
+})
 
 dir <- Sys.getenv("EUNOMIA_DATA_FOLDER")
 name <- Sys.getenv("TEST_DB_NAME")
@@ -45,54 +46,16 @@ get_concepts_table <- function(cdm, concepts) {
 }
 
 # Function to produce the 'calypso_monthly_counts' table
-calculate_monthly_counts <- function(cdm) {
-  # Function to analyse a column from a specific table
-  # for each month
-  analyse_table <- function(table, concept, date) {
-    # Extract year and month from date column
-    table <- table |>
-      mutate(
-        concept_id = {{ concept }},
-        date_year = lubridate::year({{ date }}),
-        date_month = lubridate::month({{ date }})
-      )
-    # Get total count for each month
-    total_count <- table |>
-      select(concept_id, date_year, date_month) |>
-      collect() |>
-      group_by(date_year, date_month, concept_id) |>
-      count(name = "total_count")
-    # Get number of unique patients per concept for each month
-    person_count <- table |>
-      select(concept_id, date_year, date_month, person_id) |>
-      collect() |>
-      group_by(date_year, date_month, concept_id) |>
-      reframe(person_count = n_distinct(person_id))
-    # Get number of records per person for each month
-    table |>
-      select(concept_id, date_year, date_month) |>
-      distinct() |>
-      collect() |>
-      inner_join(total_count, join_by(date_year, date_month, concept_id)) |>
-      inner_join(person_count, join_by(date_year, date_month, concept_id)) |>
-      mutate(records_per_person = (total_count / person_count)) |>
-      select(
-        concept_id,
-        date_year,
-        date_month,
-        person_count,
-        records_per_person
-      )
-  }
+process_monthly_counts <- function(cdm) {
   # Combine results for all tables
   out <- bind_rows(
-    cdm$condition_occurrence |> analyse_table(condition_concept_id, condition_start_date),
-    cdm$drug_exposure |> analyse_table(drug_concept_id, drug_exposure_start_date),
-    cdm$procedure_occurrence |> analyse_table(procedure_concept_id, procedure_date),
-    cdm$device_exposure |> analyse_table(device_concept_id, device_exposure_start_date),
-    cdm$measurement |> analyse_table(measurement_concept_id, measurement_date),
-    cdm$observation |> analyse_table(observation_concept_id, observation_date),
-    cdm$specimen |> analyse_table(specimen_concept_id, specimen_date)
+    cdm$condition_occurrence |> calculate_monthly_counts(condition_concept_id, condition_start_date),
+    cdm$drug_exposure |> calculate_monthly_counts(drug_concept_id, drug_exposure_start_date),
+    cdm$procedure_occurrence |> calculate_monthly_counts(procedure_concept_id, procedure_date),
+    cdm$device_exposure |> calculate_monthly_counts(device_concept_id, device_exposure_start_date),
+    cdm$measurement |> calculate_monthly_counts(measurement_concept_id, measurement_date),
+    cdm$observation |> calculate_monthly_counts(observation_concept_id, observation_date),
+    cdm$specimen |> calculate_monthly_counts(specimen_concept_id, specimen_date)
   )
 
   # Map concept names to the concept IDs

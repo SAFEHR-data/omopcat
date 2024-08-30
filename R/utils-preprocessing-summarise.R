@@ -1,0 +1,51 @@
+#' Calculate monthly statistics for an OMOP concept
+#'
+#' @param omop_table A table from the OMOP CDM
+#' @param concept The name of the concept column to calculate statistics for
+#' @param date The name of the date column to calculate statistics for
+#'
+#' @return A `data.frame` with the following columns:
+#'   - `concept_id`: The concept ID
+#'   - `concept_name`: The concept name
+#'   - `date_year`: The year of the date
+#'   - `date_month`: The month of the date
+#'   - `person_count`: The number of unique patients per concept for each month
+#'   - `records_per_person`: The average number of records per person per concept for each month
+#' @export
+#' @import dplyr
+calculate_monthly_counts <- function(omop_table, concept, date) {
+  # Extract year and month from date column
+  omop_table <- omop_table |>
+    mutate(
+      concept_id = {{ concept }},
+      date_year = lubridate::year({{ date }}),
+      date_month = lubridate::month({{ date }})
+    )
+  # Get total count for each month
+  total_count <- omop_table |>
+    select(concept_id, date_year, date_month) |>
+    collect() |>
+    group_by(date_year, date_month, concept_id) |>
+    count(name = "total_count")
+  # Get number of unique patients per concept for each month
+  person_count <- omop_table |>
+    select(concept_id, date_year, date_month, person_id) |>
+    collect() |>
+    group_by(date_year, date_month, concept_id) |>
+    reframe(person_count = n_distinct(person_id))
+  # Get number of records per person for each month
+  omop_table |>
+    select(concept_id, date_year, date_month) |>
+    distinct() |>
+    collect() |>
+    inner_join(total_count, join_by(date_year, date_month, concept_id)) |>
+    inner_join(person_count, join_by(date_year, date_month, concept_id)) |>
+    mutate(records_per_person = (total_count / person_count)) |>
+    select(
+      concept_id,
+      date_year,
+      date_month,
+      person_count,
+      records_per_person
+    )
+}
