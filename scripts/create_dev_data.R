@@ -2,7 +2,7 @@
 # Generates the dummy data in `inst/test_data` for running the app in dev mode by calling
 # the relevant scripts in the correct order.
 
-here::i_am("scripts/setup-test-data.R")
+here::i_am("scripts/create_dev_data.R")
 
 # Path to download Eunomia datasets
 Sys.setenv(EUNOMIA_DATA_FOLDER = file.path("data-raw/test_db/eunomia"))
