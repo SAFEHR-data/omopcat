@@ -114,7 +114,7 @@ all_tables <- list(
   monthly_counts = monthly_counts,
   summary_stats = summary_stats
 )
-paths <- purrr::map_chr(names(all_tables), ~ glue::glue("{out_path}/calypso-{.x}.parquet"))
+paths <- purrr::map_chr(names(all_tables), ~ glue::glue("{out_path}/calypso_{.x}.parquet"))
 
 # Write the tables to disk as parquet
 purrr::walk2(all_tables, paths, ~ nanoparquet::write_parquet(.x, .y))
