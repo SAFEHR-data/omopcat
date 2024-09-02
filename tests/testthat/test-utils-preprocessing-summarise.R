@@ -16,7 +16,7 @@ test_that("calculate_monthly_counts produces the expected results", {
   expect_named(res, c("concept_id", "date_year", "date_month", "person_count", "records_per_person"))
   expect_equal(nrow(res), 1)
   expect_equal(res$person_count, 3)
-  expect_equal(res$records_per_person, 4/3)
+  expect_equal(res$records_per_person, 4 / 3)
 })
 
 db <- dbplyr::src_memdb()
@@ -35,7 +35,7 @@ test_that("calculate_summary_stats produces the expected results", {
   mean <- res[res$summary_attribute == "mean", ][["value_as_number"]]
   sd <- res[res$summary_attribute == "sd", ][["value_as_number"]]
   expect_equal(mean, 1.5)
-  expect_equal(sd^2, 1/3)
+  expect_equal(sd^2, 1 / 3)
 })
 
 ## Add a categorical concept

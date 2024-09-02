@@ -21,6 +21,7 @@ calculate_monthly_counts <- function(omop_table, concept, date) {
     date_month = lubridate::month({{ date }})
   )
 
+  date_year <- date_month <- concept_id <- person_id <- person_count <- records_per_person <- NULL
   omop_table |>
     group_by(date_year, date_month, concept_id) |>
     summarise(
@@ -52,11 +53,14 @@ calculate_monthly_counts <- function(omop_table, concept, date) {
 #'  - `value_as_number`: The value of the summary attribute
 #'  - `value_as_concept_id`: In case of a categorical concept, the concept ID for each category
 #' @export
-#' @importFrom dplyr rename filter collect bind_rows
+#' @importFrom dplyr all_of rename filter collect bind_rows
 calculate_summary_stats <- function(omop_table, concept_name) {
   stopifnot(is.character(concept_name))
 
   omop_table <- rename(omop_table, concept_id = all_of(concept_name))
+
+  ## Avoid "no visible binding" notes
+  value_as_number <- value_as_concept_id <- NULL
 
   numeric_concepts <- filter(omop_table, !is.na(value_as_number))
   # beware CDM docs: NULL=no categorical result, 0=categorical result but no mapping
@@ -70,6 +74,8 @@ calculate_summary_stats <- function(omop_table, concept_name) {
 #' @importFrom dplyr group_by summarise
 #' @importFrom stats sd
 .summarise_numeric_concepts <- function(omop_table) {
+  value_as_number <- concept_id <- NULL
+
   # Calculate mean and sd
   stats <- omop_table |>
     group_by(concept_id) |>
@@ -86,6 +92,8 @@ calculate_summary_stats <- function(omop_table, concept_name) {
 
 #' @importFrom dplyr count mutate select
 .summarise_categorical_concepts <- function(omop_table) {
+  concept_id <- value_as_concept_id <- summary_attribute <- NULL
+
   # Calculate frequencies
   frequencies <- omop_table |>
     count(concept_id, value_as_concept_id)
