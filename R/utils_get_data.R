@@ -9,7 +9,7 @@ get_concepts_table <- function() {
       readr::read_csv(app_sys("dev_data", "calypso_concepts.csv"), show_col_types = FALSE)
     )
   }
-  .read_db_table("calypso_concepts")
+  .read_parquet_table("calypso_concepts")
 }
 
 get_monthly_counts <- function() {
@@ -18,7 +18,7 @@ get_monthly_counts <- function() {
       readr::read_csv(app_sys("dev_data", "calypso_monthly_counts.csv"), show_col_types = FALSE)
     )
   }
-  .read_db_table("calypso_monthly_counts")
+  .read_parquet_table("calypso_monthly_counts")
 }
 
 get_summary_stats <- function() {
@@ -27,25 +27,18 @@ get_summary_stats <- function() {
       readr::read_csv(app_sys("dev_data", "calypso_summary_stats.csv"), show_col_types = FALSE)
     )
   }
-  .read_db_table("calypso_summary_stats")
+  .read_parquet_table("calypso_summary_stats")
 }
 
-.connect_to_db <- function() {
-  dir <- Sys.getenv("CALYPSO_DATA_PATH")
-  name <- Sys.getenv("CALYPSO_DB_NAME")
-  version <- Sys.getenv("CALYPSO_DB_OMOP_VERSION")
 
-  db_file <- glue::glue("{dir}/{name}_{version}_1.0.duckdb")
-  if (!file.exists(db_file)) {
-    cli::cli_abort("Database file {.file {db_file}} does not exist.")
+.read_parquet_table <- function(table_name) {
+  data_dir <- Sys.getenv("CALYPSO_DATA_PATH")
+  if (data_dir == "") {
+    cli::cli_abort("Environment variable {.envvar CALYPSO_DATA_PATH} not set")
+  }
+  if (!dir.exists(data_dir)) {
+    cli::cli_abort("Data directory {.file {data_dir}} not found")
   }
 
-  # Connect to the duckdb database
-  DBI::dbConnect(duckdb::duckdb(dbdir = db_file))
-}
-
-.read_db_table <- function(table_name) {
-  con <- .connect_to_db()
-  withr::defer(DBI::dbDisconnect(con))
-  DBI::dbReadTable(con, table_name)
+  nanoparquet::read_parquet(glue::glue("{data_dir}/{table_name}.parquet"))
 }
