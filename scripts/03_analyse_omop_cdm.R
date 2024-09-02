@@ -15,6 +15,9 @@ version <- Sys.getenv("TEST_DB_OMOP_VERSION")
 db_path <- glue::glue("{dir}/{name}_{version}_1.0.duckdb")
 con <- connect_to_db(db_path)
 
+fs::dir_create(
+  out_path <- here::here("data/test_data")
+)
 
 # Functions -----------------------------------------------------------------------------------
 
@@ -93,17 +96,6 @@ process_summary_stats <- function(cdm) {
 
 # Calculate summary stats ---------------------------------------------------------------------
 
-# Retrieve SQL query to create Calypso tables
-# (using the results schema)
-sql <- gsub(
-  "@resultsDatabaseSchema",
-  Sys.getenv("TEST_DB_RESULTS_SCHEMA"),
-  readr::read_file(here::here("scripts/calypso_tables.sql"))
-)
-
-# Create the Calypso tables to the results schema
-create_results_tables(con, sql)
-
 # Load the data in a CDMConnector object
 cdm <- CDMConnector::cdm_from_con(
   con = con,
@@ -112,21 +104,19 @@ cdm <- CDMConnector::cdm_from_con(
   cdm_name = name
 )
 
-# Generate monthly counts and write it to the DB
 monthly_counts <- process_monthly_counts(cdm)
-monthly_counts |>
-  write_table(con, "calypso_monthly_counts", schema = Sys.getenv("TEST_DB_RESULTS_SCHEMA"))
-
-# Generate summary stats and write it to the DB
 summary_stats <- process_summary_stats(cdm)
-summary_stats |>
-  write_table(con, "calypso_summary_stats", schema = Sys.getenv("TEST_DB_RESULTS_SCHEMA"))
-
-# Get all distinct concept ids
 ids <- unique(c(monthly_counts$concept_id, summary_stats$concept_id))
+concepts_table <- get_concepts_table(cdm, ids)
 
-# Retrieve concept properties from the list of ids
-get_concepts_table(cdm, ids) |>
-  write_table(con, "calypso_concepts", schema = Sys.getenv("TEST_DB_RESULTS_SCHEMA"))
+all_tables <- list(
+  concepts = concepts_table,
+  monthly_counts = monthly_counts,
+  summary_stats = summary_stats
+)
+paths <- purrr::map_chr(names(all_tables), ~ glue::glue("{out_path}/calypso-{.x}.parquet"))
 
-cli::cli_alert_success("Summary statistics generated successfully")
+# Write the tables to disk as parquet
+purrr::walk2(all_tables, paths, ~ nanoparquet::write_parquet(.x, .y))
+
+cli::cli_alert_success("Summary statistics generated successfully and written to {.file {fs::path_rel(paths)}}")
