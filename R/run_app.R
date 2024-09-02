@@ -33,7 +33,7 @@ run_app <- function(
 }
 
 .check_env <- function() {
-  required <- c("CALYPSO_DATA_PATH", "CALYPSO_DB_NAME", "CALYPSO_DB_OMOP_VERSION")
+  required <- "CALYPSO_DATA_PATH"
   missing <- required[!required %in% names(Sys.getenv())]
   if (length(missing) > 0) {
     cli::cli_abort("The following environment variables are missing: {.envvar {missing}}")
