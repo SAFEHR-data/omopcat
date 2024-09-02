@@ -39,17 +39,19 @@ write_table <- function(data, con, table, schema) {
 }
 
 
-#' Read a table from the database and sort the results
+#' Read a parquet table and sort the results
 #'
-#' @inheritParams write_table
+#' @param path path to the parquet file to be read
+#' @inheritParams nanoparquet::read_parquet
 #'
 #' @return A `data.frame` with the results sorted by all columns
 #' @export
 #' @importFrom dplyr arrange across everything
-read_table_sorted <- function(con, table, schema) {
-  # Get all rows from the table
-  query <- glue::glue("SELECT * FROM {schema}.{table}")
-  # Run the query and sort results
-  DBI::dbGetQuery(con, query) |>
+read_parquet_sorted <- function(path, options = nanoparquet::parquet_options()) {
+  if (!file.exists(path)) {
+    cli::cli_abort("File {.file {path}} not found")
+  }
+
+  nanoparquet::read_parquet(path, options) |>
     arrange(across(everything()))
 }
