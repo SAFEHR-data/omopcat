@@ -1,0 +1,13 @@
+services:
+  shiny:
+    build: .
+    image: calypso:latest
+    platform: linux/amd64
+    restart: unless-stopped
+    environment:
+      - GOLEM_CONFIG_ACTIVE=production
+      - CALYPSO_DATA_PATH=/etc/calypso/data
+    volumes:
+      - ../data/prod_data:/etc/calypso/data
+    ports:
+      - 3838:3838

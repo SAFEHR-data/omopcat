@@ -13,6 +13,12 @@ run_app <- function(
     enableBookmarking = NULL,
     uiPattern = "/",
     ...) {
+  # Synchronise environment variable settings and golem options for running in prod
+  if (get_golem_config("app_prod")) {
+    options("golem.app.prod" = TRUE)
+    .check_env()
+  }
+
   with_golem_options(
     app = shinyApp(
       ui = app_ui,
@@ -24,4 +30,12 @@ run_app <- function(
     ),
     golem_opts = list(...)
   )
+}
+
+.check_env <- function() {
+  required <- "CALYPSO_DATA_PATH"
+  missing <- required[!required %in% names(Sys.getenv())]
+  if (length(missing) > 0) {
+    cli::cli_abort("The following environment variables are missing: {.envvar {missing}}")
+  }
 }

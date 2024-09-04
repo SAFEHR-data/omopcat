@@ -6,27 +6,41 @@
 get_concepts_table <- function() {
   if (golem::app_dev()) {
     return(
-      readr::read_csv(app_sys("test_data", "calypso_concepts.csv"), show_col_types = FALSE)
+      readr::read_csv(app_sys("dev_data", "calypso_concepts.csv"), show_col_types = FALSE)
     )
   }
-
-  con <- connect_to_test_db()
-  withr::defer(DBI::dbDisconnect(con))
-  DBI::dbReadTable(con, "calypso_concepts")
+  .read_parquet_table("calypso_concepts")
 }
 
 get_monthly_counts <- function() {
   # If the app is run in development mode
   if (golem::app_dev()) {
-    data <- readr::read_csv(app_sys("test_data", "calypso_monthly_counts.csv"), show_col_types = FALSE)
+    data <- readr::read_csv(app_sys("dev_data", "calypso_monthly_counts.csv"), show_col_types = FALSE)
+  } else {
+    data <- .read_parquet_table("calypso_monthly_counts")
   }
-  else {
-    con <- connect_to_test_db()
-    withr::defer(DBI::dbDisconnect(con))
-    data <- DBI::dbReadTable(con, "calypso_monthly_counts")
-  }
-  # Handle low frequency stats
   .manage_low_frequency(data)
+}
+
+get_summary_stats <- function() {
+  if (golem::app_dev()) {
+    return(
+      readr::read_csv(app_sys("dev_data", "calypso_summary_stats.csv"), show_col_types = FALSE)
+    )
+  }
+  .read_parquet_table("calypso_summary_stats")
+}
+
+.read_parquet_table <- function(table_name) {
+  data_dir <- Sys.getenv("CALYPSO_DATA_PATH")
+  if (data_dir == "") {
+    cli::cli_abort("Environment variable {.envvar CALYPSO_DATA_PATH} not set")
+  }
+  if (!dir.exists(data_dir)) {
+    cli::cli_abort("Data directory {.file {data_dir}} not found")
+  }
+
+  nanoparquet::read_parquet(glue::glue("{data_dir}/{table_name}.parquet"))
 }
 
 # Manage low frequency statistics
@@ -45,16 +59,4 @@ get_monthly_counts <- function() {
     records_per_person = ifelse(records_per_person < threshold, replacement, records_per_person),
     person_count = ifelse(person_count < threshold, replacement, person_count)
   )
-}
-
-get_summary_stats <- function() {
-  if (golem::app_dev()) {
-    return(
-      readr::read_csv(app_sys("test_data", "calypso_summary_stats.csv"), show_col_types = FALSE)
-    )
-  }
-
-  con <- connect_to_test_db()
-  withr::defer(DBI::dbDisconnect(con))
-  DBI::dbReadTable(con, "calypso_summary_stats")
 }

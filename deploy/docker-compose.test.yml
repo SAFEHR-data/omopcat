@@ -1,0 +1,7 @@
+services:
+  shiny:
+    extends:
+      file: docker-compose.yml
+      service: shiny
+    volumes:
+      - ../data/test_data:/etc/calypso/data
