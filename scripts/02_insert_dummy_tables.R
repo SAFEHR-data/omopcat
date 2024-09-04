@@ -4,38 +4,27 @@
 
 cli::cli_h1("Inserting dummy tables")
 
+
+# Setup ---------------------------------------------------------------------------------------
+
 library(readr)
+library(calypso)
 
 dir <- Sys.getenv("EUNOMIA_DATA_FOLDER")
 name <- Sys.getenv("TEST_DB_NAME")
 version <- Sys.getenv("TEST_DB_OMOP_VERSION")
 
-# Connect to the duckdb test database
-con <- DBI::dbConnect(
-  duckdb::duckdb(dbdir = glue::glue("{dir}/{name}_{version}_1.0.duckdb"))
-)
+db_path <- glue::glue("{dir}/{name}_{version}_1.0.duckdb")
 
-withr::defer(DBI::dbDisconnect(con))
+con <- connect_to_db(db_path)
 
-# Function to write data to a table in the cdm schema
-write_table <- function(data, con, table) {
-  # Insert data into the specified table
-  # (in the cdm schema)
-  DBI::dbWriteTable(
-    conn = con,
-    name = DBI::Id(
-      schema = Sys.getenv("TEST_DB_CDM_SCHEMA"),
-      table = table
-    ),
-    value = data,
-    overwrite = TRUE
-  )
-}
+
+# Insert dummy tables -------------------------------------------------------------------------
 
 ## Load dummy data and write tables to database
 ## We explicitly set the column types for columns that are needed later down the pipeline
 dummy_measurements <- read_csv(
-  here::here("dev/test_db/dummy/measurement.csv"),
+  here::here("data-raw/test_db/dummy/measurement.csv"),
   col_types = cols(
     measurement_id = col_double(),
     person_id = col_double(),
@@ -45,10 +34,10 @@ dummy_measurements <- read_csv(
     value_as_concept_id = col_double(),
   )
 )
-write_table(dummy_measurements, con, "measurement")
+write_table(dummy_measurements, con, "measurement", schema = Sys.getenv("TEST_DB_CDM_SCHEMA"))
 
 dummy_observations <- read_csv(here::here(
-  "dev/test_db/dummy/observation.csv"),
+  "data-raw/test_db/dummy/observation.csv"),
   col_types = cols(
       observation_id = col_double(),
       person_id = col_double(),
@@ -59,7 +48,7 @@ dummy_observations <- read_csv(here::here(
       value_as_concept_id = col_double(),
     )
 )
-write_table(dummy_observations, con, "observation")
+write_table(dummy_observations, con, "observation", schema = Sys.getenv("TEST_DB_CDM_SCHEMA"))
 
 # Sanity check: read the data back and make sure its consistent
 db_measurements <- DBI::dbReadTable(con, "measurement")

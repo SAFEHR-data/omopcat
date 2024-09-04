@@ -5,11 +5,9 @@ services:
     platform: linux/amd64
     restart: unless-stopped
     environment:
-      - GOLEM_CONFIG_ACTIVE=${GOLEM_CONFIG_ACTIVE}
+      - GOLEM_CONFIG_ACTIVE=production
       - CALYPSO_DATA_PATH=/etc/calypso/data
-      - CALYPSO_DB_NAME=${CALYPSO_DB_NAME}
-      - CALYPSO_DB_OMOP_VERSION=${CALYPSO_DB_OMOP_VERSION}
     volumes:
-      - ../${CALYPSO_DATA_PATH}:/etc/calypso/data
+      - ../data/prod_data:/etc/calypso/data
     ports:
       - 3838:3838
