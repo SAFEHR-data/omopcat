@@ -47,16 +47,18 @@ get_summary_stats <- function() {
 # by removing values equal to 0 and
 # by replacing values below the threshold with the replacement value
 # (both defined in environment variables)
+#' @importFrom rlang .data
 .manage_low_frequency <- function(df) {
   threshold <- as.double(Sys.getenv("LOW_FREQUENCY_THRESHOLD"))
   replacement <- as.double(Sys.getenv("LOW_FREQUENCY_REPLACEMENT"))
   # Remove records with values equal to 0
-  df <- dplyr::filter(df, records_per_person > 0)
-  df <- dplyr::filter(df, person_count > 0)
+  df <- dplyr::filter(df, .data$records_per_person > 0)
+  df <- dplyr::filter(df, .data$person_count > 0)
   # Replace values below the threshold with the replacement value
   dplyr::mutate(
     df,
-    records_per_person = ifelse(records_per_person < threshold, replacement, records_per_person),
-    person_count = ifelse(person_count < threshold, replacement, person_count)
+    records_per_person = ifelse(.data$records_per_person < threshold, replacement, .data$records_per_person),
+    person_count = ifelse(.data$person_count < threshold, replacement, .data$person_count)
   )
 }
+
