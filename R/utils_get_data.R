@@ -61,4 +61,3 @@ get_summary_stats <- function() {
     person_count = ifelse(.data$person_count < threshold, replacement, .data$person_count)
   )
 }
-

@@ -81,4 +81,3 @@ test_that("Test low frequency stats replacement for monthly counts", {
   expect_true(nrow(dplyr::filter(results, records_per_person == replacement)) == 2)
   expect_true(nrow(dplyr::filter(results, records_per_person == 1000)) == 2)
 })
-
