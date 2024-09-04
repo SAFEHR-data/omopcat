@@ -16,8 +16,8 @@ run_app <- function(
   # Synchronise environment variable settings and golem options for running in prod
   if (get_golem_config("app_prod")) {
     options("golem.app.prod" = TRUE)
+    .check_env()
   }
-  .check_env()
 
   with_golem_options(
     app = shinyApp(

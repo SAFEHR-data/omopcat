@@ -21,8 +21,8 @@ app_ui <- function(request) {
         title = "Dashboard",
         card(mod_datatable_ui("totals")),
         layout_columns(
-          card(mod_monthly_count_ui("monthly_count")),
-          card(mod_summary_stat_ui("summary_stat"))
+          card(mod_plots_ui("monthly_counts")),
+          card(mod_plots_ui("summary_stats"))
         )
       ),
       nav_panel(
