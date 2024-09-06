@@ -64,6 +64,10 @@ test_that("Test data parquet files exist and are accessible", {
 #   1 < LOW_FREQUENCY_THRESHOLD < 1000
 #   1 < LOW_FREQUENCY_REPLACEMENT < 1000
 test_that("Test low frequency stats replacement for monthly counts", {
+  withr::local_envvar(
+    "LOW_FREQUENCY_THRESHOLD" = 10,
+    "LOW_FREQUENCY_REPLACEMENT" = 2.5
+  )
   mock_monthly_counts <- data.frame(
     concept_id = c(1, 2, 3, 4, 5, 6, 7),
     person_count = c(0, 0, 1000, 1000, 1, 1000, 1),
