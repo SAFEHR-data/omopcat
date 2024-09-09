@@ -66,6 +66,8 @@ The test data can be found in [`inst/dev_data`](https://github.com/SAFEHR-data/o
 - `LOW_FREQUENCY_THRESHOLD`
 - `LOW_FREQUENCY_REPLACEMENT`
 
+These variables should be defined in `deploy/.env` when running the app in production.
+
 ### File structure
 
 This repo is organised as an R package with a few additional directories used for deployment of the
