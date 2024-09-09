@@ -20,39 +20,23 @@ test_that("Dev data files are consistent", {
 })
 
 
-## Check if we can access the data used in production
-test_that("Test data parquet files exist and are accessible", {
+test_that("Data getters fail in production if envvar not set", {
+  withr::local_envvar("GOLEM_CONFIG_ACTIVE" = "production")
+  withr::local_options(list("golem.app.prod" = TRUE))
+
+  expect_true(golem::app_prod())
+  expect_error(get_concepts_table(), "Environment variable `CALYPSO_DATA_PATH` not set")
+  expect_error(get_monthly_counts(), "Environment variable `CALYPSO_DATA_PATH` not set")
+  expect_error(get_summary_stats(), "Environment variable `CALYPSO_DATA_PATH` not set")
+})
+
+test_that("Data getters fail in production if data directory does not exist", {
   withr::local_envvar(c(
     "GOLEM_CONFIG_ACTIVE" = "production",
-    "CALYPSO_DATA_PATH" = here::here("data/test_data")
+    "CALYPSO_DATA_PATH" = "/i/dont/exist"
   ))
   withr::local_options(list("golem.app.prod" = TRUE))
 
-  data_dir <- Sys.getenv("CALYPSO_DATA_PATH")
-  expect_true(dir.exists(data_dir))
   expect_true(golem::app_prod())
-
-  concepts <- get_concepts_table()
-  monthly_counts <- get_monthly_counts()
-  summary_stats <- get_summary_stats()
-
-  expect_s3_class(concepts, "data.frame")
-  expect_s3_class(monthly_counts, "data.frame")
-  expect_s3_class(summary_stats, "data.frame")
-
-  expect_named(
-    concepts,
-    c(
-      "concept_id", "concept_name", "vocabulary_id", "domain_id",
-      "concept_class_id", "standard_concept", "concept_code"
-    )
-  )
-  expect_named(
-    monthly_counts,
-    c("concept_id", "concept_name", "date_year", "date_month", "person_count", "records_per_person")
-  )
-  expect_named(
-    summary_stats,
-    c("concept_id", "concept_name", "summary_attribute", "value_as_number", "value_as_string")
-  )
+  expect_error(.read_parquet_table("concepts"), "Data directory '/i/dont/exist' not found")
 })
