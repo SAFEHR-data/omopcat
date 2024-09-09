@@ -59,10 +59,6 @@ test_that("Test data parquet files exist and are accessible", {
 # Check that low-frequency monthly counts are well processed
 # (by removing values equal to 0 and
 # by replacing values if they are below the threshold)
-#
-# ASSUMING:
-#   1 < LOW_FREQUENCY_THRESHOLD < 1000
-#   1 < LOW_FREQUENCY_REPLACEMENT < 1000
 test_that("Test low frequency stats replacement for monthly counts", {
   withr::local_envvar(
     "LOW_FREQUENCY_THRESHOLD" = 10,
