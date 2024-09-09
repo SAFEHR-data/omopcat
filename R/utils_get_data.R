@@ -51,6 +51,9 @@ get_summary_stats <- function() {
 .manage_low_frequency <- function(df) {
   threshold <- as.double(Sys.getenv("LOW_FREQUENCY_THRESHOLD"))
   replacement <- as.double(Sys.getenv("LOW_FREQUENCY_REPLACEMENT"))
+  
+  stopifnot("LOW_FREQUENCY_THRESHOLD is not a valid number" = !is.na(threshold))
+  stopifnot("LOW_FREQUENCY_REPLACEMENT is not a valid number" = !is.na(replacement))
   # Remove records with values equal to 0
   df <- dplyr::filter(df, .data$records_per_person > 0)
   df <- dplyr::filter(df, .data$person_count > 0)
