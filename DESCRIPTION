@@ -1,6 +1,6 @@
 Package: calypso
 Title: The OMOP Data Catalogue Dashboard
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: c(
     person('Milan', 'Malfait', email = 'm.malfait@ucl.ac.uk', role = c('cre', 'aut')),
     person('Stefan', 'Piatek', role = 'aut'),

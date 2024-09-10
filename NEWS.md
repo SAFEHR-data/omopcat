@@ -1,4 +1,4 @@
-# calypso (development version)
+# calypso 0.1.0
 
 The minimal data catalogue.
 
