@@ -1,7 +1,13 @@
 Package: calypso
 Title: The OMOP Data Catalogue Dashboard
 Version: 0.0.0.9000
-Authors@R: person('Milan', 'Malfait', email = 'm.malfait@ucl.ac.uk', role = c('cre', 'aut'))
+Authors@R: c(
+    person('Milan', 'Malfait', email = 'm.malfait@ucl.ac.uk', role = c('cre', 'aut')),
+    person('Stefan', 'Piatek', role = 'aut'),
+    person('Baptiste', 'Briot Ribeyre', role = 'aut'),
+    person('Andy', 'South', role = 'aut'),
+    person("SAFEHR", role = c("cph", "fnd"))
+  )
 Description: A Shiny app to display an OMOP data catalogue in an interactive dashboard. Enables
     users to interactively explore available OMOP concepts by displaying useful summary statistics
     and subsequently export a selection of concepts of interest.
