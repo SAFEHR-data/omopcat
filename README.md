@@ -23,7 +23,7 @@ You can install the development version of calypso from within R like so:
 
 ```r
 # install.packages("pak")
-pak::pak("SAFEHR-data/calypso")
+pak::pak("SAFEHR-data/omop-data-catalogue")
 ```
 
 ## Development
