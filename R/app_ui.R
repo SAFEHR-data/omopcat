@@ -23,7 +23,8 @@ app_ui <- function(request) {
         layout_columns(
           card(mod_plots_ui("monthly_counts")),
           card(mod_plots_ui("summary_stats"))
-        )
+        ),
+        .low_frequency_disclaimer()
       ),
       nav_panel(
         title = "Export",
@@ -64,4 +65,12 @@ golem_add_external_resources <- function() {
     title <- glue::glue("{title} (dev)")
   }
   title
+}
+
+.low_frequency_disclaimer <- function() {
+  tags$div(
+    class = "alert alert-warning",
+    "Note: to avoid identifiability of the data, we convert all `records_per_person` and `person_count`",
+    glue::glue("values below {Sys.getenv('LOW_FREQUENCY_THRESHOLD')} to {Sys.getenv('LOW_FREQUENCY_REPLACEMENT')}.")
+  )
 }
