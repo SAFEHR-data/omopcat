@@ -1,8 +1,10 @@
 Package: calypso
-Title: A Dashboard to Display an OMOP Data Catalogue
+Title: The OMOP Data Catalogue Dashboard
 Version: 0.0.0.9000
 Authors@R: person('Milan', 'Malfait', email = 'm.malfait@ucl.ac.uk', role = c('cre', 'aut'))
-Description: .
+Description: A Shiny app to display an OMOP data catalogue in an interactive dashboard. Enables
+    users to interactively explore available OMOP concepts by displaying useful summary statistics
+    and subsequently export a selection of concepts of interest.
 License: Apache License (>= 2)
 Imports: 
     bslib,
