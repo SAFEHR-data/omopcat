@@ -66,7 +66,9 @@ The test data can be found in [`inst/dev_data`](https://github.com/SAFEHR-data/o
 - `LOW_FREQUENCY_THRESHOLD`
 - `LOW_FREQUENCY_REPLACEMENT`
 
-These variables should be defined in `deploy/.env` when running the app in production.
+These variables should be defined in the [docker-compose file](https://github.com/SAFEHR-data/omop-data-catalogue/tree/main/deploy/docker-compose.yml) when running the app in production.
+
+When running the app in development mode, these variables need to be defined in a `.Renviron` file.
 
 ### File structure
 

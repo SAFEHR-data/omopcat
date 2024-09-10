@@ -12,8 +12,3 @@ if (interactive()) {
 }
 
 source("renv/activate.R")
-
-# Low frequency threshold for stats
-Sys.setenv(LOW_FREQUENCY_THRESHOLD = "5")
-# Low frequency replacement value for stats
-Sys.setenv(LOW_FREQUENCY_REPLACEMENT = "2.5")
