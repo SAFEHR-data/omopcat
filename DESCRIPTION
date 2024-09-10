@@ -48,3 +48,5 @@ RoxygenNote: 7.3.2
 Config/testthat/edition: 3
 Language: en-US
 Roxygen: list(markdown = TRUE)
+URL: https://github.com/SAFEHR-data/omop-data-catalogue
+BugReports: https://github.com/SAFEHR-data/omop-data-catalogue/issues
