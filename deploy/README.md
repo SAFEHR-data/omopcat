@@ -16,30 +16,17 @@ From the package root directory, run from `R`:
 renv::snapshot(project = ".", lockfile = "./deploy/renv.lock.prod", type = "explicit")
 ```
 
-## Build Docker images
+## Build Docker images and run the app
 
 In the `deploy/` directory, run:
 
 ```shell
-# Assuming R version 4.4.1
-docker build -f Dockerfile.base --platform=linux/amd64 -t calypso_base:4.4.1 .
-docker build -f Dockerfile --platform=linux/amd64 -t calypso:latest .
+docker compose up -d --build
 ```
 
-The `calypso_base` image acts as a cached image with most of the necessary dependencies installed,
-to speed up the build process of the `calypso` image. The base image is not intended to be run and
-is only expected to be rebuilt in case of major dependency changes.
+This will build the container and install the necessary dependencies to run the app.
+The `-d` flag runs the `docker compose` command in "detached" mode, meaning the app will be run
+in the background and you can safely quit your terminal session.
 
-Note that the `calypso` image also includes a `renv::restore()` step, so any dependencies not present
-in the base image will still be installed.
+By default, the app will be hosted at `https://localhost:3838`.
 
-## Run with `docker compose`
-
-Define the environment variables in `.env`, using `.env.sample` as a template.
-Then run:
-
-```shell
-docker compose up --build
-```
-
-to launch the app.
