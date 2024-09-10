@@ -21,7 +21,8 @@ Imports:
     lubridate,
     dplyr,
     cli,
-    nanoparquet
+    nanoparquet,
+    rlang
 Suggests:
     devtools,
     usethis,
