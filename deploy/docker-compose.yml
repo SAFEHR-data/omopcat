@@ -1,14 +1,20 @@
 services:
-  shiny:
-    build: .
+  calypso:
+    build:
+      context: .
+      args:
+        HTTP_PROXY: ${HTTP_PROXY}
+        HTTPS_PROXY: ${HTTPS_PROXY}
     image: calypso:latest
     platform: linux/amd64
     restart: unless-stopped
     environment:
-      - GOLEM_CONFIG_ACTIVE=production
-      - CALYPSO_DATA_PATH=/etc/calypso/data
-      - LOW_FREQUENCY_THRESHOLD=5
-      - LOW_FREQUENCY_REPLACEMENT=2.5
+      HTTP_PROXY: ${HTTP_PROXY}
+      HTTPS_PROXY: ${HTTPS_PROXY}
+      GOLEM_CONFIG_ACTIVE: production
+      CALYPSO_DATA_PATH: /etc/calypso/data
+      LOW_FREQUENCY_THRESHOLD: 5
+      LOW_FREQUENCY_REPLACEMENT: 2.5
     volumes:
       - ../data/prod_data:/etc/calypso/data
     ports:
