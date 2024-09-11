@@ -52,5 +52,5 @@ in the background and you can safely quit your terminal session.
 
 By default, the app will be hosted at `https://localhost:3838`.
 
-Running the app on the GAE will make it available at `http://uclvlddpragae05:3838` within the UCLH
+Running the app on GAE05 will make it available at `http://uclvlddpragae05:3838` within the UCLH
 network.
