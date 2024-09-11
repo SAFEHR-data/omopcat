@@ -18,7 +18,13 @@ renv::snapshot(project = ".", lockfile = "./deploy/renv.lock.prod", type = "expl
 
 ## Build Docker images and run the app
 
-In the `deploy/` directory, run:
+To launch the test version of the app, run:
+
+```shell
+docker compose -f docker-compose.test.yml up -d --build
+```
+
+To launch the production version of the up, run:
 
 ```shell
 docker compose up -d --build
