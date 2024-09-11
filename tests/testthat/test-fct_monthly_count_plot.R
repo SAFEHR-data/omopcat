@@ -22,5 +22,5 @@ test_that("monthly_count_plot correctly parses dates", {
 
 test_that("Date range filtering fails for invalid date range", {
   selected_dates <- c("2020-01-01", "2019-01-01")
-  expect_error(.filter_dates(monthly_counts, selected_dates), "Invalid date range, end date is before start date")
+  expect_error(filter_dates(monthly_counts, selected_dates), "Invalid date range, end date is before start date")
 })

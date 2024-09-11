@@ -31,7 +31,7 @@ get_summary_stats <- function() {
   .read_parquet_table("calypso_summary_stats")
 }
 
-.filter_dates <- function(x, date_range) {
+filter_dates <- function(x, date_range) {
   date_range <- as.Date(date_range)
   if (date_range[2] < date_range[1]) {
     stop("Invalid date range, end date is before start date")

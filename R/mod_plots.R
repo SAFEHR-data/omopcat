@@ -53,7 +53,7 @@ mod_plots_server <- function(id, selected_concept, selected_dates = NULL,
 
       if (!is.null(selected_dates)) {
         req(selected_dates())
-        out <- .filter_dates(out, selected_dates())
+        out <- filter_dates(out, selected_dates())
       }
       out
     })
