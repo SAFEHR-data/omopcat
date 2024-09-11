@@ -22,6 +22,7 @@ The goal of calypso is to provide a summary of OMOP data and display it in a pub
 You can install the development version of calypso from within R like so:
 
 ```r
+install.packages("remotes")
 usethis::create_github_token()
 credentials::set_github_pat()
 remotes::install_github("SAFEHR-data/omop-data-catalogue")
