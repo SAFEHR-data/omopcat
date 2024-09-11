@@ -22,9 +22,14 @@ The goal of calypso is to provide a summary of OMOP data and display it in a pub
 You can install the development version of calypso from within R like so:
 
 ```r
-# install.packages("pak")
-pak::pak("SAFEHR-data/calypso")
+install.packages("remotes")
+usethis::create_github_token()
+credentials::set_github_pat()
+remotes::install_github("SAFEHR-data/omop-data-catalogue")
 ```
+
+You will need to copy the PAT from the web page that `usethis::create_github_token`
+opens and paste it into the input that `credentials::set_github_pat` provides.
 
 ## Development
 
@@ -39,19 +44,22 @@ as it has good support for R package development and Shiny.
     - Either with `git clone git@github.com:SAFEHR-data/omop-data-catalogue.git`
     - Or by creating [a new project in RStudio from version control](https://docs.posit.co/ide/user/ide/guide/tools/version-control.html#creating-a-new-project-based-on-a-remote-git-or-subversion-repository)
 
-2. Install [`{renv}`](https://rstudio.github.io/renv/index.html) and restore the project library by running the following from an R console in the project directory:
+2. You will also need some packages installed on your OS for the next stage to work. If you don't perform this step the next stage will tell you (gradually) which packages to install, but it will be quicker if you install them ahead of time. The packages you need are as follows:
+    - For Ubuntu/Debian: `libcurl4-openssl-dev libfontconfig1-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev libxml2-dev`
+
+3. Install [`{renv}`](https://rstudio.github.io/renv/index.html) and restore the project library by running the following from an R console in the project directory:
 
     ```r
     install.packages("renv")
     renv::restore()
     ```
-3. Create the [duckdb](https://github.com/duckdb/duckdb) test database and run the analyses by running from an R console in the project directory:
+4. Create the [duckdb](https://github.com/duckdb/duckdb) test database and run the analyses by running from an R console in the project directory:
 
     ```r
     source(here::here("scripts/create_dev_data.R"))
     ```
 
-4. To preview the app locally, run the following from an R console within the project directory:
+5. To preview the app locally, run the following from an R console within the project directory:
 
     ```r
     golem::run_dev()
