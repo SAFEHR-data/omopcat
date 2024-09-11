@@ -7,6 +7,8 @@ services:
     environment:
       - GOLEM_CONFIG_ACTIVE=production
       - CALYPSO_DATA_PATH=/etc/calypso/data
+      - LOW_FREQUENCY_THRESHOLD=5
+      - LOW_FREQUENCY_REPLACEMENT=2.5
     volumes:
       - ../data/prod_data:/etc/calypso/data
     ports:
