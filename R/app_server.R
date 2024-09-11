@@ -11,7 +11,9 @@ app_server <- function(input, output, session) {
   selected_data <- mod_select_concepts_server("select_concepts", concepts_table)
   mod_date_range_server("date_range")
 
+  #populates main concepts table
   selected_row <- mod_datatable_server("totals", selected_data)
+
   selected_dates <- mod_date_range_server("date_range")
 
   mod_plots_server("monthly_counts", selected_row, selected_dates, type = "monthly_counts")
