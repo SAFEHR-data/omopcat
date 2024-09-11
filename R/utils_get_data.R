@@ -31,6 +31,17 @@ get_summary_stats <- function() {
   .read_parquet_table("calypso_summary_stats")
 }
 
+.filter_dates <- function(x, date_range) {
+  date_range <- as.Date(date_range)
+  if (date_range[2] < date_range[1]) {
+    stop("Invalid date range, end date is before start date")
+  }
+
+  dates <- lubridate::make_date(year = x$date_year, month = x$date_month)
+  keep_dates <- dplyr::between(dates, date_range[1], date_range[2])
+  dplyr::filter(x, keep_dates)
+}
+
 .read_parquet_table <- function(table_name) {
   data_dir <- Sys.getenv("CALYPSO_DATA_PATH")
   if (data_dir == "") {

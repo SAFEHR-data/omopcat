@@ -70,13 +70,4 @@ mod_plots_server <- function(id, selected_concept, selected_dates = NULL,
 }
 
 
-.filter_dates <- function(x, date_range) {
-  date_range <- as.Date(date_range)
-  if (date_range[2] < date_range[1]) {
-    stop("Invalid date range, end date is before start date")
-  }
 
-  dates <- lubridate::make_date(year = x$date_year, month = x$date_month)
-  keep_dates <- dplyr::between(dates, date_range[1], date_range[2])
-  dplyr::filter(x, keep_dates)
-}
