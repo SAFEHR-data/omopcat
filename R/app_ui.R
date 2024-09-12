@@ -19,12 +19,16 @@ app_ui <- function(request) {
       ),
       nav_panel(
         title = "Dashboard",
-        card(mod_datatable_ui("totals")),
+        card(mod_datatable_ui("concepts")),
         layout_columns(
           card(mod_plots_ui("monthly_counts")),
           card(mod_plots_ui("summary_stats"))
         ),
         .low_frequency_disclaimer()
+      ),
+      nav_panel(
+        title = "Bundles",
+        card(mod_datatable_ui("bundles"))
       ),
       nav_panel(
         title = "Export",

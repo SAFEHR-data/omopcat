@@ -31,6 +31,15 @@ get_summary_stats <- function() {
   .read_parquet_table("calypso_summary_stats")
 }
 
+get_bundles <- function() {
+  if (golem::app_dev()) {
+    return(
+      readr::read_csv(app_sys("dev_data", "omop_bundles.csv"), show_col_types = FALSE)
+    )
+  }
+  NA
+}
+
 .read_parquet_table <- function(table_name) {
   data_dir <- Sys.getenv("CALYPSO_DATA_PATH")
   if (data_dir == "") {
