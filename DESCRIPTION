@@ -31,7 +31,7 @@ Imports:
     cli,
     nanoparquet,
     rlang,
-    omopbundles
+    omopbundles (>= 0.1.0)
 Suggests:
     devtools,
     usethis,
