@@ -13,9 +13,8 @@ and subsequently export a selection of concepts of interest.
 
 1. [Installation](#installation)
 1. [Usage](#usage)
-1. [Deployment](./deploy/README.md)
+1. [Deployment](#deploying-with-docker)
 1. [Developer instructions](https://github.com/SAFEHR-data/omop-data-catalogue/wiki/)
-
 
 ## Installation
 
@@ -57,6 +56,25 @@ or by setting it in a local [`.Renviron`](https://usethis.r-lib.org/reference/ed
 Note that running the app locally in production mode should only be done for teting purposes.
 To run a truly productionised version, we provide a [containerised deployment](#deployment).
 
-## Deployment
+## Deploying with Docker
 
-See the [deployment docs](./deploy/README.md).
+We provide a [Docker](https://www.docker.com/) container and [`docker-compose`](https://docs.docker.com/compose/)
+configuration to run the app in a production environment.
+
+A test version can be run with
+
+```sh
+docker compose -f deploy/docker-compose.test.yml up -d
+```
+
+which will use the [test data](./data/test_data).
+
+To deploy a production version, using the data from `data/prod_data` (needs to be populated manually), run
+
+```sh
+docker compose -f deploy/docker-compose.yml up -d
+```
+
+By default, the app will be hosted at `http://localhost:3838`.
+
+See the [deployment docs](./deploy/README.md) for more details.
