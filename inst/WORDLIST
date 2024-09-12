@@ -1,6 +1,8 @@
+CDM
 CMD
 Catalogue
 Lifecycle
+Nanoparquet
 OMOP
 RStudio
 UI
@@ -8,4 +10,5 @@ catalogue
 duckdb
 golem
 lockfile
+organised
 tidyverse

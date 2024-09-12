@@ -41,7 +41,7 @@ calculate_monthly_counts <- function(omop_table, concept, date) {
 
 #' Calculate summary statistics for an OMOP table
 #'
-#' Calculates the mean snd standard deviation for numeric concepts and the
+#' Calculates the mean and standard deviation for numeric concepts and the
 #' frequency for categorical concepts.
 #'
 #' @param omop_table A table from the OMOP CDM
@@ -49,7 +49,7 @@ calculate_monthly_counts <- function(omop_table, concept, date) {
 #'
 #' @return A `data.frame` with the following columns:
 #'  - `concept_id`: The concept ID
-#'  - `summary_attribute`: The summary attribute (e.g. "mean", "sd", "frequency")
+#'  - `summary_attribute`: The summary attribute (e.g. `"mean"`, `"sd"`, `"frequency"`)
 #'  - `value_as_number`: The value of the summary attribute
 #'  - `value_as_concept_id`: In case of a categorical concept, the concept ID for each category
 #' @export
