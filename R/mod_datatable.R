@@ -14,6 +14,19 @@ mod_datatable_ui <- function(id) {
   )
 }
 
+#' export datatable UI Function
+#'
+#' @description A shiny Module.
+#'
+#' @param namespace namespace to put the table in.
+#'
+#' @noRd
+#'
+#' @importFrom shiny NS tagList
+mod_exporttable_ui <- function(namespace) {
+  shiny::tableOutput(NS(namespace, "exportview"))
+}
+
 #' datatable Server Functions
 #'
 #' @param data A reactive data.frame containing the data to be displayed
@@ -30,7 +43,7 @@ mod_datatable_server <- function(id, data) {
       selected = 1,
       target = "row"
     ))
-
+    output$exportview <- shiny::renderTable(data())
     reactive(data()[input$datatable_rows_selected, ])
   })
 }

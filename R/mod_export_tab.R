@@ -10,7 +10,7 @@
 mod_export_tab_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    mod_datatable_ui(ns("datatable")),
+    mod_exporttable_ui(ns("datatable")),
     mod_export_ui(ns("export"))
   )
 }

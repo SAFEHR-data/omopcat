@@ -5,11 +5,17 @@
 #' @noRd
 get_concepts_table <- function() {
   if (golem::app_dev()) {
-    return(
-      readr::read_csv(app_sys("dev_data", "calypso_concepts.csv"), show_col_types = FALSE)
+    ct <- readr::read_csv(
+      app_sys("dev_data", "calypso_concepts.csv"),
+      show_col_types = FALSE
     )
+  } else {
+    ct <- .read_parquet_table("calypso_concepts")
   }
-  .read_parquet_table("calypso_concepts")
+  # Make sure the concept IDs are integers so that they get rendered as such
+  # in shiny::renderTable()
+  ct$concept_id <- as.integer(ct$concept_id)
+  ct
 }
 
 get_monthly_counts <- function() {
