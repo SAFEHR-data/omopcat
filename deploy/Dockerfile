@@ -1,9 +1,11 @@
-FROM calypso_base:4.4.1
+FROM rocker/shiny-verse:4.4.1
 
 WORKDIR /app
 COPY renv.lock.prod renv.lock
 
-RUN R -e 'renv::restore()'
+# Install renv and restore environment
+RUN install2.r --error --skipinstalled renv && \
+    R -e 'renv::restore()'
 
 COPY calypso_*.tar.gz /app.tar.gz
 RUN R -e 'remotes::install_local("/app.tar.gz", upgrade="never")' && \
