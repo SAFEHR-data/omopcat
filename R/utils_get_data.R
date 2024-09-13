@@ -31,7 +31,8 @@ get_summary_stats <- function() {
   .read_parquet_table("calypso_summary_stats")
 }
 
-get_bundles <- function() {
+# NEED TO BE REMOVED WHEN MERGING WITH BUNDLES UTILS FUNCTIONS
+all_bundles <- function() {
   if (golem::app_dev()) {
     return(
       readr::read_csv(app_sys("dev_data", "omop_bundles.csv"), show_col_types = FALSE)

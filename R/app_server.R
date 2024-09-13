@@ -6,8 +6,12 @@
 #' @noRd
 app_server <- function(input, output, session) {
   # Get the input tables
+  bundles_table <- all_bundles()
+
+  selected_bundle <- mod_dropdown_list_server("select_bundle", bundles_table)
+
+  # concepts_table <- get_bundle_concepts(selected_bundle$id, selected_bundle$domain)
   concepts_table <- get_concepts_table()
-  bundles_table <- get_bundles()
 
   selected_data <- mod_select_concepts_server("select_concepts", concepts_table)
   mod_date_range_server("date_range")
@@ -17,8 +21,6 @@ app_server <- function(input, output, session) {
 
   mod_plots_server("monthly_counts", selected_concept_row, selected_dates, type = "monthly_counts")
   mod_plots_server("summary_stats", selected_concept_row, type = "summary_stats")
-
-  selected_bundle_row <- mod_datatable_server("bundles", reactiveVal(bundles_table))
 
   mod_export_tab_server("export_tab", selected_data)
 }

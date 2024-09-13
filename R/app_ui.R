@@ -14,6 +14,7 @@ app_ui <- function(request) {
       title = .app_title(),
       sidebar = sidebar(
         title = "Filtering options",
+        mod_dropdown_list_ui("select_bundle"),
         mod_select_concepts_ui("select_concepts"),
         mod_date_range_ui("date_range"),
       ),
@@ -25,10 +26,6 @@ app_ui <- function(request) {
           card(mod_plots_ui("summary_stats"))
         ),
         .low_frequency_disclaimer()
-      ),
-      nav_panel(
-        title = "Bundles",
-        card(mod_datatable_ui("bundles"))
       ),
       nav_panel(
         title = "Export",
