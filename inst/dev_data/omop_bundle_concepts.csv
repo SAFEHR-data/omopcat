@@ -1,0 +1,10 @@
+id,domain,concept_id,allowed,per_person,min,max
+bundle_measurement,measurement,3001079,TRUE,NA,NA,NA
+bundle_measurement,measurement,4108450,TRUE,NA,NA,NA
+bundle_observation,observation,4128111,TRUE,NA,NA,NA
+bundle_measurement,measurement,4248525,TRUE,NA,NA,NA
+bundle_observation,observation,4353713,FALSE,NA,NA,NA
+bundle_observation,observation,4353717,TRUE,NA,NA,NA
+bundle_measurement,measurement,4353843,FALSE,NA,NA,NA
+bundle_measurement,measurement,4354252,TRUE,NA,NA,NA
+bundle_observation,observation,45766147,TRUE,NA,NA,NA

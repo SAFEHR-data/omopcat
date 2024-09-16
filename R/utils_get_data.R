@@ -31,14 +31,22 @@ get_summary_stats <- function() {
   .read_parquet_table("calypso_summary_stats")
 }
 
-# NEED TO BE REMOVED WHEN MERGING WITH BUNDLES UTILS FUNCTIONS
-all_bundles <- function() {
+get_bundles_table <- function() {
   if (golem::app_dev()) {
     return(
       readr::read_csv(app_sys("dev_data", "omop_bundles.csv"), show_col_types = FALSE)
     )
   }
-  NA
+  all_bundles()
+}
+
+get_bundle_concepts_table <- function(bundle_id, bundle_domain) {
+  if (golem::app_dev()) {
+    return(
+      .get_mock_bundle_concepts(bundle_id, bundle_domain)
+    )
+  }
+  get_bundle_concepts(bundle_id, bundle_domain)
 }
 
 .read_parquet_table <- function(table_name) {
@@ -72,5 +80,21 @@ all_bundles <- function() {
     df,
     records_per_person = ifelse(.data$records_per_person < threshold, replacement, .data$records_per_person),
     person_count = ifelse(.data$person_count < threshold, replacement, .data$person_count)
+  )
+}
+
+#' @importFrom rlang .data
+.get_mock_bundle_concepts <- function(bundle_id, bundle_domain) {
+  dplyr::select(
+    dplyr::filter(
+      readr::read_csv(app_sys("dev_data", "omop_bundle_concepts.csv"), show_col_types = FALSE),
+      .data$id == bundle_id & .data$domain == bundle_domain
+    ),
+    .data$concept_id,
+    .data$allowed,
+    .data$per_person,
+    .data$min,
+    .data$max,
+    .data$domain
   )
 }

@@ -5,12 +5,11 @@
 #' @import shiny
 #' @noRd
 app_server <- function(input, output, session) {
+
+  bundles_table <- get_bundles_table()
+  concepts_table <- mod_dropdown_list_server("select_bundle", bundles_table)
+
   # Get the input tables
-  bundles_table <- all_bundles()
-
-  selected_bundle <- mod_dropdown_list_server("select_bundle", bundles_table)
-
-  # concepts_table <- get_bundle_concepts(selected_bundle$id, selected_bundle$domain)
   concepts_table <- get_concepts_table()
 
   selected_data <- mod_select_concepts_server("select_concepts", concepts_table)

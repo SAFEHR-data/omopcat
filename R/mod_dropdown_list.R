@@ -10,7 +10,7 @@
 mod_dropdown_list_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    selectInput(ns("select_bundle"), "Select bundle", choices = NULL)
+    selectInput(ns("select_bundle"), "Select bundle", choices = NULL, multiple = FALSE)
   )
 }
 
@@ -21,16 +21,23 @@ mod_dropdown_list_ui <- function(id) {
 #' @return The selected row as a reactive object
 #'
 #' @noRd
+#'
+#' @importFrom rlang .data
 mod_dropdown_list_server <- function(id, bundles_table) {
   stopifnot("concept_name" %in% names(bundles_table))
-
   moduleServer(id, function(input, output, session) {
-    bundles_table <- reactiveVal(bundles_table)
-    observeEvent(bundles_table(), {
-      updateSelectInput(session, "select_bundle",
-                        choices = bundles_table()$concept_name
-      )
+    observeEvent(bundles_table, {
+      updateSelectInput(session, "select_bundle", choices = bundles_table$concept_name)
     })
-    reactive(bundles_table()[bundles_table()$concept_name %in% input$select_bundle, ])
+    # bundle <- reactive(bundles_table[bundles_table$concept_name == input$select_bundle, ])
+    # reactive({
+    #   req(bundle())
+    #   dplyr::inner_join(
+    #     dplyr::select(get_concepts_table(), .data$concept_id, .data$concept_name),
+    #     get_bundle_concepts_table(bundle()$id, bundle()$domain),
+    #     join_by(concept_id)
+    #   )
+    # })
+    reactive(bundles_table[bundles_table$concept_name == input$select_bundle, ])
   })
 }
