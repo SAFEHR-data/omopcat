@@ -1,10 +1,19 @@
+#' Should we be using the inst/dev_data?
+#'
+#' Only if we are running as a development server and CALYPSO_DATA_PATH
+#' is not set
+should_use_dev_data <- function() {
+  golem::app_dev() && Sys.getenv("CALYPSO_DATA_PATH") == ""
+}
+
+
 #' Get input data for the app
 #'
 #' Utility functions to retrieve the input data for the app from the database.
 #'
 #' @noRd
 get_concepts_table <- function() {
-  if (golem::app_dev()) {
+  if (should_use_dev_data()) {
     ct <- readr::read_csv(
       app_sys("dev_data", "calypso_concepts.csv"),
       show_col_types = FALSE
@@ -19,8 +28,7 @@ get_concepts_table <- function() {
 }
 
 get_monthly_counts <- function() {
-  # If the app is run in development mode
-  if (golem::app_dev()) {
+  if (should_use_dev_data()) {
     data <- readr::read_csv(app_sys("dev_data", "calypso_monthly_counts.csv"), show_col_types = FALSE)
   } else {
     data <- .read_parquet_table("calypso_monthly_counts")
@@ -29,7 +37,7 @@ get_monthly_counts <- function() {
 }
 
 get_summary_stats <- function() {
-  if (golem::app_dev()) {
+  if (should_use_dev_data()) {
     return(
       readr::read_csv(app_sys("dev_data", "calypso_summary_stats.csv"), show_col_types = FALSE)
     )
