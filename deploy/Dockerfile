@@ -7,12 +7,12 @@ COPY renv.lock.prod renv.lock
 RUN install2.r --error --skipinstalled renv && \
     R -e 'renv::restore()'
 
-COPY calypso_*.tar.gz /app.tar.gz
+COPY omopcat_*.tar.gz /app.tar.gz
 RUN R -e 'remotes::install_local("/app.tar.gz", upgrade="never")' && \
     rm /app.tar.gz
 
 EXPOSE 3838
-CMD ["R", "-e", "options('shiny.port'=3838,shiny.host='0.0.0.0');library(calypso);calypso::run_app()"]
+CMD ["R", "-e", "options('shiny.port'=3838,shiny.host='0.0.0.0');library(omopcat);omopcat::run_app()"]
 
-# to build: docker build -t calypso .
-# to run: docker run -p 3838:3838 calypso
+# to build: docker build -t omopcat .
+# to run: docker run -p 3838:3838 omopcat

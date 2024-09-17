@@ -46,7 +46,7 @@ usethis::use_test("app")
 # Documentation
 
 ## Vignette ----
-usethis::use_vignette("calypso")
+usethis::use_vignette("omopcat")
 devtools::build_vignettes()
 
 ## Code Coverage----

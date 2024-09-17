@@ -6,18 +6,18 @@
 get_concepts_table <- function() {
   if (golem::app_dev()) {
     return(
-      readr::read_csv(app_sys("dev_data", "calypso_concepts.csv"), show_col_types = FALSE)
+      readr::read_csv(app_sys("dev_data", "omopcat_concepts.csv"), show_col_types = FALSE)
     )
   }
-  .read_parquet_table("calypso_concepts")
+  .read_parquet_table("omopcat_concepts")
 }
 
 get_monthly_counts <- function() {
   # If the app is run in development mode
   if (golem::app_dev()) {
-    data <- readr::read_csv(app_sys("dev_data", "calypso_monthly_counts.csv"), show_col_types = FALSE)
+    data <- readr::read_csv(app_sys("dev_data", "omopcat_monthly_counts.csv"), show_col_types = FALSE)
   } else {
-    data <- .read_parquet_table("calypso_monthly_counts")
+    data <- .read_parquet_table("omopcat_monthly_counts")
   }
   .manage_low_frequency(data)
 }
@@ -25,10 +25,10 @@ get_monthly_counts <- function() {
 get_summary_stats <- function() {
   if (golem::app_dev()) {
     return(
-      readr::read_csv(app_sys("dev_data", "calypso_summary_stats.csv"), show_col_types = FALSE)
+      readr::read_csv(app_sys("dev_data", "omopcat_summary_stats.csv"), show_col_types = FALSE)
     )
   }
-  .read_parquet_table("calypso_summary_stats")
+  .read_parquet_table("omopcat_summary_stats")
 }
 
 .read_parquet_table <- function(table_name) {
