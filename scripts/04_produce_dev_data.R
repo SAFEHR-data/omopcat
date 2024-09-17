@@ -5,7 +5,7 @@ cli::cli_h1("Producing test data")
 
 suppressPackageStartupMessages({
   library(dplyr)
-  library(calypso)
+  library(omopcat)
 })
 
 data_path <- here::here("data/test_data")
@@ -17,7 +17,7 @@ stopifnot(dir.exists(out_path))
 
 # Get the relevant tables and filter
 table_names <- c("concepts", "monthly_counts", "summary_stats")
-paths <- glue::glue("{data_path}/calypso_{table_names}.parquet")
+paths <- glue::glue("{data_path}/omopcat_{table_names}.parquet")
 tables <- purrr::map(paths, read_parquet_sorted)
 names(tables) <- table_names
 
@@ -35,7 +35,7 @@ tables <- purrr::map(tables, ~ .x[.x$concept_id %in% filtered_monthly$concept_id
 
 # Write all results to the test data folder
 purrr::iwalk(tables, function(tbl, name) {
-  path <- glue::glue("{out_path}/calypso_{name}.csv")
+  path <- glue::glue("{out_path}/omopcat_{name}.csv")
   cli::cli_alert_info("Writing {name} to {path}")
   readr::write_csv(tbl, file = path)
 })

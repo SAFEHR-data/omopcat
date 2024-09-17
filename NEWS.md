@@ -1,6 +1,6 @@
-# calypso (development version)
+# omopcat (development version)
 
-# calypso 0.1.0
+# omopcat 0.1.0
 
 The minimal data catalogue.
 

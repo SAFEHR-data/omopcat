@@ -1,4 +1,4 @@
-Package: calypso
+Package: omopcat
 Title: The OMOP Data Catalogue Dashboard
 Version: 0.1.0.9000
 Authors@R: c(
