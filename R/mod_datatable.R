@@ -26,33 +26,14 @@ mod_datatable_ui <- function(id) {
 mod_exporttable_ui <- function(namespace) {
   ns <- NS(namespace)
   tagList(
-    shiny::p("Summary of the table to be exported:"),
-    shiny::tableOutput(ns("exportview"))
+    shiny::p(tagList(
+      shiny::textOutput(ns("row_count"), inline = TRUE),
+      shiny::span("concepts have been selected for export:")
+    )),
+    shiny::tableOutput(ns("by_domain")),
+    shiny::tableOutput(ns("by_concept_class")),
+    shiny::tableOutput(ns("by_vocabulary_id"))
   )
-}
-
-summarize_column <- function(df_col) {
-  max_display_explicitly <- 9
-  display_initial <- 5
-  vals <- unique(df_col)
-  n <- length(vals)
-  if (n <= max_display_explicitly) {
-    return(paste(vals, collapse = ", "))
-  }
-  # Too many values to list comfortably
-  paste0(
-    paste(vals[1:display_initial], collapse = ", "),
-    "... and ",
-    n - display_initial,
-    " others"
-  )
-}
-
-summarize_dataframe <- function(df) {
-  summaries <- apply(df, 2, summarize_column)
-  df <- data.frame(columns = names(df), uniques = summaries)
-  colnames(df) <- c("Column", "Unique values in this column")
-  df
 }
 
 #' datatable Server Functions
@@ -62,6 +43,7 @@ summarize_dataframe <- function(df) {
 #' @return The selected row as a reactive object
 #'
 #' @noRd
+#' @importFrom dplyr group_by summarise
 mod_datatable_server <- function(id, data) {
   stopifnot(is.reactive(data))
 
@@ -71,7 +53,22 @@ mod_datatable_server <- function(id, data) {
       selected = 1,
       target = "row"
     ))
-    output$exportview <- shiny::renderTable(summarize_dataframe(data()))
+    output$row_count <- shiny::renderText(nrow(data()))
+    output$by_domain <- shiny::renderTable(
+      data()
+      |> group_by(domain_id)
+      |> summarise(concepts = length(concept_id))
+    )
+    output$by_concept_class <- shiny::renderTable(
+      data()
+      |> group_by(concept_class_id)
+      |> summarise(concepts = length(concept_id))
+    )
+    output$by_vocabulary_id <- shiny::renderTable(
+      data()
+      |> group_by(vocabulary_id)
+      |> summarise(concepts = length(concept_id))
+    )
     reactive(data()[input$datatable_rows_selected, ])
   })
 }
