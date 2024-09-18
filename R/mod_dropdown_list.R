@@ -29,15 +29,14 @@ mod_dropdown_list_server <- function(id, bundles_table) {
     observeEvent(bundles_table, {
       updateSelectInput(session, "select_bundle", choices = bundles_table$concept_name)
     })
-    # bundle <- reactive(bundles_table[bundles_table$concept_name == input$select_bundle, ])
-    # reactive({
-    #   req(bundle())
-    #   dplyr::inner_join(
-    #     dplyr::select(get_concepts_table(), .data$concept_id, .data$concept_name),
-    #     get_bundle_concepts_table(bundle()$id, bundle()$domain),
-    #     join_by(concept_id)
-    #   )
-    # })
-    reactive(bundles_table[bundles_table$concept_name == input$select_bundle, ])
+    reactive({
+      req(input$select_bundle)
+      bundle <- bundles_table[bundles_table$concept_name == input$select_bundle, ]
+      dplyr::inner_join(
+        get_concepts_table(),
+        dplyr::select(get_bundle_concepts_table(bundle$id, bundle$domain), .data$concept_id),
+        dplyr::join_by(concept_id)
+      )
+    })
   })
 }
