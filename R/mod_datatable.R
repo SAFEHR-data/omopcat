@@ -14,28 +14,6 @@ mod_datatable_ui <- function(id) {
   )
 }
 
-#' export datatable UI Function
-#'
-#' @description A shiny Module.
-#'
-#' @param namespace namespace to put the table in.
-#'
-#' @noRd
-#'
-#' @importFrom shiny NS tagList
-mod_exporttable_ui <- function(namespace) {
-  ns <- NS(namespace)
-  tagList(
-    shiny::p(tagList(
-      shiny::textOutput(ns("row_count"), inline = TRUE),
-      shiny::span("concepts have been selected for export:")
-    )),
-    shiny::tableOutput(ns("by_domain")),
-    shiny::tableOutput(ns("by_concept_class")),
-    shiny::tableOutput(ns("by_vocabulary_id"))
-  )
-}
-
 #' datatable Server Functions
 #'
 #' @param data A reactive data.frame containing the data to be displayed
@@ -53,22 +31,6 @@ mod_datatable_server <- function(id, data) {
       selected = 1,
       target = "row"
     ))
-    output$row_count <- shiny::renderText(nrow(data()))
-    output$by_domain <- shiny::renderTable(
-      data()
-      |> group_by(domain_id)
-      |> summarise(concepts = length(concept_id))
-    )
-    output$by_concept_class <- shiny::renderTable(
-      data()
-      |> group_by(concept_class_id)
-      |> summarise(concepts = length(concept_id))
-    )
-    output$by_vocabulary_id <- shiny::renderTable(
-      data()
-      |> group_by(vocabulary_id)
-      |> summarise(concepts = length(concept_id))
-    )
     reactive(data()[input$datatable_rows_selected, ])
   })
 }
