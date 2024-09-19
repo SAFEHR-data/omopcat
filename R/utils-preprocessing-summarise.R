@@ -25,6 +25,7 @@ calculate_monthly_counts <- function(omop_table, concept, date) {
   omop_table |>
     group_by(date_year, date_month, concept_id) |>
     summarise(
+      record_count = n(),
       person_count = n_distinct(person_id),
       records_per_person = n() / n_distinct(person_id)
     ) |>
@@ -32,6 +33,7 @@ calculate_monthly_counts <- function(omop_table, concept, date) {
       concept_id,
       date_year,
       date_month,
+      record_count,
       person_count,
       records_per_person
     ) |>
