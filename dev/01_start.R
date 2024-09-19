@@ -19,7 +19,7 @@
 ## to change the name in the app_sys() function in app_config.R /!\
 ##
 golem::fill_desc(
-  pkg_name = "calypso", # The Name of the package containing the App
+  pkg_name = "omopcat", # The Name of the package containing the App
   pkg_title = "A Dashboard to Display an OMOP Data Catalogue", # The Title of the package containing the App
   pkg_description = "PKG_DESC.", # The Description of the package containing the App
   author_first_name = "Milan", # Your First Name

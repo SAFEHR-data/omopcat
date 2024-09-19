@@ -1,8 +1,16 @@
-Package: calypso
-Title: A Dashboard to Display an OMOP Data Catalogue
-Version: 0.0.0.9000
-Authors@R: person('Milan', 'Malfait', email = 'm.malfait@ucl.ac.uk', role = c('cre', 'aut'))
-Description: .
+Package: omopcat
+Title: The OMOP Data Catalogue Dashboard
+Version: 0.1.0.9000
+Authors@R: c(
+    person('Milan', 'Malfait', email = 'm.malfait@ucl.ac.uk', role = c('cre', 'aut')),
+    person('Stefan', 'Piatek', role = 'aut'),
+    person('Baptiste', 'Briot Ribeyre', role = 'aut'),
+    person('Andy', 'South', role = 'aut'),
+    person("SAFEHR", role = c("cph", "fnd"))
+  )
+Description: A Shiny app to display an OMOP data catalogue in an interactive dashboard. Enables
+    users to interactively explore available OMOP concepts by displaying useful summary statistics
+    and subsequently export a selection of concepts of interest.
 License: Apache License (>= 2)
 Imports: 
     bslib,
@@ -22,7 +30,8 @@ Imports:
     dplyr,
     cli,
     nanoparquet,
-    rlang
+    rlang,
+    omopbundles (>= 0.1.0)
 Suggests:
     devtools,
     usethis,
@@ -34,9 +43,12 @@ Suggests:
     lintr,
     dbplyr,
     RSQLite
+Remotes: SAFEHR-data/omop-bundles
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.2
 Config/testthat/edition: 3
 Language: en-US
 Roxygen: list(markdown = TRUE)
+URL: https://github.com/SAFEHR-data/omop-data-catalogue
+BugReports: https://github.com/SAFEHR-data/omop-data-catalogue/issues

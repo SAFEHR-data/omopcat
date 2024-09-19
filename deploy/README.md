@@ -8,6 +8,13 @@ From the package root directory, run from `R`:
 pkgbuild::build(path = ".", dest_path = "deploy")
 ```
 
+This will create a `omopcat_*.tar.gz` file in the `deploy/` directory with a built version of the
+package, which  will be used to install the package in the Docker container. The reasoning here
+is that we have a **production** version of the package that is separate from the **development**
+version. The production version would ideally be pinned to a release version, e.g. `0.1.0` and only
+be updated when a new release is made, e.g. `0.1.1` or `0.2.0`. This should allow us to continue
+developing the app without affecting the version that is running in production.
+
 ## Create `renv.lock.prod`
 
 From the package root directory, run from `R`:
@@ -16,30 +23,34 @@ From the package root directory, run from `R`:
 renv::snapshot(project = ".", lockfile = "./deploy/renv.lock.prod", type = "explicit")
 ```
 
-## Build Docker images
+This `renv.lock.prod` file will be a subset of the `renv.lock` that is in the package root. The
+latter also includes development dependencies, which are not necessary to run the app in production.
 
-In the `deploy/` directory, run:
+## Build Docker images and run the app
 
-```shell
-# Assuming R version 4.4.1
-docker build -f Dockerfile.base --platform=linux/amd64 -t calypso_base:4.4.1 .
-docker build -f Dockerfile --platform=linux/amd64 -t calypso:latest .
-```
-
-The `calypso_base` image acts as a cached image with most of the necessary dependencies installed,
-to speed up the build process of the `calypso` image. The base image is not intended to be run and
-is only expected to be rebuilt in case of major dependency changes.
-
-Note that the `calypso` image also includes a `renv::restore()` step, so any dependencies not present
-in the base image will still be installed.
-
-## Run with `docker compose`
-
-Define the environment variables in `.env`, using `.env.sample` as a template.
-Then run:
+To launch the test version of the app, run:
 
 ```shell
-docker compose up --build
+docker compose -f docker-compose.test.yml up -d --build
 ```
 
-to launch the app.
+This will run a **test** version of the production app using the synthetic data in
+[`data/test_data`](../data/test_data/).
+
+To launch the production version of the up, run:
+
+```shell
+docker compose up -d --build
+```
+
+Note that this will require to populate the [`data/prod_data`](../data/prod_data/) directory with
+the necessary `parquet` files (see [`data/test_data`](../data/test_data/ for an example).
+
+This will build the container and install the necessary dependencies to run the app.
+The `-d` flag runs the `docker compose` command in "detached" mode, meaning the app will be run
+in the background and you can safely quit your terminal session.
+
+By default, the app will be hosted at `https://localhost:3838`.
+
+Running the app on GAE05 will make it available at `http://uclvlddpragae05:3838` within the UCLH
+network.

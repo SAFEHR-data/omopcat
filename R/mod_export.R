@@ -25,7 +25,7 @@ mod_export_server <- function(id, data) {
   moduleServer(id, function(input, output, session) {
     output$export <- downloadHandler(
       filename = function() {
-        paste0("calypso-export-", Sys.Date(), ".csv")
+        paste0("omopcat-export-", Sys.Date(), ".csv")
       },
       content = function(file) {
         utils::write.csv(data(), file, row.names = FALSE)

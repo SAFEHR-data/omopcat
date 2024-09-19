@@ -1,7 +1,7 @@
 services:
-  shiny:
+  calyspo_test:
     extends:
       file: docker-compose.yml
-      service: shiny
+      service: omopcat
     volumes:
-      - ../data/test_data:/etc/calypso/data
+      - ../data/test_data:/etc/omopcat/data

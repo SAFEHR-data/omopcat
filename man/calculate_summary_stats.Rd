@@ -15,12 +15,12 @@ calculate_summary_stats(omop_table, concept_name)
 A \code{data.frame} with the following columns:
 \itemize{
 \item \code{concept_id}: The concept ID
-\item \code{summary_attribute}: The summary attribute (e.g. "mean", "sd", "frequency")
+\item \code{summary_attribute}: The summary attribute (e.g. \code{"mean"}, \code{"sd"}, \code{"frequency"})
 \item \code{value_as_number}: The value of the summary attribute
 \item \code{value_as_concept_id}: In case of a categorical concept, the concept ID for each category
 }
 }
 \description{
-Calculates the mean snd standard deviation for numeric concepts and the
+Calculates the mean and standard deviation for numeric concepts and the
 frequency for categorical concepts.
 }
