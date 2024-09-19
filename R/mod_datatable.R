@@ -26,6 +26,7 @@ mod_datatable_server <- function(id, data, selected_dates = NULL) {
   stopifnot(is.reactive(selected_dates) || is.null(selected_dates))
 
   moduleServer(id, function(input, output, session) {
+
     output$datatable <- DT::renderDT(selected_data_plus_counts(), selection = list(
       mode = "single",
       selected = 1,
@@ -36,9 +37,6 @@ mod_datatable_server <- function(id, data, selected_dates = NULL) {
     ##join onto selected_data
     ##start with mean records_per_person
     ##later we need to add record_count & calc person_count=record_count/mean(records_per_person)
-
-    #TODO FIND OUT WHY records_per_person NO LONGER ADDED TO TABLE
-    #when this code moved here from app_server.R ???
 
     monthly_counts <- get_monthly_counts()
 
