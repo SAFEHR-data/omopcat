@@ -8,7 +8,7 @@ cli::cli_h1("Inserting dummy tables")
 # Setup ---------------------------------------------------------------------------------------
 
 library(readr)
-library(calypso)
+library(omopcat)
 
 dir <- Sys.getenv("EUNOMIA_DATA_FOLDER")
 name <- Sys.getenv("TEST_DB_NAME")

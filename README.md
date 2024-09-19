@@ -1,11 +1,12 @@
-# calypso
+# omopcat
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/SAFEHR-data/omop-data-catalogue/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/SAFEHR-data/omop-data-catalogue/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/SAFEHR-data/omop-data-catalogue/graph/badge.svg)](https://app.codecov.io/gh/SAFEHR-data/omop-data-catalogue)
 <!-- badges: end -->
 
-The `calypso` web app provides an interactive dashboard to display a catalogue of available OMOP data. It enables
+The `omopcat` web app provides an interactive dashboard to display a catalogue of available OMOP data. It enables
 users to interactively explore available OMOP concepts by showing useful summary statistics
 and subsequently export a selection of concepts of interest.
 
@@ -18,7 +19,7 @@ and subsequently export a selection of concepts of interest.
 
 ## Installation
 
-You can install the development version of calypso from within R like so:
+You can install the development version of omopcat from within R like so:
 
 ```r
 install.packages("remotes")
@@ -35,7 +36,7 @@ opens and paste it into the input that `credentials::set_github_pat` provides.
 Once the app is installed, you can run it locally with
 
 ```r
-library(calypso)
+library(omopcat)
 run_app()
 ```
 
@@ -46,7 +47,7 @@ To run the app in production mode, set the `GOLEM_CONFIG_ACTIVE` environment var
 From within R this can be done by
 
 ```r
-library(calypso)
+library(omopcat)
 Sys.setenv(GOLEM_CONFIG_ACTIVE = "production")
 run_app()
 ```

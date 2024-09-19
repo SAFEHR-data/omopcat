@@ -1,6 +1,6 @@
 cli::cli_h1("Setting up test database")
 
-library(calypso)
+library(omopcat)
 
 # Create an duckdb database from Eunomia datasets
 db_path <-  CDMConnector::eunomia_dir(
