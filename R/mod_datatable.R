@@ -34,22 +34,18 @@ mod_datatable_server <- function(id, data, selected_dates = NULL) {
     ))
 
     #use selected dates to calc num patients and records per concept
-    ##join onto selected_data
-    ##start with mean records_per_person
-    ##later we need to add record_count & calc person_count=record_count/mean(records_per_person)
-
-    monthly_counts <- get_monthly_counts()
+    #join onto selected_data
 
     selected_data_plus_counts <- reactive({
-      filter_dates(monthly_counts, selected_dates()) |>
-        group_by(concept_id) |>
-        summarise(patients = round(sum(record_count)/mean(records_per_person)),
-                  records_per_person = mean(records_per_person)) |>
-        dplyr::right_join(data(), by = "concept_id")
+      get_monthly_counts() |>
+      filter_dates(selected_dates()) |>
+      group_by(concept_id) |>
+      summarise(patients = round(sum(record_count)/mean(records_per_person)),
+                records_per_person = mean(records_per_person)) |>
+      dplyr::right_join(data(), by = "concept_id")
     })
 
     reactive(selected_data_plus_counts()[input$datatable_rows_selected, ])
-
 
   })
 }
