@@ -26,7 +26,7 @@ mod_datatable_server <- function(id, data, selected_dates = NULL) {
   stopifnot(is.reactive(selected_dates) || is.null(selected_dates))
 
   moduleServer(id, function(input, output, session) {
-    output$datatable <- DT::renderDT(data(), selection = list(
+    output$datatable <- DT::renderDT(selected_data_plus_counts(), selection = list(
       mode = "single",
       selected = 1,
       target = "row"
@@ -51,5 +51,7 @@ mod_datatable_server <- function(id, data, selected_dates = NULL) {
     })
 
     reactive(selected_data_plus_counts()[input$datatable_rows_selected, ])
+
+
   })
 }
