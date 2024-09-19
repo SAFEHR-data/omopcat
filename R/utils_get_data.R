@@ -1,7 +1,9 @@
 #' Should we be using the inst/dev_data?
 #'
 #' Only if we are running as a development server and CALYPSO_DATA_PATH
-#' is not set
+#' is not set.
+#'
+#' @noRd
 should_use_dev_data <- function() {
   golem::app_dev() && Sys.getenv("CALYPSO_DATA_PATH") == ""
 }

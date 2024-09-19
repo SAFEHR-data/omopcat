@@ -18,7 +18,12 @@ mod_exportsummary_ui <- function(namespace) {
     layout_columns(
       card(tableOutput(ns("by_domain"))),
       card(tableOutput(ns("by_concept_class"))),
-      card(tableOutput(ns("by_vocabulary_id")))
+      card(tableOutput(ns("by_vocabulary_id"))),
+      col_widths = breakpoints(
+        sm = c(7),
+        md = c(6, 6),
+        lg = c(4, 4, 4)
+      )
     )
   )
 }
