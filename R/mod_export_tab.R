@@ -60,18 +60,18 @@ mod_exportsummary_server <- function(id, data) {
     output$row_count <- shiny::renderText(nrow(data()))
     output$by_domain <- shiny::renderTable(
       data()
-      |> group_by(domain_id)  # nolint -- group_by argument is not bound
-      |> summarise(concepts = length(concept_id))  # nolint -- group_by
+      |> group_by(.data$domain_id)
+      |> summarise(concepts = length(.data$concept_id))
     )
     output$by_concept_class <- shiny::renderTable(
       data()
-      |> group_by(concept_class_id)  # nolint -- group_by
-      |> summarise(concepts = length(concept_id))  # nolint -- group_by
+      |> group_by(.data$concept_class_id)
+      |> summarise(concepts = length(.data$concept_id))
     )
     output$by_vocabulary_id <- shiny::renderTable(
       data()
-      |> group_by(vocabulary_id)  # nolint -- group_by
-      |> summarise(concepts = length(concept_id))  # nolint -- group_by
+      |> group_by(.data$vocabulary_id)
+      |> summarise(concepts = length(.data$concept_id))
     )
   })
 }
