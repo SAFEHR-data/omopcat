@@ -52,26 +52,26 @@ mod_export_tab_ui <- function(id) {
 #' @return The selected row as a reactive object
 #'
 #' @noRd
-#' @importFrom dplyr group_by summarise
+#' @importFrom dplyr group_by summarise n_distinct
 mod_exportsummary_server <- function(id, data) {
   stopifnot(is.reactive(data))
 
   moduleServer(id, function(input, output, session) {
-    output$row_count <- shiny::renderText(nrow(data()))
+    output$row_count <- shiny::renderText(n_distinct(data()$concept_id))
     output$by_domain <- shiny::renderTable(
       data()
       |> group_by(.data$domain_id)
-      |> summarise(concepts = length(.data$concept_id))
+      |> summarise(concepts = n_distinct(.data$concept_id))
     )
     output$by_concept_class <- shiny::renderTable(
       data()
       |> group_by(.data$concept_class_id)
-      |> summarise(concepts = length(.data$concept_id))
+      |> summarise(concepts = n_distinct(.data$concept_id))
     )
     output$by_vocabulary_id <- shiny::renderTable(
       data()
       |> group_by(.data$vocabulary_id)
-      |> summarise(concepts = length(.data$concept_id))
+      |> summarise(concepts = n_distinct(.data$concept_id))
     )
   })
 }
