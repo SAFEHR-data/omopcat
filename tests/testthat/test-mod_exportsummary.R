@@ -1,5 +1,3 @@
-source("mock_selection_data.R")
-
 test_that("export summary server works", {
   testServer(
     mod_exportsummary_server,

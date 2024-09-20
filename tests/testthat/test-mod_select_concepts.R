@@ -1,5 +1,3 @@
-source("mock_selection_data.R")
-
 test_that("mod_select_concepts_server reacts to concept selection", {
   testServer(
     mod_select_concepts_server,

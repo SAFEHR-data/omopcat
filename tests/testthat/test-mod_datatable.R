@@ -1,5 +1,3 @@
-source("mock_selection_data.R")
-
 test_that("datatable server works", {
   testServer(
     mod_datatable_server,
