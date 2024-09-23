@@ -3,6 +3,7 @@
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/SAFEHR-data/omop-data-catalogue/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/SAFEHR-data/omop-data-catalogue/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/SAFEHR-data/omop-data-catalogue/graph/badge.svg)](https://app.codecov.io/gh/SAFEHR-data/omop-data-catalogue)
 <!-- badges: end -->
 
 The `omopcat` web app provides an interactive dashboard to display a catalogue of available OMOP data. It enables

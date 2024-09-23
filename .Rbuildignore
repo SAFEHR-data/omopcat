@@ -14,3 +14,4 @@ $run_dev.*
 ^deploy$
 ^dev$
 ^scripts$
+^codecov\.yml$
