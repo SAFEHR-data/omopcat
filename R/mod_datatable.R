@@ -26,8 +26,7 @@ mod_datatable_server <- function(id, data) {
 
   moduleServer(id, function(input, output, session) {
     output$datatable <- DT::renderDT(data(), selection = list(
-      mode = "single",
-      selected = 1,
+      mode = "multiple",
       target = "row"
     ))
 
