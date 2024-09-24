@@ -40,8 +40,8 @@ mod_datatable_server <- function(id, data, selected_dates = NULL) {
       get_monthly_counts() |>
       filter_dates(selected_dates()) |>
       group_by(concept_id) |>
-      summarise(patients = round(sum(record_count)/mean(records_per_person)),
-                records_per_person = mean(records_per_person)) |>
+      summarise(records = sum(record_count),
+                patients = round(sum(record_count)/mean(records_per_person))) |>
       dplyr::right_join(data(), by = "concept_id")
     })
 
