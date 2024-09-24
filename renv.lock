@@ -1431,20 +1431,22 @@
     },
     "omopbundles": {
       "Package": "omopbundles",
-      "Version": "0.1.0",
+      "Version": "0.1.1",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "SAFEHR-data",
       "RemoteRepo": "omop-bundles",
       "RemoteRef": "main",
-      "RemoteSha": "9892d696d80df6184ae3a5a5fe052ef5ba6ebb95",
+      "RemoteSha": "652f2a49649026f41f345142d834da92353edd62",
       "Requirements": [
         "dplyr",
+        "glue",
         "purrr",
-        "readr"
+        "readr",
+        "vroom"
       ],
-      "Hash": "4181c59ab86740eb06d14ef129ee2c23"
+      "Hash": "70219812dddf4b0df3f48dc174146e00"
     },
     "omopgenerics": {
       "Package": "omopgenerics",
