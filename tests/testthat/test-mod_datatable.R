@@ -44,7 +44,7 @@ date_range_test <- c("2019-01-01", "2022-01-01")
 
 test_that("count of records and patients works", {
   testServer(
-    mod_datatable_server,
+    datatable_plus_counts_server,
     args = list(
       concepts = reactiveVal(df_concepts),
       monthly_counts = df_monthly_counts,
