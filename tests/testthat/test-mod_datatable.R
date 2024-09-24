@@ -28,23 +28,20 @@ df_concepts <- data.frame(
   concept_code = NA
 )
 
-# I can't yet pass this to the test see comments below
+# 10 patients, with 10 records each
+# concept 1:2019, concept2:2019-2020, concept3:2019-2021
 df_monthly_counts <- data.frame(
-  concept_id = rep(c(1, 2, 3), each = 3),
-  date_year = rep(c(2019, 2020, 2021), times = 3),
+  concept_id = c(1, 2, 2, 3, 3, 3),
+  date_year = c(2019, 2019,2020, 2019,2020,2021),
   date_month = 1,
-  person_count = rep(c(10, 20, 30), each = 3),
-  record_count = 1,
-  records_per_person = 1
+  person_count = 10,
+  record_count = 100,
+  records_per_person = 10
 )
 
-date_range_test <- c("2019-04-01", "2024-08-01")
+date_range_test <- c("2019-01-01", "2022-01-01")
 
-# I want to test that counts work
-# BUT currently monthly counts are accessed by a hardcoded csv
-# got by get_monthly_counts() within mod_datatable_server()
-# I suggest get_monthly_counts() should be moved to app_server.R & the result passed
-# so that I can pass test data to mod_datatable_server()
+
 test_that("count of records and patients works", {
   testServer(
     mod_datatable_server,
@@ -56,7 +53,25 @@ test_that("count of records and patients works", {
     {
       out <- session$getReturned()
 
+      #these pass doing same thing, not v useful tests
       expect_true(ncol(out()) == 9)
+      expect_equal(ncol(out()), 9)
+
+      expect_equal(names(out())[1], "concept_id")
+      expect_equal(names(out())[2], "records")
+      expect_equal(names(out())[3], "patients")
+
+      #fails actual:0 ???
+      expect_equal(nrow(out()), 3)
+
+      #actual NA, expected 100 ???
+      expect_equal(out()$records[1], 100)
+      #fails, seemingly nothing for records
+      expect_equal(out()$records, c(100, 200, 300))
+
+      #expect_equal(out()[["records"]], c(100, 200, 300))
+      #selected_dates <- reactiveVal(c("2019-01-01", "2019-12-31"))
+      #session$flushReact()
     }
   )
 })
