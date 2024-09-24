@@ -21,7 +21,8 @@ mod_datatable_ui <- function(id) {
 #' @return The selected row as a reactive object
 #'
 #' @noRd
-mod_datatable_server <- function(id, data, selected_dates = NULL) {
+#' @importFrom dplyr group_by summarise
+  mod_datatable_server <- function(id, data, selected_dates = NULL) {
   stopifnot(is.reactive(data))
   stopifnot(is.reactive(selected_dates) || is.null(selected_dates))
 
