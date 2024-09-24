@@ -29,6 +29,10 @@ app_ui <- function(request) {
       nav_panel(
         title = "Export",
         mod_export_tab_ui("export_tab")
+      ),
+      nav_panel(
+        title = "User Manual",
+        mod_manual_ui("manual")
       )
     )
   )
