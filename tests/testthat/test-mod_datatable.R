@@ -23,9 +23,9 @@ df_concepts <- data.frame(
   concept_name = c("2019", "2019-2020", "2019-2021"),
   domain_id = "Drug",
   vocabulary_id = "LOINC",
-  concept_class_id = NA,
+  concept_class_id = "test",
   standard_concept = "S",
-  concept_code = NA
+  concept_code = "test"
 )
 
 # 10 patients, with 10 records each
@@ -57,6 +57,7 @@ test_that("count of records and patients works", {
       expect_true(ncol(out()) == 9)
       expect_equal(ncol(out()), 9)
 
+      #passes
       expect_equal(names(out())[1], "concept_id")
       expect_equal(names(out())[2], "records")
       expect_equal(names(out())[3], "patients")
@@ -64,7 +65,7 @@ test_that("count of records and patients works", {
       #fails actual:0 ???
       expect_equal(nrow(out()), 3)
 
-      #actual NA, expected 100 ???
+      #fails actual NA, expected 100 ???
       expect_equal(out()$records[1], 100)
       #fails, seemingly nothing for records
       expect_equal(out()$records, c(100, 200, 300))
