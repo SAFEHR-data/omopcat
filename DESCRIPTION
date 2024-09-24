@@ -1,4 +1,4 @@
-Package: calypso
+Package: omopcat
 Title: The OMOP Data Catalogue Dashboard
 Version: 0.1.0.9000
 Authors@R: c(
@@ -31,7 +31,7 @@ Imports:
     cli,
     nanoparquet,
     rlang,
-    omopbundles (>= 0.1.0)
+    omopbundles (>= 0.1.1)
 Suggests:
     devtools,
     usethis,
@@ -42,7 +42,8 @@ Suggests:
     CDMConnector,
     lintr,
     dbplyr,
-    RSQLite
+    RSQLite,
+    precommit
 Remotes: SAFEHR-data/omop-bundles
 Encoding: UTF-8
 LazyData: true

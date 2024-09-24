@@ -8,7 +8,7 @@ From the package root directory, run from `R`:
 pkgbuild::build(path = ".", dest_path = "deploy")
 ```
 
-This will create a `calypso_*.tar.gz` file in the `deploy/` directory with a built version of the
+This will create a `omopcat_*.tar.gz` file in the `deploy/` directory with a built version of the
 package, which  will be used to install the package in the Docker container. The reasoning here
 is that we have a **production** version of the package that is separate from the **development**
 version. The production version would ideally be pinned to a release version, e.g. `0.1.0` and only

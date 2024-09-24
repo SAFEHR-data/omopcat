@@ -1,22 +1,8 @@
-mock_data <- data.frame(
-  concept_id = c(40213251, 133834, 4057420),
-  concept_name = c(
-    "varicella virus vaccine",
-    "Atopic dermatitis",
-    "Catheter ablation of tissue of heart"
-  ),
-  domain_id = c("Drug", "Condition", "Procedure"),
-  vocabulary_id = c("CVX", "SNOMED", "SNOMED"),
-  concept_class_id = c("CVX", "Clinical Finding", "Procedure"),
-  standard_concept = c("S", "S", "S"),
-  concept_code = c("21", "24079001", "18286008")
-)
-
 test_that("mod_select_concepts_server reacts to concept selection", {
   testServer(
     mod_select_concepts_server,
     # Add here your module params
-    args = list(concepts_table = reactiveVal(mock_data)),
+    args = list(concepts_table = reactiveVal(mock_selection_data)),
     {
       ns <- session$ns
       # Pre-defined golem tests
@@ -25,7 +11,7 @@ test_that("mod_select_concepts_server reacts to concept selection", {
       expect_true(grepl("test", ns("test")))
 
       out <- session$getReturned()
-      select_concepts <- mock_data$concept_name[c(2, 3)]
+      select_concepts <- mock_selection_data$concept_name[c(2, 3)]
       session$setInputs(select_concepts = select_concepts)
 
       expect_s3_class(out(), "data.frame")

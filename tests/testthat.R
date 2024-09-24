@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(calypso)
+library(omopcat)
 
-test_check("calypso")
+test_check("omopcat")

@@ -53,7 +53,7 @@ golem_add_external_resources <- function() {
     favicon(),
     bundle_resources(
       path = app_sys("app/www"),
-      app_title = "calypso"
+      app_title = "omopcat"
     )
     # Add here other external resources
     # for example, you can add shinyalert::useShinyalert()
@@ -61,7 +61,7 @@ golem_add_external_resources <- function() {
 }
 
 .app_title <- function() {
-  title <- glue::glue('calypso v{get_golem_config("golem_version")}')
+  title <- glue::glue('omopcat v{get_golem_config("golem_version")}')
   if (golem::app_dev()) {
     title <- glue::glue("{title} (dev)")
   }

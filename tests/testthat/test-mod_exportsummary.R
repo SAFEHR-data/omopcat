@@ -1,6 +1,6 @@
-test_that("datatable server works", {
+test_that("export summary server works", {
   testServer(
-    mod_datatable_server,
+    mod_exportsummary_server,
     args = list(data = reactiveVal(mock_selection_data)),
     {
       ns <- session$ns
@@ -8,17 +8,12 @@ test_that("datatable server works", {
       expect_true(inherits(ns, "function"))
       expect_true(grepl(id, ns("")))
       expect_true(grepl("test", ns("test")))
-
-      out <- session$getReturned()
-      expect_true(is.reactive(out))
-      expect_s3_class(out(), "data.frame")
-      expect_s3_class(output$datatable, "json")
     }
   )
 })
 
 test_that("module ui works", {
-  ui <- mod_datatable_ui(id = "test")
+  ui <- mod_exportsummary_ui(namespace = "test")
   golem::expect_shinytaglist(ui)
   # Check that formals have not been removed
   fmls <- formals(mod_datatable_ui)

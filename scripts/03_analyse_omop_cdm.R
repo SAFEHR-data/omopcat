@@ -5,7 +5,7 @@ cli::cli_h1("Generating summarys statistics")
 
 suppressPackageStartupMessages({
   library(tidyverse)
-  library(calypso)
+  library(omopcat)
 })
 
 dir <- Sys.getenv("EUNOMIA_DATA_FOLDER")
@@ -30,7 +30,7 @@ create_results_tables <- function(con, sql) {
 }
 
 
-# Function to produce the 'calypso_concepts' table
+# Function to produce the 'omopcat_concepts' table
 # from a list of concept ids
 get_concepts_table <- function(cdm, concepts) {
   # Extract columns from concept table
@@ -48,7 +48,7 @@ get_concepts_table <- function(cdm, concepts) {
     collect()
 }
 
-# Function to produce the 'calypso_monthly_counts' table
+# Function to produce the 'omopcat_monthly_counts' table
 process_monthly_counts <- function(cdm) {
   # Combine results for all tables
   out <- bind_rows(
@@ -70,7 +70,7 @@ process_monthly_counts <- function(cdm) {
     select(concept_id, concept_name, everything())
 }
 
-# Function to produce the 'calypso_summary_stats' table
+# Function to produce the 'omopcat_summary_stats' table
 process_summary_stats <- function(cdm) {
   table_names <- c("measurement", "observation")
   concept_names <- c("measurement_concept_id", "observation_concept_id")
@@ -114,7 +114,7 @@ all_tables <- list(
   monthly_counts = monthly_counts,
   summary_stats = summary_stats
 )
-paths <- purrr::map_chr(names(all_tables), ~ glue::glue("{out_path}/calypso_{.x}.parquet"))
+paths <- purrr::map_chr(names(all_tables), ~ glue::glue("{out_path}/omopcat_{.x}.parquet"))
 
 # Write the tables to disk as parquet
 purrr::walk2(all_tables, paths, ~ nanoparquet::write_parquet(.x, .y))

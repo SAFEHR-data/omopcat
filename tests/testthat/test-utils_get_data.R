@@ -1,8 +1,8 @@
 # Sanity checks
 test_that("Dev data files exist", {
-  expect_true(file.exists(app_sys("dev_data", "calypso_concepts.csv")))
-  expect_true(file.exists(app_sys("dev_data", "calypso_monthly_counts.csv")))
-  expect_true(file.exists(app_sys("dev_data", "calypso_summary_stats.csv")))
+  expect_true(file.exists(app_sys("dev_data", "omopcat_concepts.csv")))
+  expect_true(file.exists(app_sys("dev_data", "omopcat_monthly_counts.csv")))
+  expect_true(file.exists(app_sys("dev_data", "omopcat_summary_stats.csv")))
 })
 
 # These tests act as proxy tests for the pre-processing scripts that generate the test data
@@ -20,7 +20,7 @@ test_that("Dev data files are consistent", {
 })
 
 test_that("Data getters fail in production if envvar not set", {
-  withr::local_envvar("GOLEM_CONFIG_ACTIVE" = "production")
+  withr::local_envvar(GOLEM_CONFIG_ACTIVE = "production", CALYPSO_DATA_PATH = NA)
   withr::local_options(list("golem.app.prod" = TRUE))
 
   expect_true(golem::app_prod())
