@@ -22,8 +22,9 @@ mod_datatable_ui <- function(id) {
 #'
 #' @noRd
 #' @importFrom dplyr group_by summarise
-mod_datatable_server <- function(id, data, selected_dates = NULL) {
-  stopifnot(is.reactive(data))
+mod_datatable_server <- function(id, concepts, monthly_counts, selected_dates = NULL) {
+  stopifnot(is.reactive(concepts))
+  #stopifnot(is.reactive(monthly_counts))
   stopifnot(is.reactive(selected_dates) || is.null(selected_dates))
 
   moduleServer(id, function(input, output, session) {
@@ -38,14 +39,14 @@ mod_datatable_server <- function(id, data, selected_dates = NULL) {
     # join onto selected_data
 
     selected_data_plus_counts <- reactive({
-      get_monthly_counts() |>
+        monthly_counts |>
         filter_dates(selected_dates()) |>
         dplyr::group_by(concept_id) |>
         dplyr::summarise(
           records = sum(record_count),
           patients = round(sum(record_count) / mean(records_per_person))
         ) |>
-        dplyr::right_join(data(), by = "concept_id")
+        dplyr::right_join(concepts(), by = "concept_id")
     })
 
     reactive(selected_data_plus_counts()[input$datatable_rows_selected, ])

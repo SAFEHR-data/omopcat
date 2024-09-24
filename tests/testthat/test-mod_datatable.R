@@ -29,15 +29,16 @@ df_concepts <- data.frame(
 )
 
 # I can't yet pass this to the test see comments below
-df_month_counts <- data.frame(
+df_monthly_counts <- data.frame(
   concept_id = rep(c(1, 2, 3), each = 3),
   date_year = rep(c(2019, 2020, 2021), times = 3),
   date_month = 1,
   person_count = rep(c(10, 20, 30), each = 3),
+  record_count = 1,
   records_per_person = 1
 )
 
-date_range_test <- reactiveVal(c("2019-04-01", "2024-08-01"))
+date_range_test <- c("2019-04-01", "2024-08-01")
 
 # I want to test that counts work
 # BUT currently monthly counts are accessed by a hardcoded csv
@@ -48,14 +49,13 @@ test_that("count of records and patients works", {
   testServer(
     mod_datatable_server,
     args = list(
-      data = reactiveVal(df_concepts),
-      selected_dates = date_range_test
+      concepts = reactiveVal(df_concepts),
+      monthly_counts = df_monthly_counts,
+      selected_dates = reactiveVal(date_range_test)
     ),
     {
       out <- session$getReturned()
 
-      # this shows that I can access the returned table
-      # but only passes the test because there are 9 columns in the hardcoded dev csv from get_monthly_counts()
       expect_true(ncol(out()) == 9)
     }
   )
@@ -64,10 +64,10 @@ test_that("count of records and patients works", {
 test_that("datatable server works", {
   testServer(
     mod_datatable_server,
-    # args = list(data = reactiveVal(mock_data)),
     args = list(
-      data = reactiveVal(df_concepts),
-      selected_dates = date_range_test
+      concepts = reactiveVal(df_concepts),
+      monthly_counts = df_monthly_counts,
+      selected_dates = reactiveVal(date_range_test)
     ),
     {
       ns <- session$ns
