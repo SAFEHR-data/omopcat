@@ -26,26 +26,25 @@ mod_datatable_server <- function(id, data, selected_dates = NULL) {
   stopifnot(is.reactive(selected_dates) || is.null(selected_dates))
 
   moduleServer(id, function(input, output, session) {
-
     output$datatable <- DT::renderDT(selected_data_plus_counts(), selection = list(
       mode = "single",
       selected = 1,
       target = "row"
     ))
-
-    #use selected dates to calc num patients and records per concept
-    #join onto selected_data
+    # use selected dates to calc num patients and records per concept
+    # join onto selected_data
 
     selected_data_plus_counts <- reactive({
       get_monthly_counts() |>
-      filter_dates(selected_dates()) |>
-      group_by(concept_id) |>
-      summarise(records = sum(record_count),
-                patients = round(sum(record_count)/mean(records_per_person))) |>
-      dplyr::right_join(data(), by = "concept_id")
+        filter_dates(selected_dates()) |>
+        dplyr::group_by(concept_id) |>
+        dplyr::summarise(
+          records = sum(record_count),
+          patients = round(sum(record_count) / mean(records_per_person))
+        ) |>
+        dplyr::right_join(data(), by = "concept_id")
     })
 
     reactive(selected_data_plus_counts()[input$datatable_rows_selected, ])
-
   })
 }

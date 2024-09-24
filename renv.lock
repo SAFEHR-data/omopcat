@@ -513,13 +513,13 @@
     },
     "curl": {
       "Package": "curl",
-      "Version": "5.2.1",
+      "Version": "5.2.3",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R"
       ],
-      "Hash": "411ca2c03b1ce5f548345d2fc2685f7a"
+      "Hash": "d91263322a58af798f6cf3b13fd56dde"
     },
     "cyclocomp": {
       "Package": "cyclocomp",
@@ -1431,20 +1431,22 @@
     },
     "omopbundles": {
       "Package": "omopbundles",
-      "Version": "0.1.0",
+      "Version": "0.1.1",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "SAFEHR-data",
       "RemoteRepo": "omop-bundles",
       "RemoteRef": "main",
-      "RemoteSha": "9892d696d80df6184ae3a5a5fe052ef5ba6ebb95",
+      "RemoteSha": "652f2a49649026f41f345142d834da92353edd62",
       "Requirements": [
         "dplyr",
+        "glue",
         "purrr",
-        "readr"
+        "readr",
+        "vroom"
       ],
-      "Hash": "4181c59ab86740eb06d14ef129ee2c23"
+      "Hash": "70219812dddf4b0df3f48dc174146e00"
     },
     "omopgenerics": {
       "Package": "omopgenerics",
@@ -1467,13 +1469,13 @@
     },
     "openssl": {
       "Package": "openssl",
-      "Version": "2.2.0",
+      "Version": "2.2.2",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "askpass"
       ],
-      "Hash": "2bcca3848e4734eb3b16103bc9aa4b8e"
+      "Hash": "d413e0fef796c9401a4419485f709ca1"
     },
     "pillar": {
       "Package": "pillar",
@@ -1583,6 +1585,25 @@
       "Repository": "CRAN",
       "Hash": "a555924add98c99d2f411e37e7d25e9f"
     },
+    "precommit": {
+      "Package": "precommit",
+      "Version": "0.4.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R.cache",
+        "cli",
+        "fs",
+        "here",
+        "magrittr",
+        "purrr",
+        "rlang",
+        "rprojroot",
+        "withr",
+        "yaml"
+      ],
+      "Hash": "3b9c9c622ecd61e92199e523652f36e4"
+    },
     "prettyunits": {
       "Package": "prettyunits",
       "Version": "1.2.0",
@@ -1679,14 +1700,14 @@
     },
     "ragg": {
       "Package": "ragg",
-      "Version": "1.3.2",
+      "Version": "1.3.3",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "systemfonts",
         "textshaping"
       ],
-      "Hash": "e3087db406e079a8a2fd87f413918ed3"
+      "Hash": "0595fe5e47357111f29ad19101c7d271"
     },
     "rappdirs": {
       "Package": "rappdirs",

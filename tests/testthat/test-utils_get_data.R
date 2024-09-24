@@ -20,7 +20,7 @@ test_that("Dev data files are consistent", {
 })
 
 test_that("Data getters fail in production if envvar not set", {
-  withr::local_envvar("GOLEM_CONFIG_ACTIVE" = "production")
+  withr::local_envvar(GOLEM_CONFIG_ACTIVE = "production", CALYPSO_DATA_PATH = NA)
   withr::local_options(list("golem.app.prod" = TRUE))
 
   expect_true(golem::app_prod())
