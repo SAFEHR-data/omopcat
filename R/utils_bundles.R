@@ -18,7 +18,7 @@ all_bundles <- function(version = "latest") {
   stopifnot("Bundles are empty" = nrow(bundles) > 0)
   stopifnot(
     "omopbundles::available_bundles() data.frame doesn't have the expected names" =
-      c("id", "concept_name", "domain", "version") %in% names(bundles)
+      c("id", "bundle_name", "domain", "version") %in% names(bundles)
   )
   bundles
 }
