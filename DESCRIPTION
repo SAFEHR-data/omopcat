@@ -42,7 +42,8 @@ Suggests:
     CDMConnector,
     lintr,
     dbplyr,
-    RSQLite
+    RSQLite,
+    precommit
 Remotes: SAFEHR-data/omop-bundles
 Encoding: UTF-8
 LazyData: true

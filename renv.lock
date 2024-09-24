@@ -1585,6 +1585,25 @@
       "Repository": "CRAN",
       "Hash": "a555924add98c99d2f411e37e7d25e9f"
     },
+    "precommit": {
+      "Package": "precommit",
+      "Version": "0.4.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R.cache",
+        "cli",
+        "fs",
+        "here",
+        "magrittr",
+        "purrr",
+        "rlang",
+        "rprojroot",
+        "withr",
+        "yaml"
+      ],
+      "Hash": "3b9c9c622ecd61e92199e523652f36e4"
+    },
     "prettyunits": {
       "Package": "prettyunits",
       "Version": "1.2.0",
