@@ -39,8 +39,7 @@ df_monthly_counts <- data.frame(
   records_per_person = 10
 )
 
-date_range_test <- c("2019-01-01", "2022-01-01")
-
+reactive_dates <- reactiveVal(c("2019-01-01", "2022-01-01"))
 
 test_that("count of records and patients works", {
   testServer(
@@ -48,7 +47,7 @@ test_that("count of records and patients works", {
     args = list(
       concepts = reactiveVal(df_concepts),
       monthly_counts = df_monthly_counts,
-      selected_dates = reactiveVal(date_range_test)
+      selected_dates = reactive_dates
     ),
     {
       out <- session$getReturned()
@@ -66,8 +65,7 @@ test_that("count of records and patients works", {
       expect_equal(out()$patients, c(10, 20, 30))
 
       # test changed dates
-      # 1 year should give same records & patients for all concepts
-      selected_dates <- reactiveVal(c("2019-01-01", "2019-12-31"))
+      selected_dates(c("2019-01-01", "2019-12-31"))
       session$flushReact()
       expect_equal(out()$records, c(100, 100, 100))
       expect_equal(out()$patients, c(10, 10, 10))
@@ -81,7 +79,7 @@ test_that("datatable server works", {
     args = list(
       concepts = reactiveVal(df_concepts),
       monthly_counts = df_monthly_counts,
-      selected_dates = reactiveVal(date_range_test)
+      selected_dates = reactive_dates
     ),
     {
       ns <- session$ns
