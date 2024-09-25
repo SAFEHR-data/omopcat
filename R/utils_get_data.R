@@ -1,11 +1,11 @@
 #' Should we be using the inst/dev_data?
 #'
-#' Only if we are running as a development server and CALYPSO_DATA_PATH
+#' Only if we are running as a development server and OMOPCAT_DATA_PATH
 #' is not set.
 #'
 #' @noRd
 should_use_dev_data <- function() {
-  golem::app_dev() && Sys.getenv("CALYPSO_DATA_PATH") == ""
+  golem::app_dev() && Sys.getenv("OMOPCAT_DATA_PATH") == ""
 }
 
 
@@ -48,9 +48,9 @@ get_summary_stats <- function() {
 }
 
 .read_parquet_table <- function(table_name) {
-  data_dir <- Sys.getenv("CALYPSO_DATA_PATH")
+  data_dir <- Sys.getenv("OMOPCAT_DATA_PATH")
   if (data_dir == "") {
-    cli::cli_abort("Environment variable {.envvar CALYPSO_DATA_PATH} not set")
+    cli::cli_abort("Environment variable {.envvar OMOPCAT_DATA_PATH} not set")
   }
   if (!dir.exists(data_dir)) {
     cli::cli_abort("Data directory {.file {data_dir}} not found")
