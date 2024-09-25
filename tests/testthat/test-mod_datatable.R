@@ -53,26 +53,24 @@ test_that("count of records and patients works", {
     {
       out <- session$getReturned()
 
-      #these pass doing same thing, not v useful tests
-      expect_true(ncol(out()) == 9)
       expect_equal(ncol(out()), 9)
-
-      #passes
       expect_equal(names(out())[1], "concept_id")
       expect_equal(names(out())[2], "records")
       expect_equal(names(out())[3], "patients")
 
-      #fails actual:0 ???
       expect_equal(nrow(out()), 3)
 
-      #fails actual NA, expected 100 ???
+      # records & patients as expected all years
       expect_equal(out()$records[1], 100)
-      #fails, seemingly nothing for records
       expect_equal(out()$records, c(100, 200, 300))
+      expect_equal(out()$patients, c(10, 20, 30))
 
-      #expect_equal(out()[["records"]], c(100, 200, 300))
-      #selected_dates <- reactiveVal(c("2019-01-01", "2019-12-31"))
-      #session$flushReact()
+      # test changed dates
+      # 1 year should give same records & patients for all concepts
+      selected_dates <- reactiveVal(c("2019-01-01", "2019-12-31"))
+      session$flushReact()
+      expect_equal(out()$records, c(100, 100, 100))
+      expect_equal(out()$patients, c(10, 10, 10))
     }
   )
 })
