@@ -16,7 +16,7 @@ mod_dropdown_list_ui <- function(id) {
 
 #' dropdown list Server Functions
 #'
-#' @param data A reactive data.frame containing the data to be displayed
+#' @param bundles_table A data.frame containing the available bundles
 #'
 #' @return The selected row as a reactive object
 #'
