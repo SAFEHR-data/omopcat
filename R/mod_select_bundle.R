@@ -10,12 +10,12 @@
 #' @importFrom shiny NS tagList
 mod_select_bundle_ui <- function(id) {
   ns <- NS(id)
-  bundles_table <- get_bundles_table()
-  stopifnot(c("id", "concept_name") %in% names(bundles_table))
+  bundles_table <- all_bundles()
+  stopifnot(c("id", "bundle_name") %in% names(bundles_table))
 
   ## Select bundles based on their ID but use the bundle name for display in the menu
   bundle_choices <- c("all", bundles_table$id)
-  names(bundle_choices) <- c("All bundles", bundles_table$concept_name)
+  names(bundle_choices) <- c("All bundles", bundles_table$bundle_name)
 
   tagList(
     selectInput(ns("select_bundle"), "Select bundle",
@@ -40,7 +40,7 @@ mod_select_bundle_ui <- function(id) {
 #' @importFrom rlang .data
 mod_select_bundle_server <- function(id) {
   all_concepts <- get_concepts_table()
-  all_bundles <- get_bundles_table()
+  all_bundles <- all_bundles()
 
   moduleServer(id, function(input, output, session) {
     reactive({
@@ -50,10 +50,11 @@ mod_select_bundle_server <- function(id) {
         return(all_concepts)
       }
 
-      bundle <- all_bundles[all_bundles$id == input$select_bundle, ]
-      bundle_concepts <- get_bundle_concepts_table(bundle$id, bundle$domain)
+      selected_bundle_id <- input$select_bundle
+      domain <- all_bundles[all_bundles$id == selected_bundle_id, ]$domain
+      bundle_concepts <- get_bundle_concepts(selected_bundle_id, domain)
       all_concepts %>%
-        dplyr::filter(concept_id %in% bundle_concepts$concept_id)
+        dplyr::filter(concept_id %in% bundle_concepts)
     })
   })
 }

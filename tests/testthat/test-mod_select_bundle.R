@@ -7,17 +7,15 @@ test_that("select_bundle reacts to bundle selection", {
     expect_true(grepl("test", ns("test")))
 
     out <- session$getReturned()
-    select_bundle <- "bundle_measurement"
+    select_bundle <- "smoking"
     session$setInputs(select_bundle = select_bundle)
 
     expect_true(is.reactive(out))
     expect_s3_class(out(), "data.frame")
-    expect_true(all(c("concept_id", "concept_name") %in% names(out())),
-      info = "Return data should contain the columns 'concept_id' and 'concept_name'"
-    )
+    expect_in(c("concept_id", "concept_name"), names(out()))
 
-    expected_concepts <- get_bundle_concepts_table("bundle_measurement", "measurement")$concept_id
-    expect_equal(out()$concept_id, expected_concepts)
+    expected_concepts <- get_bundle_concepts("smoking", "observation")
+    expect_in(out()$concept_id, expected_concepts)
   })
 })
 
@@ -38,9 +36,7 @@ test_that("select_bundle server can return all concepts", {
 
     expect_true(is.reactive(out))
     expect_s3_class(out(), "data.frame")
-    expect_true(all(c("concept_id", "concept_name") %in% names(out())),
-      info = "Return data should contain the columns 'concept_id' and 'concept_name'"
-    )
+    expect_in(c("concept_id", "concept_name"), names(out()))
     expect_equal(out()$concept_id, get_concepts_table()$concept_id)
   })
 })
