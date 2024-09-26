@@ -15,13 +15,14 @@ should_use_dev_data <- function() {
 #'
 #' @noRd
 get_concepts_table <- function() {
+  table_name <- "omopcat_concepts"
   if (should_use_dev_data()) {
     ct <- readr::read_csv(
-      app_sys("dev_data", "omopcat_concepts.csv"),
+      app_sys("dev_data", glue::glue("{table_name}.csv")),
       show_col_types = FALSE
     )
   } else {
-    ct <- .read_parquet_table("calypso_concepts")
+    ct <- .read_parquet_table(table_name)
   }
   # Make sure the concept IDs are integers so that they get rendered as such
   # in shiny::renderTable()
