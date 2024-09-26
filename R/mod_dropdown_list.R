@@ -35,7 +35,7 @@ mod_dropdown_list_server <- function(id, bundles_table) {
       dplyr::inner_join(
         get_concepts_table(),
         dplyr::select(get_bundle_concepts_table(bundle$id, bundle$domain), .data$concept_id),
-        dplyr::join_by(concept_id)
+        dplyr::join_by("concept_id")
       )
     })
   })

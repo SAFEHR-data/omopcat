@@ -18,8 +18,6 @@ test_that("dropdown list server works", {
 
       out <- session$getReturned()
       expect_true(is.reactive(out))
-      # expect_s3_class(out(), "data.frame")
-      # expect_s3_class(output$datatable, "json")
     }
   )
 })
