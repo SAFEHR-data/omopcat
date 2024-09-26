@@ -1,6 +1,7 @@
-#' dropdown list UI Function
+#' select_bundle UI Function
 #'
-#' @description A shiny Module.
+#' @description Provides a dropdown menu to select a bundle. By default, the
+#' selected bundle is "all", which results in all concepts being shown.
 #'
 #' @param id,input,output,session Internal parameters for {shiny}.
 #'
@@ -20,7 +21,10 @@ mod_select_bundle_ui <- function(id) {
   )
 }
 
-#' dropdown list Server Functions
+#' select_bundle Server Functions
+#'
+#' @description Returns the concepts table for the selected bundle. If the
+#' selected bundle is "all", all concepts are returned.
 #'
 #' @param bundles_table A data.frame containing the available bundles
 #'
