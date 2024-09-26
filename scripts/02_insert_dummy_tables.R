@@ -36,8 +36,10 @@ dummy_measurements <- read_csv(
 )
 write_table(dummy_measurements, con, "measurement", schema = Sys.getenv("TEST_DB_CDM_SCHEMA"))
 
-dummy_observations <- read_csv(here::here(
-  "data-raw/test_db/dummy/observation.csv"),
+dummy_observations <- read_csv(
+  here::here(
+    "data-raw/test_db/dummy/observation.csv"
+  ),
   col_types = cols(
     observation_id = col_integer(),
     person_id = col_integer(),
