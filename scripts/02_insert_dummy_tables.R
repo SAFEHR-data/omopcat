@@ -26,12 +26,12 @@ con <- connect_to_db(db_path)
 dummy_measurements <- read_csv(
   here::here("data-raw/test_db/dummy/measurement.csv"),
   col_types = cols(
-    measurement_id = col_double(),
-    person_id = col_double(),
-    measurement_concept_id = col_double(),
+    measurement_id = col_integer(),
+    person_id = col_integer(),
+    measurement_concept_id = col_integer(),
     measurement_date = col_date(),
     value_as_number = col_double(),
-    value_as_concept_id = col_double(),
+    value_as_concept_id = col_integer(),
   )
 )
 write_table(dummy_measurements, con, "measurement", schema = Sys.getenv("TEST_DB_CDM_SCHEMA"))
@@ -39,14 +39,14 @@ write_table(dummy_measurements, con, "measurement", schema = Sys.getenv("TEST_DB
 dummy_observations <- read_csv(here::here(
   "data-raw/test_db/dummy/observation.csv"),
   col_types = cols(
-      observation_id = col_double(),
-      person_id = col_double(),
-      observation_concept_id = col_double(),
-      observation_date = col_date(),
-      value_as_number = col_double(),
-      value_as_string = col_logical(),
-      value_as_concept_id = col_double(),
-    )
+    observation_id = col_integer(),
+    person_id = col_integer(),
+    observation_concept_id = col_integer(),
+    observation_date = col_date(),
+    value_as_number = col_double(),
+    value_as_string = col_logical(),
+    value_as_concept_id = col_integer(),
+  )
 )
 write_table(dummy_observations, con, "observation", schema = Sys.getenv("TEST_DB_CDM_SCHEMA"))
 
