@@ -1,17 +1,17 @@
 concept_id,concept_name,summary_attribute,value_as_number,value_as_string
-3001079,Blood group antibody screen [Presence] in Serum or Plasma,frequency,2,Not present
-4108450,Inspiration/expiration time ratio,mean,0.6666666666666666,NA
-4108450,Inspiration/expiration time ratio,sd,0,NA
-4128111,T - Tumor stage,frequency,1,NA
-4128111,T - Tumor stage,frequency,1,NA
-4248525,Lying systolic blood pressure,mean,132.8,NA
-4248525,Lying systolic blood pressure,sd,21.25323504786977,NA
-4353713,Positive end expiratory pressure,mean,5.666666666666667,NA
-4353713,Positive end expiratory pressure,sd,1.1547005383792517,NA
-4353717,Ventilator delivered minute volume,mean,12.799999999999999,NA
-4353717,Ventilator delivered minute volume,sd,3.469870314579495,NA
-4353843,Invasive systolic arterial pressure,mean,128.83333333333334,NA
-4353843,Invasive systolic arterial pressure,sd,23.65938855225694,NA
-4354252,Non-invasive systolic arterial pressure,mean,123.66666666666667,NA
-4354252,Non-invasive systolic arterial pressure,sd,9.993331109628395,NA
-45766147,Appearance,frequency,1,Well nourished
+3003573,C Ag [Presence] on Red Blood Cells,frequency,2,Not present
+3005673,Hemoglobin A1c/Hemoglobin.total in Blood by HPLC,mean,123.66666666666667,NA
+3005673,Hemoglobin A1c/Hemoglobin.total in Blood by HPLC,sd,9.993331109628395,NA
+3021714,Do sup(a) Ag [Presence] on Red Blood Cells,frequency,1,NA
+3021714,Do sup(a) Ag [Presence] on Red Blood Cells,frequency,1,NA
+3022250,Lactate dehydrogenase [Enzymatic activity/volume] in Serum or Plasma by Lactate to pyruvate reaction,mean,128.83333333333334,NA
+3022250,Lactate dehydrogenase [Enzymatic activity/volume] in Serum or Plasma by Lactate to pyruvate reaction,sd,23.65938855225694,NA
+4092281,Ex-cigarette smoker,frequency,1,Well nourished
+4276526,Cigarette smoker,mean,12.799999999999999,NA
+4276526,Cigarette smoker,sd,3.469870314579495,NA
+4298794,Smoker,mean,5.666666666666667,NA
+4298794,Smoker,sd,1.1547005383792517,NA
+40760007,HIV 1+2 Ab+HIV1 p24 Ag [Presence] in Serum or Plasma by Immunoassay,mean,0.6666666666666666,NA
+40760007,HIV 1+2 Ab+HIV1 p24 Ag [Presence] in Serum or Plasma by Immunoassay,sd,0,NA
+40762352,Hemoglobin A1c/Hemoglobin.total in Blood by IFCC protocol,mean,132.8,NA
+40762352,Hemoglobin A1c/Hemoglobin.total in Blood by IFCC protocol,sd,21.25323504786977,NA
