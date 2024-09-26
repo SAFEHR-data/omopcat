@@ -9,8 +9,11 @@
 #' @importFrom shiny NS tagList
 mod_select_bundle_ui <- function(id) {
   ns <- NS(id)
+  bundles_table <- get_bundles_table()
+  stopifnot("concept_name" %in% names(bundles_table))
+
   tagList(
-    selectInput(ns("select_bundle"), "Select bundle", choices = NULL, multiple = FALSE)
+    selectInput(ns("select_bundle"), "Select bundle", choices = bundles_table$concept_name)
   )
 }
 
@@ -24,11 +27,7 @@ mod_select_bundle_ui <- function(id) {
 #'
 #' @importFrom rlang .data
 mod_select_bundle_server <- function(id, bundles_table) {
-  stopifnot("concept_name" %in% names(bundles_table))
   moduleServer(id, function(input, output, session) {
-    observeEvent(bundles_table, {
-      updateSelectInput(session, "select_bundle", choices = bundles_table$concept_name)
-    })
     reactive({
       req(input$select_bundle)
       bundle <- bundles_table[bundles_table$concept_name == input$select_bundle, ]
