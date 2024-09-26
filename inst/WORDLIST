@@ -4,11 +4,9 @@ Catalogue
 Lifecycle
 Nanoparquet
 OMOP
-RStudio
-UI
 catalogue
+codecov
+containerised
 duckdb
 golem
-lockfile
-organised
-tidyverse
+productionised

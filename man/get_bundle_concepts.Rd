@@ -16,7 +16,7 @@ An \code{integer} vector with the concept IDs.
 }
 \description{
 This is essentially a wrapper around \code{\link[omopbundles:concept_by_bundle]{omopbundles::concept_by_bundle()}}
-to retrieve the concepts belonging to a spcecific bundle, defined by its \code{id} and \code{domain},
+to retrieve the concepts belonging to a specific bundle, defined by its \code{id} and \code{domain},
 but returning only the concept IDs as a vector.
 }
 \keyword{internal}
