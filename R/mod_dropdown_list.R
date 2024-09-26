@@ -18,7 +18,7 @@ mod_dropdown_list_ui <- function(id) {
 #'
 #' @param bundles_table A data.frame containing the available bundles
 #'
-#' @return The selected row as a reactive object
+#' @return The concepts table for the selected bundle as a reactive data.frame.
 #'
 #' @noRd
 #'
