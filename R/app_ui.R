@@ -14,7 +14,7 @@ app_ui <- function(request) {
       title = .app_title(),
       sidebar = sidebar(
         title = "Filtering options",
-        mod_dropdown_list_ui("select_bundle"),
+        mod_select_bundle_ui("select_bundle"),
         mod_select_concepts_ui("select_concepts"),
         mod_date_range_ui("date_range"),
       ),

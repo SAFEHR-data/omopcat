@@ -7,7 +7,7 @@
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
-mod_dropdown_list_ui <- function(id) {
+mod_select_bundle_ui <- function(id) {
   ns <- NS(id)
   tagList(
     selectInput(ns("select_bundle"), "Select bundle", choices = NULL, multiple = FALSE)
@@ -23,7 +23,7 @@ mod_dropdown_list_ui <- function(id) {
 #' @noRd
 #'
 #' @importFrom rlang .data
-mod_dropdown_list_server <- function(id, bundles_table) {
+mod_select_bundle_server <- function(id, bundles_table) {
   stopifnot("concept_name" %in% names(bundles_table))
   moduleServer(id, function(input, output, session) {
     observeEvent(bundles_table, {

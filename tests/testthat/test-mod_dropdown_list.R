@@ -7,7 +7,7 @@ mock_data <- data.frame(
 
 test_that("dropdown list server works", {
   testServer(
-    mod_dropdown_list_server,
+    mod_select_bundle_server,
     args = list(bundles_table = mock_data),
     {
       ns <- session$ns
@@ -23,10 +23,10 @@ test_that("dropdown list server works", {
 })
 
 test_that("module ui works", {
-  ui <- mod_dropdown_list_ui(id = "test")
+  ui <- mod_select_bundle_ui(id = "test")
   golem::expect_shinytaglist(ui)
   # Check that formals have not been removed
-  fmls <- formals(mod_dropdown_list_ui)
+  fmls <- formals(mod_select_bundle_ui)
   for (i in c("id")) {
     expect_true(i %in% names(fmls))
   }
