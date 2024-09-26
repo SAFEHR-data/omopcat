@@ -8,8 +8,6 @@ app_server <- function(input, output, session) {
   concepts_table <- mod_select_bundle_server("select_bundle")
 
   selected_data <- mod_select_concepts_server("select_concepts", concepts_table)
-  mod_date_range_server("date_range")
-
   selected_concept_row <- mod_datatable_server("concepts", selected_data)
   selected_dates <- mod_date_range_server("date_range")
 
