@@ -53,8 +53,8 @@ mod_select_bundle_server <- function(id) {
       selected_bundle_id <- input$select_bundle
       domain <- all_bundles[all_bundles$id == selected_bundle_id, ]$domain
       bundle_concepts <- get_bundle_concepts(selected_bundle_id, domain)
-      all_concepts %>%
-        dplyr::filter(concept_id %in% bundle_concepts)
+      all_concepts |>
+        dplyr::filter(.data$concept_id %in% bundle_concepts)
     })
   })
 }
