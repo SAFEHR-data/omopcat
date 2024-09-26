@@ -11,11 +11,15 @@
 mod_select_bundle_ui <- function(id) {
   ns <- NS(id)
   bundles_table <- get_bundles_table()
-  stopifnot("concept_name" %in% names(bundles_table))
+  stopifnot(c("id", "concept_name") %in% names(bundles_table))
+
+  ## Select bundles based on their ID but use the bundle name for display in the menu
+  bundle_choices <- c("all", bundles_table$id)
+  names(bundle_choices) <- c("All bundles", bundles_table$concept_name)
 
   tagList(
     selectInput(ns("select_bundle"), "Select bundle",
-      choices = c("all", bundles_table$concept_name),
+      choices = bundle_choices,
       selected = "all"
     )
   )
@@ -25,6 +29,7 @@ mod_select_bundle_ui <- function(id) {
 #'
 #' @description Returns the concepts table for the selected bundle. If the
 #' selected bundle is "all", all concepts are returned.
+#' The selected bundle is taken from the dropdown menu input, using its `id`.
 #'
 #' @param bundles_table A data.frame containing the available bundles
 #'
@@ -42,7 +47,7 @@ mod_select_bundle_server <- function(id, bundles_table) {
         return(get_concepts_table())
       }
 
-      bundle <- bundles_table[bundles_table$concept_name == input$select_bundle, ]
+      bundle <- bundles_table[bundles_table$id == input$select_bundle, ]
       dplyr::inner_join(
         get_concepts_table(),
         dplyr::select(get_bundle_concepts_table(bundle$id, bundle$domain), .data$concept_id),
