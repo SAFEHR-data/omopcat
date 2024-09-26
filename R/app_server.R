@@ -5,10 +5,7 @@
 #' @import shiny
 #' @noRd
 app_server <- function(input, output, session) {
-  # Get the input tables
-  bundles_table <- get_bundles_table()
-
-  concepts_table <- mod_select_bundle_server("select_bundle", bundles_table)
+  concepts_table <- mod_select_bundle_server("select_bundle")
 
   selected_data <- mod_select_concepts_server("select_concepts", concepts_table)
   mod_date_range_server("date_range")

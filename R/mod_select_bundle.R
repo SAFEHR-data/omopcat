@@ -38,21 +38,22 @@ mod_select_bundle_ui <- function(id) {
 #' @noRd
 #'
 #' @importFrom rlang .data
-mod_select_bundle_server <- function(id, bundles_table) {
+mod_select_bundle_server <- function(id) {
+  all_concepts <- get_concepts_table()
+  all_bundles <- get_bundles_table()
+
   moduleServer(id, function(input, output, session) {
     reactive({
       req(input$select_bundle)
 
       if (input$select_bundle == "all") {
-        return(get_concepts_table())
+        return(all_concepts)
       }
 
-      bundle <- bundles_table[bundles_table$id == input$select_bundle, ]
-      dplyr::inner_join(
-        get_concepts_table(),
-        dplyr::select(get_bundle_concepts_table(bundle$id, bundle$domain), .data$concept_id),
-        dplyr::join_by("concept_id")
-      )
+      bundle <- all_bundles[all_bundles$id == input$select_bundle, ]
+      bundle_concepts <- get_bundle_concepts_table(bundle$id, bundle$domain)
+      all_concepts %>%
+        dplyr::filter(concept_id %in% bundle_concepts$concept_id)
     })
   })
 }
