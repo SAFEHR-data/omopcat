@@ -13,7 +13,10 @@ mod_select_bundle_ui <- function(id) {
   stopifnot("concept_name" %in% names(bundles_table))
 
   tagList(
-    selectInput(ns("select_bundle"), "Select bundle", choices = bundles_table$concept_name)
+    selectInput(ns("select_bundle"), "Select bundle",
+      choices = c("all", bundles_table$concept_name),
+      selected = "all"
+    )
   )
 }
 
@@ -30,6 +33,11 @@ mod_select_bundle_server <- function(id, bundles_table) {
   moduleServer(id, function(input, output, session) {
     reactive({
       req(input$select_bundle)
+
+      if (input$select_bundle == "all") {
+        return(get_concepts_table())
+      }
+
       bundle <- bundles_table[bundles_table$concept_name == input$select_bundle, ]
       dplyr::inner_join(
         get_concepts_table(),
