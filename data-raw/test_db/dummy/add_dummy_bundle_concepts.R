@@ -3,6 +3,7 @@
 library(tidyverse)
 library(omopcat)
 library(omopbundles)
+library(rlang)
 
 here::i_am("data-raw/test_db/dummy/add_dummy_bundle_concepts.R")
 db_path <- here::here("data-raw/test_db/eunomia/synthea-allergies-10k_5.3_1.0.duckdb")
@@ -38,7 +39,7 @@ replace_concepts <- function(x, concept_id_name, concepts_to_keep) {
   names(concepts_map) <- concepts
 
   x |>
-    mutate("{concept_id_name}" := concepts_map[as.character(.data[[concept_id_name]])])
+    mutate("{concept_id_name}" := concepts_map[as.character(.data[[concept_id_name]])]) # nolint
 }
 
 new_measurements <- replace_concepts(measurement, "measurement_concept_id", keep_concepts$measurement)
