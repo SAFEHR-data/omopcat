@@ -75,7 +75,6 @@ filter_dates <- function(x, date_range) {
 # by removing values equal to 0 and
 # by replacing values below the threshold with the replacement value
 # (both defined in environment variables)
-#' @importFrom rlang .data
 .manage_low_frequency <- function(df) {
   threshold <- as.double(Sys.getenv("LOW_FREQUENCY_THRESHOLD"))
   replacement <- as.double(Sys.getenv("LOW_FREQUENCY_REPLACEMENT"))
