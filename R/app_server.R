@@ -19,7 +19,7 @@ app_server <- function(input, output, session) {
   # records and patients counts
   # Get the selected row from the datatable as a reactive output
   selected_row <- mod_datatable_server("concepts", selected_data, monthly_counts, selected_dates)
-  
+
   # Generate the plots based on the selected data
   mod_plots_server("monthly_counts", selected_row, selected_dates, type = "monthly_counts")
   mod_plots_server("summary_stats", selected_row, type = "summary_stats")

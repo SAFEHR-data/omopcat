@@ -38,8 +38,8 @@ mod_datatable_server <- function(id, concepts, monthly_counts, selected_dates = 
       join_counts_to_concepts(concepts(), monthly_counts, selected_dates()) |>
         # Handle low frequencies
         mutate(
-          records = replace_low_frequencies(records),
-          patients = replace_low_frequencies(patients)
+          records = replace_low_frequencies(.data$records),
+          patients = replace_low_frequencies(.data$patients)
         ) |>
         # Reorder and select the columns we want to display
         dplyr::select(
