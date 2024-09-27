@@ -36,6 +36,24 @@ test_that("datatable server works", {
   )
 })
 
+test_that("Low frequencies are replaced in the concepts table", {
+  testServer(
+    mod_datatable_server,
+    args = list(
+      # Use the dev data to test low frequency replacement
+      concepts = reactiveVal(get_concepts_table()),
+      monthly_counts = get_monthly_counts(),
+      selected_dates = reactive_dates
+    ),
+    {
+      replacement <- as.double(Sys.getenv("LOW_FREQUENCY_REPLACEMENT"))
+
+      expect_true(all(concepts_with_counts()$records >= replacement))
+      expect_true(all(concepts_with_counts()$patients >= replacement))
+    }
+  )
+})
+
 test_that("module ui works", {
   ui <- mod_datatable_ui(id = "test")
   golem::expect_shinytaglist(ui)

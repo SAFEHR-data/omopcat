@@ -36,6 +36,11 @@ mod_datatable_server <- function(id, concepts, monthly_counts, selected_dates = 
   moduleServer(id, function(input, output, session) {
     concepts_with_counts <- reactive({
       join_counts_to_concepts(concepts(), monthly_counts, selected_dates()) |>
+        # Handle low frequencies
+        mutate(
+          records = replace_low_frequencies(records),
+          patients = replace_low_frequencies(patients)
+        ) |>
         # Reorder and select the columns we want to display
         dplyr::select(
           "concept_id", "concept_name", "records", "patients",
