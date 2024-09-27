@@ -6,7 +6,7 @@
 #' @noRd
 app_server <- function(input, output, session) {
   # Get the input tables
-  concepts_table <- get_concepts_table()
+  concepts_table <- mod_select_bundle_server("select_bundle")
   monthly_counts <- get_monthly_counts()
 
   # Filter concepts table based on user-selected concepts, showing all by default
@@ -18,8 +18,8 @@ app_server <- function(input, output, session) {
   # Populate the main concepts table in the dashboard with selected concepts and their
   # records and patients counts
   # Get the selected row from the datatable as a reactive output
-  selected_row <- mod_datatable_server("totals", selected_data, monthly_counts, selected_dates)
-
+  selected_row <- mod_datatable_server("concepts", selected_data, monthly_counts, selected_dates)
+  
   # Generate the plots based on the selected data
   mod_plots_server("monthly_counts", selected_row, selected_dates, type = "monthly_counts")
   mod_plots_server("summary_stats", selected_row, type = "summary_stats")
