@@ -22,12 +22,9 @@ mod_select_concepts_ui <- function(id) {
 #'
 #' @noRd
 mod_select_concepts_server <- function(id, concepts_table) {
-  stopifnot("concept_name" %in% names(concepts_table))
-
   moduleServer(id, function(input, output, session) {
-    ## Make concepts table reactive so that it can be updated
-    concepts_table <- reactiveVal(concepts_table)
     observeEvent(concepts_table(), {
+      stopifnot("concept_name" %in% names(concepts_table()))
       updateSelectInput(session, "select_concepts",
         choices = concepts_table()$concept_name,
         ## Have all present concepts selected by default

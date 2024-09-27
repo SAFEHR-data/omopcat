@@ -14,12 +14,13 @@ app_ui <- function(request) {
       title = .app_title(),
       sidebar = sidebar(
         title = "Filtering options",
+        mod_select_bundle_ui("select_bundle"),
         mod_select_concepts_ui("select_concepts"),
         mod_date_range_ui("date_range"),
       ),
       nav_panel(
         title = "Dashboard",
-        card(mod_datatable_ui("totals")),
+        card(mod_datatable_ui("concepts")),
         layout_columns(
           card(mod_plots_ui("monthly_counts")),
           card(mod_plots_ui("summary_stats"))

@@ -2,7 +2,7 @@ test_that("mod_select_concepts_server reacts to concept selection", {
   testServer(
     mod_select_concepts_server,
     # Add here your module params
-    args = list(concepts_table = mock_selection_data),
+    args = list(concepts_table = reactiveVal(mock_selection_data)),
     {
       ns <- session$ns
       # Pre-defined golem tests
