@@ -86,18 +86,13 @@ filter_dates <- function(x, date_range) {
 # by replacing values below the threshold with the replacement value
 # (both defined in environment variables)
 .manage_low_frequency <- function(df) {
-  threshold <- as.double(Sys.getenv("LOW_FREQUENCY_THRESHOLD"))
-  replacement <- as.double(Sys.getenv("LOW_FREQUENCY_REPLACEMENT"))
-
-  stopifnot("LOW_FREQUENCY_THRESHOLD is not a valid number" = !is.na(threshold))
-  stopifnot("LOW_FREQUENCY_REPLACEMENT is not a valid number" = !is.na(replacement))
   # Remove records with values equal to 0
   df <- dplyr::filter(df, .data$records_per_person > 0)
   df <- dplyr::filter(df, .data$person_count > 0)
   # Replace values below the threshold with the replacement value
   dplyr::mutate(
     df,
-    records_per_person = ifelse(.data$records_per_person < threshold, replacement, .data$records_per_person),
-    person_count = ifelse(.data$person_count < threshold, replacement, .data$person_count)
+    records_per_person = replace_low_frequencies(.data$records_per_person),
+    person_count = replace_low_frequencies(.data$person_count)
   )
 }
