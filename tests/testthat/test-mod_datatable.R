@@ -1,51 +1,11 @@
-# previous test data commented out temporarily because I want to create a simpler one to test counts
-# we could have two separate test datasets
-
-# mock_data <- data.frame(
-#   concept_id = c(40213251, 133834, 4057420),
-#   concept_name = c(
-#     "varicella virus vaccine",
-#     "Atopic dermatitis",
-#     "Catheter ablation of tissue of heart"
-#   ),
-#   domain_id = c("Drug", "Condition", "Procedure"),
-#   vocabulary_id = c("CVX", "SNOMED", "SNOMED"),
-#   concept_class_id = c("CVX", "Clinical Finding", "Procedure"),
-#   standard_concept = c("S", "S", "S"),
-#   concept_code = c("21", "24079001", "18286008")
-# )
-
-# FIXME: use `mock_monthly_counts` from helper
-
-# to test calculation of record and patient counts
-#
-# start making simpler test data explicitly to test counting
-df_concepts <- data.frame(
-  concept_id = c(1, 2, 3),
-  concept_name = c("2019", "2019-2020", "2019-2021"),
-  domain_id = "Drug",
-  vocabulary_id = "LOINC",
-  concept_class_id = "test",
-  standard_concept = "S",
-  concept_code = "test"
-)
-
-# 10 patients, with 10 records each
-# concept 1:2019, concept2:2019-2020, concept3:2019-2021
-df_monthly_counts <- data.frame(
-  concept_id = c(1, 2, 2, 3, 3, 3),
-  date_year = c(2019, 2019, 2020, 2019, 2020, 2021),
-  date_month = 1,
-  person_count = 10,
-  record_count = 100,
-  records_per_person = 10
-)
+# Using mock_selection_data and mock_monthly_counts from helper-mock_selection_data.R
+# for the concepts table and monthly counts, respectively
 
 selected_dates <- c("2019-01-01", "2022-01-01")
 reactive_dates <- reactiveVal(selected_dates)
 
 test_that("Adding records and patients counts to concepts table works", {
-  concepts_with_counts <- join_counts_to_concepts(df_concepts, df_monthly_counts, selected_dates)
+  concepts_with_counts <- join_counts_to_concepts(mock_selection_data, mock_monthly_counts, selected_dates)
 
   expect_in(c("concept_id", "concept_name", "records", "patients"), names(concepts_with_counts))
   expect_equal(nrow(concepts_with_counts), 3)
@@ -55,7 +15,7 @@ test_that("Adding records and patients counts to concepts table works", {
 
 test_that("Added counts depends on selected dates", {
   selected_dates <- c("2019-01-01", "2019-12-31")
-  concepts_with_counts <- join_counts_to_concepts(df_concepts, df_monthly_counts, selected_dates)
+  concepts_with_counts <- join_counts_to_concepts(mock_selection_data, mock_monthly_counts, selected_dates)
 
   expect_equal(concepts_with_counts$records, c(100, 100, 100))
   expect_equal(concepts_with_counts$patients, c(10, 10, 10))
@@ -65,8 +25,8 @@ test_that("datatable server works", {
   testServer(
     mod_datatable_server,
     args = list(
-      concepts = reactiveVal(df_concepts),
-      monthly_counts = df_monthly_counts,
+      concepts = reactiveVal(mock_selection_data),
+      monthly_counts = mock_monthly_counts,
       selected_dates = reactive_dates
     ),
     {
