@@ -35,7 +35,12 @@ mod_datatable_server <- function(id, concepts, monthly_counts, selected_dates = 
 
   moduleServer(id, function(input, output, session) {
     concepts_with_counts <- reactive({
-      join_counts_to_concepts(concepts(), monthly_counts, selected_dates())
+      join_counts_to_concepts(concepts(), monthly_counts, selected_dates()) |>
+        # Reorder and select the columns we want to display
+        dplyr::select(
+          "concept_id", "concept_name", "records", "patients",
+          "domain_id", "vocabulary_id", "concept_class_id"
+        )
     })
     output$datatable <- DT::renderDT(concepts_with_counts(), selection = list(
       mode = "single",
