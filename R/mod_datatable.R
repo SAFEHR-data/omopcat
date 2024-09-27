@@ -45,12 +45,13 @@ mod_datatable_server <- function(id, concepts, monthly_counts, selected_dates = 
 ## Use selected dates to calculate number of patients and records per concept
 ## and join onto selected_data
 join_counts_to_concepts <- function(concepts, monthly_counts, selected_dates) {
-  monthly_counts |>
+  summarised_counts <- monthly_counts |>
     filter_dates(selected_dates) |>
     dplyr::group_by(.data$concept_id) |>
     dplyr::summarise(
       records = sum(.data$record_count),
       patients = round(sum(.data$record_count) / mean(.data$records_per_person))
-    ) |>
-    dplyr::right_join(concepts, by = "concept_id")
+    )
+  # Use inner_join so we only keep concepts for which we have counts in the selected dates
+  dplyr::inner_join(concepts, summarised_counts, by = "concept_id")
 }
