@@ -4,31 +4,6 @@
 selected_dates <- c("2019-01-01", "2022-01-01")
 reactive_dates <- reactiveVal(selected_dates)
 
-test_that("Adding records and patients counts to concepts table works", {
-  concepts_with_counts <- join_counts_to_concepts(mock_selection_data, mock_monthly_counts, selected_dates)
-
-  expect_in(c("concept_id", "concept_name", "records", "patients"), names(concepts_with_counts))
-  expect_equal(nrow(concepts_with_counts), 3)
-  expect_equal(concepts_with_counts$records, c(100, 200, 300))
-  expect_equal(concepts_with_counts$patients, c(10, 20, 30))
-})
-
-test_that("Added counts depends on selected dates", {
-  selected_dates <- c("2019-01-01", "2019-12-31")
-  concepts_with_counts <- join_counts_to_concepts(mock_selection_data, mock_monthly_counts, selected_dates)
-
-  expect_equal(concepts_with_counts$records, c(100, 100, 100))
-  expect_equal(concepts_with_counts$patients, c(10, 10, 10))
-})
-
-test_that("Only concepts with data for the selected date range are kept", {
-  selected_dates <- c("2020-01-01", "2020-12-31")
-  concepts_with_counts <- join_counts_to_concepts(mock_selection_data, mock_monthly_counts, selected_dates)
-
-  expect_equal(nrow(concepts_with_counts), 2)
-  expect_false(40213251 %in% concepts_with_counts$concept_id)
-})
-
 test_that("datatable server works", {
   testServer(
     mod_datatable_server,
@@ -69,4 +44,29 @@ test_that("module ui works", {
   for (i in c("id")) {
     expect_true(i %in% names(fmls))
   }
+})
+
+test_that("Adding records and patients counts to concepts table works", {
+  concepts_with_counts <- join_counts_to_concepts(mock_selection_data, mock_monthly_counts, selected_dates)
+
+  expect_in(c("concept_id", "concept_name", "records", "patients"), names(concepts_with_counts))
+  expect_equal(nrow(concepts_with_counts), 3)
+  expect_equal(concepts_with_counts$records, c(100, 200, 300))
+  expect_equal(concepts_with_counts$patients, c(10, 20, 30))
+})
+
+test_that("Added counts depends on selected dates", {
+  selected_dates <- c("2019-01-01", "2019-12-31")
+  concepts_with_counts <- join_counts_to_concepts(mock_selection_data, mock_monthly_counts, selected_dates)
+
+  expect_equal(concepts_with_counts$records, c(100, 100, 100))
+  expect_equal(concepts_with_counts$patients, c(10, 10, 10))
+})
+
+test_that("Only concepts with data for the selected date range are kept", {
+  selected_dates <- c("2020-01-01", "2020-12-31")
+  concepts_with_counts <- join_counts_to_concepts(mock_selection_data, mock_monthly_counts, selected_dates)
+
+  expect_equal(nrow(concepts_with_counts), 2)
+  expect_false(40213251 %in% concepts_with_counts$concept_id)
 })
