@@ -32,7 +32,14 @@ get_concepts_table <- function() {
 
 get_monthly_counts <- function() {
   if (should_use_dev_data()) {
-    data <- readr::read_csv(app_sys("dev_data", "omopcat_monthly_counts.csv"), show_col_types = FALSE)
+    data <- readr::read_csv(
+      app_sys("dev_data", "omopcat_monthly_counts.csv"),
+      col_types = readr::cols(
+        concept_id = readr::col_integer(),
+        date_year = readr::col_integer(),
+        date_month = readr::col_integer()
+      )
+    )
   } else {
     data <- .read_parquet_table("omopcat_monthly_counts")
   }
@@ -42,7 +49,10 @@ get_monthly_counts <- function() {
 get_summary_stats <- function() {
   if (should_use_dev_data()) {
     return(
-      readr::read_csv(app_sys("dev_data", "omopcat_summary_stats.csv"), show_col_types = FALSE)
+      readr::read_csv(
+        app_sys("dev_data", "omopcat_summary_stats.csv"),
+        col_types = readr::cols(concept_id = readr::col_integer())
+      )
     )
   }
   .read_parquet_table("omopcat_summary_stats")
