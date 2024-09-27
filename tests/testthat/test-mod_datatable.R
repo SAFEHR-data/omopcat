@@ -32,7 +32,7 @@ df_concepts <- data.frame(
 # concept 1:2019, concept2:2019-2020, concept3:2019-2021
 df_monthly_counts <- data.frame(
   concept_id = c(1, 2, 2, 3, 3, 3),
-  date_year = c(2019, 2019,2020, 2019,2020,2021),
+  date_year = c(2019, 2019, 2020, 2019, 2020, 2021),
   date_month = 1,
   person_count = 10,
   record_count = 100,

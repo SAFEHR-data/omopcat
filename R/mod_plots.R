@@ -68,6 +68,3 @@ mod_plots_server <- function(id, selected_concept, selected_dates = NULL,
     })
   })
 }
-
-
-

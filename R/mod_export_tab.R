@@ -61,17 +61,17 @@ mod_exportsummary_server <- function(id, data) {
     output$by_domain <- shiny::renderTable(
       data()
       |> group_by(.data$domain_id)
-      |> summarise(concepts = n_distinct(.data$concept_id))
+        |> summarise(concepts = n_distinct(.data$concept_id))
     )
     output$by_concept_class <- shiny::renderTable(
       data()
       |> group_by(.data$concept_class_id)
-      |> summarise(concepts = n_distinct(.data$concept_id))
+        |> summarise(concepts = n_distinct(.data$concept_id))
     )
     output$by_vocabulary_id <- shiny::renderTable(
       data()
       |> group_by(.data$vocabulary_id)
-      |> summarise(concepts = n_distinct(.data$concept_id))
+        |> summarise(concepts = n_distinct(.data$concept_id))
     )
   })
 }
