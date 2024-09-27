@@ -1,6 +1,6 @@
 #' datatable UI Function
 #'
-#' @description A shiny Module.
+#' @description The UI component to display the datatable.
 #'
 #' @param id,input,output,session Internal parameters for {shiny}.
 #'
@@ -14,10 +14,15 @@ mod_datatable_ui <- function(id) {
   )
 }
 
-# FIXME: update docs
 #' datatable Server Functions
 #'
-#' @param data A reactive data.frame containing the data to be displayed
+#' @description Generates a `DT::datatable` with the concepts and their counts for the selected
+#' date range. The datatable allows the user to select a concept by clicking its row.
+#' The selected row is returned as a reactive object.
+#'
+#' @param concepts A reactive object containing the concepts to display
+#' @param monthly_counts A data frame containing the monthly counts of records per concept
+#' @param selected_dates A reactive object containing the selected dates
 #'
 #' @return The selected row as a reactive object
 #'
