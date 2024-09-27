@@ -20,19 +20,19 @@ test_that("Dev data files are consistent", {
 })
 
 test_that("Data getters fail in production if envvar not set", {
-  withr::local_envvar(GOLEM_CONFIG_ACTIVE = "production", CALYPSO_DATA_PATH = NA)
+  withr::local_envvar(GOLEM_CONFIG_ACTIVE = "production", OMOPCAT_DATA_PATH = NA)
   withr::local_options(list("golem.app.prod" = TRUE))
 
   expect_true(golem::app_prod())
-  expect_error(get_concepts_table(), "Environment variable `CALYPSO_DATA_PATH` not set")
-  expect_error(get_monthly_counts(), "Environment variable `CALYPSO_DATA_PATH` not set")
-  expect_error(get_summary_stats(), "Environment variable `CALYPSO_DATA_PATH` not set")
+  expect_error(get_concepts_table(), "Environment variable `OMOPCAT_DATA_PATH` not set")
+  expect_error(get_monthly_counts(), "Environment variable `OMOPCAT_DATA_PATH` not set")
+  expect_error(get_summary_stats(), "Environment variable `OMOPCAT_DATA_PATH` not set")
 })
 
 test_that("Data getters fail in production if data directory does not exist", {
   withr::local_envvar(c(
     "GOLEM_CONFIG_ACTIVE" = "production",
-    "CALYPSO_DATA_PATH" = "/i/dont/exist"
+    "OMOPCAT_DATA_PATH" = "/i/dont/exist"
   ))
   withr::local_options(list("golem.app.prod" = TRUE))
 

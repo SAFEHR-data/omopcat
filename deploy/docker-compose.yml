@@ -12,7 +12,7 @@ services:
       HTTP_PROXY: ${HTTP_PROXY}
       HTTPS_PROXY: ${HTTPS_PROXY}
       GOLEM_CONFIG_ACTIVE: production
-      CALYPSO_DATA_PATH: /etc/omopcat/data
+      OMOPCAT_DATA_PATH: /etc/omopcat/data
       LOW_FREQUENCY_THRESHOLD: 5
       LOW_FREQUENCY_REPLACEMENT: 2.5
     volumes:

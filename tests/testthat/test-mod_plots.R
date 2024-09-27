@@ -11,12 +11,12 @@ test_that("mod_plots_server reacts to changes in the selected concept", {
       expect_true(grepl(id, ns("")))
       expect_true(grepl("test", ns("test")))
 
-      selected_row <- list(concept_id = 4108450, concept_name = "test")
+      selected_row <- list(concept_id = 3003573, concept_name = "test")
       mock_concept_row(selected_row) # update reactive value
       session$flushReact()
       expect_identical(unique(filtered_data()$concept_id), selected_row$concept_id)
 
-      selected_row2 <- list(concept_id = 45766147, concept_name = "test")
+      selected_row2 <- list(concept_id = 4276526, concept_name = "test")
       mock_concept_row(selected_row2) # update reactive value
       session$flushReact()
       expect_identical(unique(filtered_data()$concept_id), selected_row2$concept_id)
@@ -34,7 +34,7 @@ test_that("mod_monthly_count_server reacts to changes in the selected date range
       expect_true(grepl(id, ns("")))
       expect_true(grepl("test", ns("test")))
 
-      mock_concept_row(list(concept_id = 4248525, concept_name = "test"))
+      mock_concept_row(list(concept_id = 4092281, concept_name = "test"))
 
       selected_dates <- c("2019-01-01", "2019-12-31")
       mock_date_range(selected_dates)
