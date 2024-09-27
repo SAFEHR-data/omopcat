@@ -21,10 +21,10 @@ datatable_plus_counts_server <- function(id, concepts, monthly_counts, selected_
     reactive({
       monthly_counts |>
         filter_dates(selected_dates()) |>
-        dplyr::group_by(concept_id) |>
+        dplyr::group_by(.data$concept_id) |>
         dplyr::summarise(
-          records = sum(record_count),
-          patients = round(sum(record_count) / mean(records_per_person))
+          records = sum(.data$record_count),
+          patients = round(sum(.data$record_count) / mean(.data$records_per_person))
         ) |>
         dplyr::right_join(concepts(), by = "concept_id")
     })
