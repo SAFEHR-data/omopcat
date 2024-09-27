@@ -21,6 +21,14 @@ test_that("Added counts depends on selected dates", {
   expect_equal(concepts_with_counts$patients, c(10, 10, 10))
 })
 
+test_that("Only concepts with data for the selected date range are kept", {
+  selected_dates <- c("2020-01-01", "2020-12-31")
+  concepts_with_counts <- join_counts_to_concepts(mock_selection_data, mock_monthly_counts, selected_dates)
+
+  expect_equal(nrow(concepts_with_counts), 2)
+  expect_false(40213251 %in% concepts_with_counts$concept_id)
+})
+
 test_that("datatable server works", {
   testServer(
     mod_datatable_server,
