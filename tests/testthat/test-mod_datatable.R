@@ -15,6 +15,8 @@
 #   concept_code = c("21", "24079001", "18286008")
 # )
 
+# FIXME: use `mock_monthly_counts` from helper
+
 # to test calculation of record and patient counts
 #
 # start making simpler test data explicitly to test counting
@@ -39,38 +41,24 @@ df_monthly_counts <- data.frame(
   records_per_person = 10
 )
 
-reactive_dates <- reactiveVal(c("2019-01-01", "2022-01-01"))
+selected_dates <- c("2019-01-01", "2022-01-01")
+reactive_dates <- reactiveVal(selected_dates)
 
-test_that("count of records and patients works", {
-  testServer(
-    datatable_plus_counts_server,
-    args = list(
-      concepts = reactiveVal(df_concepts),
-      monthly_counts = df_monthly_counts,
-      selected_dates = reactive_dates
-    ),
-    {
-      out <- session$getReturned()
+test_that("Adding records and patients counts to concepts table works", {
+  concepts_with_counts <- join_counts_to_concepts(df_concepts, df_monthly_counts, selected_dates)
 
-      expect_equal(ncol(out()), 9)
-      expect_equal(names(out())[1], "concept_id")
-      expect_equal(names(out())[2], "records")
-      expect_equal(names(out())[3], "patients")
+  expect_in(c("concept_id", "concept_name", "records", "patients"), names(concepts_with_counts))
+  expect_equal(nrow(concepts_with_counts), 3)
+  expect_equal(concepts_with_counts$records, c(100, 200, 300))
+  expect_equal(concepts_with_counts$patients, c(10, 20, 30))
+})
 
-      expect_equal(nrow(out()), 3)
+test_that("Added counts depends on selected dates", {
+  selected_dates <- c("2019-01-01", "2019-12-31")
+  concepts_with_counts <- join_counts_to_concepts(df_concepts, df_monthly_counts, selected_dates)
 
-      # records & patients as expected all years
-      expect_equal(out()$records[1], 100)
-      expect_equal(out()$records, c(100, 200, 300))
-      expect_equal(out()$patients, c(10, 20, 30))
-
-      # test changed dates
-      selected_dates(c("2019-01-01", "2019-12-31"))
-      session$flushReact()
-      expect_equal(out()$records, c(100, 100, 100))
-      expect_equal(out()$patients, c(10, 10, 10))
-    }
-  )
+  expect_equal(concepts_with_counts$records, c(100, 100, 100))
+  expect_equal(concepts_with_counts$patients, c(10, 10, 10))
 })
 
 test_that("datatable server works", {
