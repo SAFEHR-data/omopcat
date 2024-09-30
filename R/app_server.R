@@ -5,8 +5,11 @@
 #' @import shiny
 #' @noRd
 app_server <- function(input, output, session) {
-  mod_bundles_summary_server("bundles")
   concepts_table <- mod_select_bundle_server("select_bundle")
+  selected_bundle_id <- mod_bundles_summary_server("bundles")
+
+  # Updated the selected bundle when a row is selected in the bundles table
+  mod_update_select_bundle_server("select_bundle", selected_bundle_id)
 
   selected_data <- mod_select_concepts_server("select_concepts", concepts_table)
   selected_concept_row <- mod_datatable_server("concepts", selected_data)

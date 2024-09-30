@@ -11,7 +11,7 @@ mod_bundles_summary_ui <- function(id) {
   ns <- NS(id)
   # TODO: might be possible to reuse the existing mod_datatable_ui for this
   tagList(
-    DT::dataTableOutput(ns("bundles"))
+    DT::DTOutput(ns("bundles"))
   )
 }
 
@@ -23,21 +23,23 @@ mod_bundles_summary_server <- function(id) {
     bundle_data <- all_bundles() |>
       dplyr::mutate(
         n_concepts = .n_available_concepts(.data$id, .data$domain)
-      ) |>
-      # Show only selected columns
-      dplyr::select("bundle_name", "domain", "n_concepts")
+      )
 
-    output$bundles <- DT::renderDataTable(
-      bundle_data,
+    output$bundles <- DT::renderDT(
+      # Show only selected columns
+      dplyr::select(bundle_data, "bundle_name", "domain", "n_concepts"),
       rownames = FALSE,
       colnames = c(
         "Bundle Name" = "bundle_name",
         "Domain" = "domain",
         "Available Concepts" = "n_concepts"
       ),
-      selection = list(mode = "single", selected = 1, target = "row"),
+      selection = list(mode = "single", target = "row"),
       options = list(pageLength = 50) # show 50 entries by default
     )
+
+    ## Return the bundle ID for the selected row
+    reactive(bundle_data$id[input$bundles_rows_selected])
   })
 }
 
