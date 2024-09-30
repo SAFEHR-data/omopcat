@@ -20,7 +20,10 @@ app_ui <- function(request) {
       ),
       nav_panel(
         title = "Bundles",
-        card(mod_bundles_summary_ui("bundles"))
+        card(
+          mod_bundles_summary_ui("bundles"),
+          full_screen = TRUE
+        )
       ),
       nav_panel(
         title = "Concepts",
