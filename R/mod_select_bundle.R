@@ -60,6 +60,8 @@ mod_select_bundle_server <- function(id) {
 }
 
 mod_update_select_bundle_server <- function(id, selected_bundle_id) {
+  stopifnot(is.reactive(selected_bundle_id))
+
   moduleServer(id, function(input, output, session) {
     observeEvent(selected_bundle_id(), {
       req(selected_bundle_id())
