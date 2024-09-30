@@ -5,6 +5,7 @@
 #' @import shiny
 #' @noRd
 app_server <- function(input, output, session) {
+  mod_bundles_summary_server("bundles")
   concepts_table <- mod_select_bundle_server("select_bundle")
 
   selected_data <- mod_select_concepts_server("select_concepts", concepts_table)

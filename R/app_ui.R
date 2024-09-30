@@ -19,7 +19,11 @@ app_ui <- function(request) {
         mod_date_range_ui("date_range"),
       ),
       nav_panel(
-        title = "Dashboard",
+        title = "Bundles",
+        card(mod_bundles_summary_ui("bundles"))
+      ),
+      nav_panel(
+        title = "Concepts",
         card(mod_datatable_ui("concepts")),
         layout_columns(
           card(mod_plots_ui("monthly_counts")),
