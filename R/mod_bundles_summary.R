@@ -23,7 +23,9 @@ mod_bundles_summary_server <- function(id) {
     bundle_data <- all_bundles() |>
       dplyr::mutate(
         n_concepts = .n_available_concepts(.data$id, .data$domain)
-      )
+      ) |>
+      # Filter out bundles with no available concepts
+      dplyr::filter(.data$n_concepts > 0)
 
     output$bundles <- DT::renderDT(
       # Show only selected columns
