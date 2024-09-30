@@ -26,6 +26,7 @@ mod_datatable_server <- function(id, data) {
   stopifnot(is.reactive(data))
 
   moduleServer(id, function(input, output, session) {
+    req(data)
     output$datatable <- DT::renderDT(data(), selection = list(
       mode = "single",
       selected = 1,
