@@ -20,10 +20,24 @@ mod_bundles_summary_ui <- function(id) {
 #' @noRd
 mod_bundles_summary_server <- function(id) {
   moduleServer(id, function(input, output, session) {
-    bundle_data <- all_bundles()
+    bundle_data <- all_bundles() |>
+      dplyr::mutate(
+        n_concepts = .n_available_concepts(.data$id, .data$domain)
+      )
     output$bundles <- DT::renderDT(
       bundle_data,
       selection = list(mode = "single", selected = 1, target = "row")
     )
   })
+}
+
+.n_available_concepts <- function(bundle_id, bundle_domain) {
+  ## Count the number of available concepts for a bundle within the input dataset
+  available_concepts <- get_concepts_table()$concept_id
+
+  purrr::map2_int(
+    bundle_id,
+    bundle_domain,
+    ~ sum(get_bundle_concepts(.x, .y) %in% available_concepts)
+  )
 }
