@@ -51,7 +51,7 @@ mod_bundles_summary_server <- function(id) {
   purrr::map2_int(
     bundle_id, bundle_domain,
     function(id, domain) {
-      get_bundle_concepts(id, domain) %in% available_concepts
+      sum(get_bundle_concepts(id, domain) %in% available_concepts)
     }
   )
 }
