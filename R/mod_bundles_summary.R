@@ -9,7 +9,6 @@
 #' @importFrom shiny NS tagList
 mod_bundles_summary_ui <- function(id) {
   ns <- NS(id)
-  # TODO: might be possible to reuse the existing mod_datatable_ui for this
   tagList(
     DT::DTOutput(ns("bundles"))
   )
@@ -50,8 +49,9 @@ mod_bundles_summary_server <- function(id) {
   available_concepts <- get_concepts_table()$concept_id
 
   purrr::map2_int(
-    bundle_id,
-    bundle_domain,
-    ~ sum(get_bundle_concepts(.x, .y) %in% available_concepts)
+    bundle_id, bundle_domain,
+    function(id, domain) {
+      get_bundle_concepts(id, domain) %in% available_concepts
+    }
   )
 }
