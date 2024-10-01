@@ -31,6 +31,7 @@ Imports:
     cli,
     nanoparquet,
     rlang,
+    htmltools,
     omopbundles (>= 0.1.1)
 Suggests:
     devtools,
@@ -43,7 +44,8 @@ Suggests:
     lintr,
     dbplyr,
     RSQLite,
-    precommit
+    precommit,
+    markdown
 Remotes: SAFEHR-data/omop-bundles
 Encoding: UTF-8
 LazyData: true

@@ -8,10 +8,14 @@
 #'
 #' @importFrom shiny NS tagList
 #' @importFrom bslib card card_header
+#' @importFrom htmltools includeMarkdown
 mod_manual_ui <- function(id) {
   card(
     full_screen = TRUE,
-    card_title("User Manual"),
-    "This is the user manual. It will contain all the information you need to use this app."
+    card_title(""),
+    fluidRow(
+      # includeMarkdown(system.file("app/www/help_tab.md", package = "omopcat"))
+      includeMarkdown(app_sys("app/www/help_tab.md"))
+    )
   )
 }
