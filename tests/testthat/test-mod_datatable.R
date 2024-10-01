@@ -1,7 +1,6 @@
 test_that("datatable server works", {
   testServer(
     mod_datatable_server,
-    args = list(data = reactiveVal(mock_selection_data)),
     {
       ns <- session$ns
       # Pre-defined golem tests
