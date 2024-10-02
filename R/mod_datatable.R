@@ -27,11 +27,11 @@ mod_datatable_ui <- function(id) {
 #'
 #' @noRd
 #' @importFrom dplyr group_by summarise
-mod_datatable_server <- function(id, monthly_counts, selected_dates = NULL) {
-  stopifnot(is.data.frame(monthly_counts))
+mod_datatable_server <- function(id, selected_dates = NULL) {
   stopifnot(is.reactive(selected_dates) || is.null(selected_dates))
 
   all_concepts <- get_concepts_table()
+  monthly_counts <- get_monthly_counts()
 
   moduleServer(id, function(input, output, session) {
     concepts_with_counts <- reactive({
