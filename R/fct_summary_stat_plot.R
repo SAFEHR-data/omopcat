@@ -9,13 +9,12 @@
 #' - `value_as_number`: The value of the summary attribute as a numeric value.
 #'
 #' @param summary_stats A `data.frame` containing the summary statistics.
-#' @param plot_title A `character`, to be used as title of the plot.
 #'
 #' @return A `ggplot2` object or `NULL` if no numeric concepts are present.
 #'
 #' @importFrom ggplot2 ggplot aes geom_boxplot theme
 #' @noRd
-stat_numeric_plot <- function(summary_stats, plot_title) {
+stat_numeric_plot <- function(summary_stats) {
   # Select only numeric concepts
   summary_stats <- .numeric_stats(summary_stats)
   if (nrow(summary_stats) == 0) {
@@ -36,7 +35,6 @@ stat_numeric_plot <- function(summary_stats, plot_title) {
       stat = "identity"
     ) +
     xlab(NULL) +
-    ggtitle(plot_title) +
     theme(legend.position = "none")
 }
 
@@ -53,13 +51,12 @@ stat_numeric_plot <- function(summary_stats, plot_title) {
 #' - `value_as_number`: The value of the summary attribute as a numeric value.
 #'
 #' @param summary_stats A `data.frame` containing the summary statistics.
-#' @param plot_title A `character`, to be used as title of the plot.
 #'
 #' @return A `ggplot2` object or `NULL` if no numeric concepts are present.
 #'
 #' @importFrom ggplot2 ggplot aes geom_col labs facet_wrap vars
 #' @noRd
-stat_categorical_plot <- function(summary_stats, plot_title) {
+stat_categorical_plot <- function(summary_stats) {
   ## Select only categorical concepts
   summary_stats <- .categorical_stats(summary_stats)
   if (nrow(summary_stats) == 0) {
@@ -78,7 +75,6 @@ stat_categorical_plot <- function(summary_stats, plot_title) {
   ggplot(summary_stats, aes(.data$value_as_string, .data$value_as_number)) +
     geom_col(aes(fill = .data$value_as_string), show.legend = FALSE) +
     labs(x = "Category", y = "Frequency") +
-    ggtitle(plot_title) +
     facet_wrap(vars(.data$concept_name), scales = "free")
 }
 

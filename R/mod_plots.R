@@ -12,8 +12,13 @@ mod_plots_ui <- function(id) {
   ns <- NS(id)
   tagList(
     layout_columns(
-      card(plotOutput(ns("monthly_counts")), height = 250),
       card(
+        card_header("Distribution of Monthly Records for the selected concepts"),
+        plotOutput(ns("monthly_counts")),
+        height = 250
+      ),
+      card(
+        card_header("Summary Statistics for the selected concepts"),
         navset_card_underline(
           nav_panel("Numeric concepts", plotOutput(ns("numeric_stats"))),
           nav_panel("Categorical concepts", plotOutput(ns("categorical_stats"))),
@@ -59,26 +64,17 @@ mod_plots_server <- function(id, selected_concepts, selected_dates) {
 
     output$monthly_counts <- renderPlot({
       req(nrow(monthly_counts()) > 0)
-      monthly_count_plot(
-        monthly_counts(),
-        plot_title = "Distribution of Monthly Records for the selected concepts"
-      )
+      monthly_count_plot(monthly_counts())
     })
 
     output$numeric_stats <- renderPlot({
       req(nrow(summary_stats()) > 0)
-      stat_numeric_plot(
-        summary_stats(),
-        plot_title = "Summary Statistics for the numeric concepts"
-      )
+      stat_numeric_plot(summary_stats())
     })
 
     output$categorical_stats <- renderPlot({
       req(nrow(summary_stats()) > 0)
-      stat_categorical_plot(
-        summary_stats(),
-        plot_title = "Summary Statistics for the categorical concepts"
-      )
+      stat_categorical_plot(summary_stats())
     })
   })
 }
