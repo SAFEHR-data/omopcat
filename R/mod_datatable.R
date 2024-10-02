@@ -49,11 +49,20 @@ mod_datatable_server <- function(id, selected_dates = NULL) {
           "domain_id", "vocabulary_id", "concept_class_id"
         )
     })
-    output$datatable <- DT::renderDT(concepts_with_counts(), selection = list(
-      mode = "single",
-      selected = 1,
-      target = "row"
-    ))
+    output$datatable <- DT::renderDT(concepts_with_counts(),
+      rownames = FALSE,
+      colnames = c(
+        "Concept ID" = "concept_id",
+        "Concept Name" = "concept_name",
+        "Total Records" = "total_records",
+        "Average Persons per Month" = "mean_persons",
+        "Average Records per Person per Month" = "mean_records_per_person",
+        "Domain ID" = "domain_id",
+        "Vocabulary ID" = "vocabulary_id",
+        "Concept Class ID" = "concept_class_id"
+      ),
+      selection = list(mode = "single", selected = 1, target = "row")
+    )
 
     reactive(concepts_with_counts()[input$datatable_rows_selected, ])
   })
