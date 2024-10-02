@@ -24,22 +24,21 @@ mod_plots_ui <- function(id) {
 #' an error is raised.
 #'
 #' @param data `data.frame` containing the data to be plotted.
-#' @param selected_concept Reactive value containing the selected concept, used for filtering
+#' @param selected_concepts Reactive value containing the selected concepts, used for filtering
 #' @param selected_dates Optional reactive value if date filtering needs to be applied
 #' @param type The type of plot to be generated.
 #'
 #' @noRd
-mod_plots_server <- function(id, selected_concept, selected_dates) {
-  stopifnot(is.reactive(selected_concept))
+mod_plots_server <- function(id, selected_concepts, selected_dates) {
+  stopifnot(is.reactive(selected_concepts))
   stopifnot(is.reactive(selected_dates))
 
   moduleServer(id, function(input, output, session) {
-    selected_concept_id <- reactive(selected_concept()$concept_id)
-    selected_concept_name <- reactive(selected_concept()$concept_name)
+    selected_concept_id <- reactive(selected_concepts()$concept_id)
 
     ## Filter data based on selected concept and date range
     monthly_counts <- reactive({
-      req(length(selected_concept_name()) > 0)
+      req(length(selected_concept_id()) > 0)
       req(selected_dates)
       get_monthly_counts() |>
         dplyr::filter(.data$concept_id == selected_concept_id()) |>
@@ -47,19 +46,25 @@ mod_plots_server <- function(id, selected_concept, selected_dates) {
     })
 
     summary_stats <- reactive({
-      req(length(selected_concept_name()) > 0)
+      req(length(selected_concept_id()) > 0)
       get_summary_stats() |>
         dplyr::filter(.data$concept_id == selected_concept_id())
     })
 
     output$monthly_counts <- renderPlot({
       req(nrow(monthly_counts()) > 0)
-      monthly_count_plot(monthly_counts(), selected_concept_name())
+      monthly_count_plot(
+        monthly_counts(),
+        plot_title = "Distribution of Monthly Records for the selected concepts"
+      )
     })
 
     output$summary_stats <- renderPlot({
       req(nrow(summary_stats()) > 0)
-      summary_stat_plot(summary_stats(), selected_concept_name())
+      summary_stat_plot(
+        summary_stats(),
+        plot_title = "Summary Statistics for the selected concepts"
+      )
     })
   })
 }
