@@ -33,7 +33,7 @@ mod_select_bundle_ui <- function(id) {
 #'
 #' @param bundles_table A data.frame containing the available bundles
 #'
-#' @return The concepts table for the selected bundle as a reactive data.frame.
+#' @return The concept IDs  for the selected bundle as a reactive.
 #'
 #' @noRd
 #'
@@ -47,14 +47,13 @@ mod_select_bundle_server <- function(id) {
       req(input$select_bundle)
 
       if (input$select_bundle == "all") {
-        return(all_concepts)
+        return(all_concepts$concept_id)
       }
 
       selected_bundle_id <- input$select_bundle
       domain <- all_bundles[all_bundles$id == selected_bundle_id, ]$domain
-      bundle_concepts <- get_bundle_concepts(selected_bundle_id, domain)
-      all_concepts |>
-        dplyr::filter(.data$concept_id %in% bundle_concepts)
+
+      return(get_bundle_concepts(selected_bundle_id, domain))
     })
   })
 }

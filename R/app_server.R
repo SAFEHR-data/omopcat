@@ -5,11 +5,10 @@
 #' @import shiny
 #' @noRd
 app_server <- function(input, output, session) {
-  # Get the input tables
-  concepts_table <- mod_select_bundle_server("select_bundle")
+  bundle_concepts <- mod_select_bundle_server("select_bundle")
 
   # Filter concepts table based on user-selected concepts, showing all by default
-  selected_data <- mod_select_concepts_server("select_concepts", concepts_table)
+  selected_data <- mod_select_concepts_server("select_concepts", bundle_concepts)
 
   # Get the selected dates for date-range filtering
   selected_dates <- mod_date_range_server("date_range")
