@@ -85,3 +85,22 @@ test_that("Only concepts with data for the selected date range are kept", {
   expect_equal(nrow(concepts_with_counts), 2)
   expect_false(40213251 %in% concepts_with_counts$concept_id)
 })
+
+test_that("mod_update_datatable_selection_server works", {
+  testServer(
+    mod_update_datatable_selection_server,
+    args = list(bundle_concepts = reactiveVal()),
+    {
+      ns <- session$ns
+      # Pre-defined golem tests
+      expect_true(inherits(ns, "function"))
+      expect_true(grepl(id, ns("")))
+      expect_true(grepl("test", ns("test")))
+
+      # Not really possible to test the updating of the selected rows, but we can check
+      # whether the reactive row_indices get updated correctly as a proxy
+      bundle_concepts(c(3003573, 3005673))
+      expect_equal(row_indices(), c(1, 2))
+    }
+  )
+})

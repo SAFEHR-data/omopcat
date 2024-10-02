@@ -27,8 +27,8 @@ mod_datatable_ui <- function(id) {
 #'
 #' @noRd
 #' @importFrom dplyr group_by summarise
-mod_datatable_server <- function(id, selected_dates = NULL) {
-  stopifnot(is.reactive(selected_dates) || is.null(selected_dates))
+mod_datatable_server <- function(id, selected_dates) {
+  stopifnot(is.reactive(selected_dates))
 
   all_concepts <- get_concepts_table()
   monthly_counts <- get_monthly_counts()
@@ -81,4 +81,20 @@ join_counts_to_concepts <- function(concepts, monthly_counts, selected_dates) {
     )
   # Use inner_join so we only keep concepts for which we have counts in the selected dates
   dplyr::inner_join(concepts, summarised_counts, by = "concept_id")
+}
+
+mod_update_datatable_selection_server <- function(id, bundle_concepts) {
+  stopifnot(is.reactive(bundle_concepts))
+  all_concepts <- get_concepts_table()
+
+  moduleServer(id, function(input, output, session) {
+    row_indices <- reactive({
+      selected_concept_ids <- bundle_concepts()
+      match(selected_concept_ids, all_concepts$concept_id)
+    })
+    observeEvent(row_indices(), {
+      datatable_proxy <- DT::dataTableProxy("datatable", session = session)
+      DT::selectRows(datatable_proxy, row_indices())
+    })
+  })
 }

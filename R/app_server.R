@@ -17,6 +17,8 @@ app_server <- function(input, output, session) {
   # records and patients counts
   # Get the selected row from the datatable as a reactive output
   selected_concept_row <- mod_datatable_server("concepts", selected_dates)
+  # Update selected rows in datatable when selecting a bundle
+  mod_update_datatable_selection_server("concepts", bundle_concepts)
 
   # Generate the plots based on the selected data
   mod_plots_server("plots", selected_concept_row, selected_dates)
