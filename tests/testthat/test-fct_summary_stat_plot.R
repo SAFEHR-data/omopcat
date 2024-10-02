@@ -5,22 +5,22 @@ mock_stats <- data.frame(
   value_as_number = c(1.5, 0.5, 2.5, 0.7, 3.5, 0.8)
 )
 
-test_that("summary_stat_plot correctly processes data", {
+test_that("stat_numeric_plot correctly processes data", {
   # GIVEN: a data frame with summary statistics that still needs to be processed before plotting
-  # WHEN: summary_stat_plot is called with this data
+  # WHEN: stat_numeric_plot is called with this data
   # THEN: the data is first processed correctly and a plot is generated without errors
   mock_stats <- mock_stats[mock_stats$concept_id == 40213251, ]
   expected_data <- data.frame(concept_id = 40213251, mean = 1.5, sd = 0.5)
 
-  p <- summary_stat_plot(mock_stats, plot_title = "test")
+  p <- stat_numeric_plot(mock_stats)
   expect_identical(as.data.frame(p$data), expected_data)
   expect_s3_class(p, "ggplot")
   expect_true(inherits(p$layers[[1]]$geom, "GeomBoxplot"))
 })
 
-test_that("summary_stat_plot only works for a single concept", {
+test_that("stat_numeric_plot works for multiple concepts", {
   # GIVEN: a data frame with summary statistics for multiple concepts
-  # WHEN: summary_stat_plot is called with this data
+  # WHEN: stat_numeric_plot is called with this data
   # THEN: an error is thrown because the function only works for a single concept
   mock_stats <- data.frame(
     concept_id = rep(c(40213251, 40213252), each = 2),
@@ -29,12 +29,12 @@ test_that("summary_stat_plot only works for a single concept", {
     value_as_number = c(1.5, 0.5, 2.5, 0.7)
   )
 
-  expect_error(summary_stat_plot(mock_stats, plot_title = "test"), "Expecting a single concept ID")
+  expect_no_error(stat_numeric_plot(mock_stats))
 })
 
-test_that("summary_stat_plot works for categorical concepts", {
+test_that("stat_categorical_plot works for categorical concepts", {
   # GIVEN: a data frame with summary statistics for a categorical concept
-  # WHEN: summary_stat_plot is called with this data
+  # WHEN: stat_categorical_plot is called with this data
   # THEN: the data is processed correctly and a plot is generated without errors
   mock_stats <- data.frame(
     concept_id = rep(1234567, 3),
@@ -47,7 +47,7 @@ test_that("summary_stat_plot works for categorical concepts", {
     levels = c("cat_3", "cat_1", "cat_2")
   )
 
-  p <- summary_stat_plot(mock_stats, plot_title = "test")
+  p <- stat_categorical_plot(mock_stats)
   expect_identical(as.data.frame(p$data), expected_plot_data)
   expect_s3_class(p, "ggplot")
   expect_true(inherits(p$layers[[1]]$geom, "GeomBar"))
