@@ -11,7 +11,10 @@
 mod_plots_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    plotOutput(ns("summary_plot"), height = 250)
+    layout_columns(
+      card(plotOutput(ns("monthly_counts")), height = 250),
+      card(plotOutput(ns("summary_stats")), height = 250)
+    )
   )
 }
 
@@ -26,45 +29,37 @@ mod_plots_ui <- function(id) {
 #' @param type The type of plot to be generated.
 #'
 #' @noRd
-mod_plots_server <- function(id, selected_concept, selected_dates = NULL,
-                             type = c("monthly_counts", "summary_stats")) {
+mod_plots_server <- function(id, selected_concept, selected_dates) {
   stopifnot(is.reactive(selected_concept))
-  stopifnot(is.reactive(selected_dates) || is.null(selected_dates))
-
-  plot_func <- switch(type,
-    monthly_counts = monthly_count_plot,
-    summary_stats = summary_stat_plot,
-    cli::cli_abort("Invalid type: {type}")
-  )
-  data <- switch(type,
-    monthly_counts = get_monthly_counts(),
-    summary_stats = get_summary_stats(),
-    cli::cli_abort("Invalid type: {type}")
-  )
+  stopifnot(is.reactive(selected_dates))
 
   moduleServer(id, function(input, output, session) {
     selected_concept_id <- reactive(selected_concept()$concept_id)
     selected_concept_name <- reactive(selected_concept()$concept_name)
 
     ## Filter data based on selected concept and date range
-    filtered_data <- reactive({
+    monthly_counts <- reactive({
       req(length(selected_concept_name()) > 0)
-      out <- data[data$concept_id == selected_concept_id(), ]
-
-      if (!is.null(selected_dates)) {
-        req(selected_dates())
-        out <- filter_dates(out, selected_dates())
-      }
-      out
+      req(selected_dates)
+      get_monthly_counts() |>
+        dplyr::filter(.data$concept_id == selected_concept_id()) |>
+        filter_dates(selected_dates())
     })
 
-    output$summary_plot <- renderPlot({
-      ## Return empty plot if no data is available
-      req(filtered_data())
-      if (nrow(filtered_data()) == 0) {
-        stop("No data available for the selected date range")
-      }
-      plot_func(filtered_data(), selected_concept_name())
+    summary_stats <- reactive({
+      req(length(selected_concept_name()) > 0)
+      get_summary_stats() |>
+        dplyr::filter(.data$concept_id == selected_concept_id())
+    })
+
+    output$monthly_counts <- renderPlot({
+      req(nrow(monthly_counts()) > 0)
+      monthly_count_plot(monthly_counts(), selected_concept_name())
+    })
+
+    output$summary_stats <- renderPlot({
+      req(nrow(summary_stats()) > 0)
+      summary_stat_plot(summary_stats(), selected_concept_name())
     })
   })
 }

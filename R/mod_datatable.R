@@ -20,7 +20,6 @@ mod_datatable_ui <- function(id) {
 #' date range. The datatable allows the user to select a concept by clicking its row.
 #' The selected row is returned as a reactive object.
 #'
-#' @param concepts A reactive object containing the concepts to display
 #' @param monthly_counts A data frame containing the monthly counts of records per concept
 #' @param selected_dates A reactive object containing the selected dates
 #'
@@ -28,14 +27,15 @@ mod_datatable_ui <- function(id) {
 #'
 #' @noRd
 #' @importFrom dplyr group_by summarise
-mod_datatable_server <- function(id, concepts, monthly_counts, selected_dates = NULL) {
-  stopifnot(is.reactive(concepts))
+mod_datatable_server <- function(id, monthly_counts, selected_dates = NULL) {
   stopifnot(is.data.frame(monthly_counts))
   stopifnot(is.reactive(selected_dates) || is.null(selected_dates))
 
+  all_concepts <- get_concepts_table()
+
   moduleServer(id, function(input, output, session) {
     concepts_with_counts <- reactive({
-      join_counts_to_concepts(concepts(), monthly_counts, selected_dates()) |>
+      join_counts_to_concepts(all_concepts, monthly_counts, selected_dates()) |>
         # Handle low frequencies
         mutate(
           records = replace_low_frequencies(.data$records),

@@ -8,7 +8,6 @@ test_that("datatable server works", {
   testServer(
     mod_datatable_server,
     args = list(
-      concepts = reactiveVal(mock_selection_data),
       monthly_counts = mock_monthly_counts,
       selected_dates = reactive_dates
     ),
