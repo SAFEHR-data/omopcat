@@ -1,40 +1,27 @@
-#' summary_stat_plot
-#'
-#' Wrapper function to generate a plot for a summary statistic depending on its type
-#' (categorical or numeric).
-#'
-#' @param summary_stats A `data.frame` containing the summary statistics.
-#' @param plot_title A `character`, to be used as title of the plot.
-#'
-#' @return A `ggplot2` object.
-#'
-#' @noRd
-summary_stat_plot <- function(summary_stats, plot_title) {
-  if (.is_categorical(summary_stats)) {
-    stat_categorical_plot(summary_stats, plot_title)
-  } else {
-    stat_numeric_plot(summary_stats, plot_title)
-  }
-}
-
 #' stat_numeric_plot
 #'
-#' Generates a boxplot of the summary statistics for a numeric concept.
+#' Generates a boxplot of the summary statistics for numeric concepts.
 #' Uses pre-calculated `mean` and `sd` to generate the boxplot.
 #'
 #' Expects the input data to have the following columns:
-#' - `concept_id`: The concept ID.
+#' - `concept_id`: The concept IDs.
 #' - `summary_attribute`: The type of the summary attribute, e.g. `mean` or `sd`.
 #' - `value_as_number`: The value of the summary attribute as a numeric value.
 #'
 #' @param summary_stats A `data.frame` containing the summary statistics.
 #' @param plot_title A `character`, to be used as title of the plot.
 #'
-#' @return A `ggplot2` object.
+#' @return A `ggplot2` object or `NULL` if no numeric concepts are present.
 #'
 #' @importFrom ggplot2 ggplot aes geom_boxplot theme
 #' @noRd
 stat_numeric_plot <- function(summary_stats, plot_title) {
+  # Select only numeric concepts
+  summary_stats <- .numeric_stats(summary_stats)
+  if (nrow(summary_stats) == 0) {
+    return(NULL)
+  }
+
   processed_stats <- .process_numeric_stats(summary_stats)
 
   ggplot(processed_stats, aes(x = factor(.data$concept_id), fill = factor(.data$concept_id))) +
@@ -55,8 +42,9 @@ stat_numeric_plot <- function(summary_stats, plot_title) {
 
 #' stat_categorical_plot
 #'
-#' Generates a bar plot of the category frequencies for a categorical concept.
+#' Generates a bar plot of the category frequencies for categorical concepts.
 #' Uses pre-calculated frequencies to generate the plot.
+#' In case of multiple concepts, a faceted plot is generated.
 #'
 #' Expects the input data to have the following columns:
 #' - `concept_id`: The concept ID.
@@ -67,11 +55,17 @@ stat_numeric_plot <- function(summary_stats, plot_title) {
 #' @param summary_stats A `data.frame` containing the summary statistics.
 #' @param plot_title A `character`, to be used as title of the plot.
 #'
-#' @return A `ggplot2` object.
+#' @return A `ggplot2` object or `NULL` if no numeric concepts are present.
 #'
 #' @importFrom ggplot2 ggplot aes geom_col labs facet_wrap vars
 #' @noRd
 stat_categorical_plot <- function(summary_stats, plot_title) {
+  ## Select only categorical concepts
+  summary_stats <- .categorical_stats(summary_stats)
+  if (nrow(summary_stats) == 0) {
+    return(NULL)
+  }
+
   stopifnot(c("concept_id", "value_as_string", "value_as_number") %in% names(summary_stats))
 
   summary_stats$value_as_string <- as.factor(summary_stats$value_as_string)
@@ -98,6 +92,10 @@ stat_categorical_plot <- function(summary_stats, plot_title) {
   )
 }
 
-.is_categorical <- function(summary_stats) {
-  "frequency" %in% summary_stats$summary_attribute
+.categorical_stats <- function(summary_stats) {
+  summary_stats[summary_stats$summary_attribute == "frequency", ]
+}
+
+.numeric_stats <- function(summary_stats) {
+  summary_stats[summary_stats$summary_attribute %in% c("mean", "sd"), ]
 }
