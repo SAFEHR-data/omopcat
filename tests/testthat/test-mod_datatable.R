@@ -7,10 +7,7 @@ reactive_dates <- reactiveVal(selected_dates)
 test_that("datatable server works", {
   testServer(
     mod_datatable_server,
-    args = list(
-      monthly_counts = mock_monthly_counts,
-      selected_dates = reactive_dates
-    ),
+    args = list(selected_dates = reactive_dates),
     {
       ns <- session$ns
       # Pre-defined golem tests
@@ -29,8 +26,8 @@ test_that("datatable server works", {
       # To check this, we access the reactive object `concepts_with_counts` created within the server
       selected_dates(c("2020-01-01", "2020-12-31"))
       session$flushReact()
-      expect_equal(nrow(concepts_with_counts()), 2)
-      expect_false(40213251 %in% concepts_with_counts()$concept_id)
+      expect_equal(nrow(concepts_with_counts()), 4)
+      expect_true(all(concepts_with_counts()$records > 0))
     }
   )
 })
@@ -38,12 +35,7 @@ test_that("datatable server works", {
 test_that("Low frequencies are replaced in the concepts table", {
   testServer(
     mod_datatable_server,
-    args = list(
-      # Use the dev data to test low frequency replacement
-      concepts = reactiveVal(get_concepts_table()),
-      monthly_counts = get_monthly_counts(),
-      selected_dates = reactive_dates
-    ),
+    args = list(selected_dates = reactive_dates),
     {
       replacement <- as.double(Sys.getenv("LOW_FREQUENCY_REPLACEMENT"))
 
