@@ -23,7 +23,7 @@ monthly_count_plot <- function(monthly_counts, plot_title) {
 
   date <- person_count <- NULL
   ggplot(monthly_counts, aes(x = date, y = person_count)) +
-    geom_bar(stat = "identity") +
+    geom_bar(stat = "identity", fill = "dodgerblue") +
     ggtitle(plot_title) +
     xlab("Month") +
     ylab("Number of records")
