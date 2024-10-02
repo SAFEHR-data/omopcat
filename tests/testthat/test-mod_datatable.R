@@ -27,7 +27,7 @@ test_that("datatable server works", {
       selected_dates(c("2020-01-01", "2020-12-31"))
       session$flushReact()
       expect_equal(nrow(concepts_with_counts()), 4)
-      expect_true(all(concepts_with_counts()$records > 0))
+      expect_true(all(concepts_with_counts()$total_records > 0))
     }
   )
 })
@@ -39,8 +39,9 @@ test_that("Low frequencies are replaced in the concepts table", {
     {
       replacement <- as.double(Sys.getenv("LOW_FREQUENCY_REPLACEMENT"))
 
-      expect_true(all(concepts_with_counts()$records >= replacement))
-      expect_true(all(concepts_with_counts()$patients >= replacement))
+      expect_true(all(concepts_with_counts()$total_records >= replacement))
+      expect_true(all(concepts_with_counts()$mean_persons >= replacement))
+      expect_true(all(concepts_with_counts()$mean_records_per_person >= replacement))
     }
   )
 })
@@ -58,18 +59,23 @@ test_that("module ui works", {
 test_that("Adding records and patients counts to concepts table works", {
   concepts_with_counts <- join_counts_to_concepts(mock_selection_data, mock_monthly_counts, selected_dates)
 
-  expect_in(c("concept_id", "concept_name", "records", "patients"), names(concepts_with_counts))
+  expect_in(
+    c("concept_id", "concept_name", "total_records", "mean_persons", "mean_records_per_person"),
+    names(concepts_with_counts)
+  )
   expect_equal(nrow(concepts_with_counts), 3)
-  expect_equal(concepts_with_counts$records, c(100, 200, 300))
-  expect_equal(concepts_with_counts$patients, c(10, 20, 30))
+  expect_equal(concepts_with_counts$total_records, c(100, 200, 300))
+  expect_equal(concepts_with_counts$mean_persons, c(10, 10, 10))
+  expect_equal(concepts_with_counts$mean_records_per_person, c(10, 10, 10))
 })
 
 test_that("Added counts depends on selected dates", {
   selected_dates <- c("2019-01-01", "2019-12-31")
   concepts_with_counts <- join_counts_to_concepts(mock_selection_data, mock_monthly_counts, selected_dates)
 
-  expect_equal(concepts_with_counts$records, c(100, 100, 100))
-  expect_equal(concepts_with_counts$patients, c(10, 10, 10))
+  expect_equal(concepts_with_counts$total_records, c(100, 100, 100))
+  expect_equal(concepts_with_counts$mean_persons, c(10, 10, 10))
+  expect_equal(concepts_with_counts$mean_records_per_person, c(10, 10, 10))
 })
 
 test_that("Only concepts with data for the selected date range are kept", {
