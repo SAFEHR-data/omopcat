@@ -38,12 +38,14 @@ mod_datatable_server <- function(id, selected_dates = NULL) {
       join_counts_to_concepts(all_concepts, monthly_counts, selected_dates()) |>
         # Handle low frequencies
         mutate(
-          records = replace_low_frequencies(.data$records),
-          patients = replace_low_frequencies(.data$patients)
+          total_records = replace_low_frequencies(.data$total_records),
+          mean_persons = replace_low_frequencies(.data$mean_persons),
+          mean_records_per_person = replace_low_frequencies(.data$mean_records_per_person)
         ) |>
         # Reorder and select the columns we want to display
         dplyr::select(
-          "concept_id", "concept_name", "records", "patients",
+          "concept_id", "concept_name",
+          "total_records", "mean_persons", "mean_records_per_person",
           "domain_id", "vocabulary_id", "concept_class_id"
         )
     })
@@ -64,8 +66,9 @@ join_counts_to_concepts <- function(concepts, monthly_counts, selected_dates) {
     filter_dates(selected_dates) |>
     dplyr::group_by(.data$concept_id) |>
     dplyr::summarise(
-      records = sum(.data$record_count),
-      patients = round(sum(.data$record_count) / mean(.data$records_per_person))
+      total_records = sum(.data$record_count),
+      mean_persons = mean(.data$person_count, na.rm = TRUE),
+      mean_records_per_person = mean(.data$records_per_person, na.rm = TRUE)
     )
   # Use inner_join so we only keep concepts for which we have counts in the selected dates
   dplyr::inner_join(concepts, summarised_counts, by = "concept_id")
