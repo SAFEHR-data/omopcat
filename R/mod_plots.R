@@ -40,9 +40,10 @@ mod_plots_server <- function(id, selected_concept, selected_dates) {
     ## Filter data based on selected concept and date range
     monthly_counts <- reactive({
       req(length(selected_concept_name()) > 0)
+      req(selected_dates)
       get_monthly_counts() |>
         dplyr::filter(.data$concept_id == selected_concept_id()) |>
-        .filter_dates(selected_dates())
+        filter_dates(selected_dates())
     })
 
     summary_stats <- reactive({
@@ -61,16 +62,4 @@ mod_plots_server <- function(id, selected_concept, selected_dates) {
       summary_stat_plot(summary_stats(), selected_concept_name())
     })
   })
-}
-
-
-.filter_dates <- function(x, date_range) {
-  date_range <- as.Date(date_range)
-  if (date_range[2] < date_range[1]) {
-    stop("Invalid date range, end date is before start date")
-  }
-
-  dates <- lubridate::make_date(year = x$date_year, month = x$date_month)
-  keep_dates <- dplyr::between(dates, date_range[1], date_range[2])
-  dplyr::filter(x, keep_dates)
 }

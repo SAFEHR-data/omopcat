@@ -40,6 +40,12 @@ test_that("Data getters fail in production if data directory does not exist", {
   expect_error(.read_parquet_table("concepts"), "Data directory '/i/dont/exist' not found")
 })
 
+test_that("concept_id is always read in as integer", {
+  expect_type(get_concepts_table()$concept_id, "integer")
+  expect_type(get_monthly_counts()$concept_id, "integer")
+  expect_type(get_summary_stats()$concept_id, "integer")
+})
+
 # Check that low-frequency monthly counts are well processed
 # (by removing values equal to 0 and
 # by replacing values if they are below the threshold)
