@@ -21,8 +21,7 @@ monthly_count_plot <- function(monthly_counts, plot_title) {
 
   monthly_counts$date <- .convert_to_date(monthly_counts$date_year, monthly_counts$date_month)
 
-  date <- person_count <- NULL
-  ggplot(monthly_counts, aes(x = date, y = person_count)) +
+  ggplot(monthly_counts, aes(x = .data$date, y = .data$person_count)) +
     geom_bar(stat = "identity", fill = "dodgerblue") +
     ggtitle(plot_title) +
     xlab("Month") +

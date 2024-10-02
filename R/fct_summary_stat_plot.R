@@ -37,15 +37,14 @@ summary_stat_plot <- function(summary_stats, plot_title) {
 stat_numeric_plot <- function(summary_stats, plot_title) {
   processed_stats <- .process_numeric_stats(summary_stats)
 
-  mean <- sd <- concept_id <- NULL
-  ggplot(processed_stats, aes(x = factor(concept_id))) +
+  ggplot(processed_stats, aes(x = factor(.data$concept_id))) +
     geom_boxplot(
       aes(
-        lower = mean - sd,
-        upper = mean + sd,
-        middle = mean,
-        ymin = mean - 3 * sd,
-        ymax = mean + 3 * sd
+        lower = .data$mean - .data$sd,
+        upper = .data$mean + .data$sd,
+        middle = .data$mean,
+        ymin = .data$mean - 3 * .data$sd,
+        ymax = .data$mean + 3 * .data$sd
       ),
       stat = "identity"
     ) +
@@ -85,9 +84,8 @@ stat_categorical_plot <- function(summary_stats, plot_title) {
     .desc = TRUE
   )
 
-  value_as_string <- value_as_number <- NULL
-  ggplot(summary_stats, aes(value_as_string, value_as_number)) +
-    geom_col(aes(fill = value_as_string), show.legend = FALSE) +
+  ggplot(summary_stats, aes(.data$value_as_string, .data$value_as_number)) +
+    geom_col(aes(fill = .data$value_as_string), show.legend = FALSE) +
     labs(x = "Category", y = "Frequency") +
     ggtitle(plot_title)
 }
