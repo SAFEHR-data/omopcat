@@ -11,12 +11,12 @@ test_that("mod_plots_server reacts to changes in the selected concept", {
       expect_true(grepl(id, ns("")))
       expect_true(grepl("test", ns("test")))
 
-      selected_row <- list(concept_id = 3003573, concept_name = "test")
+      selected_row <- list(concept_id = 3003573L, concept_name = "test")
       mock_concept_row(selected_row) # update reactive value
       session$flushReact()
       expect_identical(unique(summary_stats()$concept_id), selected_row$concept_id)
 
-      selected_row2 <- list(concept_id = 4276526, concept_name = "test")
+      selected_row2 <- list(concept_id = 4276526L, concept_name = "test")
       mock_concept_row(selected_row2) # update reactive value
       session$flushReact()
       expect_identical(unique(summary_stats()$concept_id), selected_row2$concept_id)
@@ -34,7 +34,7 @@ test_that("mod_plots_server reacts to changes in the selected date range", {
       expect_true(grepl(id, ns("")))
       expect_true(grepl("test", ns("test")))
 
-      mock_concept_row(list(concept_id = 4092281, concept_name = "test"))
+      mock_concept_row(list(concept_id = 4092281L, concept_name = "test"))
 
       selected_dates <- c("2019-01-01", "2019-12-31")
       mock_date_range(selected_dates)
@@ -58,13 +58,13 @@ test_that("Date filtering works as expected", {
 
   # Test boundary dates, we only care up to the month level
   selected_dates <- c("2019-04-01", "2020-05-01")
-  expect_equal(nrow(.filter_dates(mock_data, selected_dates)), 3)
+  expect_equal(nrow(filter_dates(mock_data, selected_dates)), 3)
 
   # This checks a previous bug where a row with date_month larger than the date range months
   # would always get removed while it should be kept in case the year is within the range
   # e.g. 2019-04 should be kept when the range is 2019-01 to 2020-01
   selected_dates2 <- c("2019-01-01", "2020-01-01")
-  expect_equal(nrow(.filter_dates(mock_data, selected_dates2)), 1)
+  expect_equal(nrow(filter_dates(mock_data, selected_dates2)), 1)
 })
 
 test_that("mod_plots_server fails when input is missing", {

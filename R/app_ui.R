@@ -75,7 +75,10 @@ golem_add_external_resources <- function() {
 .low_frequency_disclaimer <- function() {
   tags$div(
     class = "alert alert-warning",
-    "Note: to avoid identifiability of the data, we convert all `records_per_person` and `person_count`",
-    glue::glue("values below {Sys.getenv('LOW_FREQUENCY_THRESHOLD')} to {Sys.getenv('LOW_FREQUENCY_REPLACEMENT')}.")
+    glue::glue(
+      "Note: to ensure patients are not identifiable, counts",
+      " below {Sys.getenv('LOW_FREQUENCY_THRESHOLD')}",
+      " are converted to {Sys.getenv('LOW_FREQUENCY_REPLACEMENT')}."
+    )
   )
 }
