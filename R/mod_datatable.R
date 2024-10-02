@@ -16,22 +16,21 @@ mod_datatable_ui <- function(id) {
 
 #' datatable Server Functions
 #'
-#' @param data A reactive data.frame containing the data to be displayed
+#' @description Displays all available concepts in a searchable datatable.
 #'
 #' @return The selected row as a reactive object
 #'
 #' @noRd
 #' @importFrom dplyr group_by summarise
-mod_datatable_server <- function(id, data) {
-  stopifnot(is.reactive(data))
+mod_datatable_server <- function(id) {
+  all_concepts <- get_concepts_table()
 
   moduleServer(id, function(input, output, session) {
-    req(data)
-    output$datatable <- DT::renderDT(data(), selection = list(
+    output$datatable <- DT::renderDT(all_concepts, selection = list(
       mode = "single",
       selected = 1,
       target = "row"
     ))
-    reactive(data()[input$datatable_rows_selected, ])
+    reactive(all_concepts[input$datatable_rows_selected, ])
   })
 }
