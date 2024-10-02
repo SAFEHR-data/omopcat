@@ -76,8 +76,8 @@ join_counts_to_concepts <- function(concepts, monthly_counts, selected_dates) {
     dplyr::group_by(.data$concept_id) |>
     dplyr::summarise(
       total_records = sum(.data$record_count),
-      mean_persons = mean(.data$person_count, na.rm = TRUE),
-      mean_records_per_person = mean(.data$records_per_person, na.rm = TRUE)
+      mean_persons = round(mean(.data$person_count, na.rm = TRUE)),
+      mean_records_per_person = round(mean(.data$records_per_person, na.rm = TRUE))
     )
   # Use inner_join so we only keep concepts for which we have counts in the selected dates
   dplyr::inner_join(concepts, summarised_counts, by = "concept_id")
