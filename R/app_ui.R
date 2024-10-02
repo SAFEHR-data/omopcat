@@ -28,10 +28,7 @@ app_ui <- function(request) {
       nav_panel(
         title = "Concepts",
         card(mod_datatable_ui("concepts")),
-        layout_columns(
-          card(mod_plots_ui("monthly_counts")),
-          card(mod_plots_ui("summary_stats"))
-        ),
+        mod_plots_ui("plots"),
         .low_frequency_disclaimer()
       ),
       nav_panel(
