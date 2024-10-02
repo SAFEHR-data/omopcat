@@ -32,24 +32,25 @@ summary_stat_plot <- function(summary_stats, plot_title) {
 #'
 #' @return A `ggplot2` object.
 #'
-#' @importFrom ggplot2 ggplot aes geom_boxplot
+#' @importFrom ggplot2 ggplot aes geom_boxplot theme
 #' @noRd
 stat_numeric_plot <- function(summary_stats, plot_title) {
   processed_stats <- .process_numeric_stats(summary_stats)
 
-  ggplot(processed_stats, aes(x = factor(.data$concept_id))) +
+  ggplot(processed_stats, aes(x = factor(.data$concept_id), fill = factor(.data$concept_id))) +
     geom_boxplot(
       aes(
         lower = .data$mean - .data$sd,
         upper = .data$mean + .data$sd,
         middle = .data$mean,
         ymin = .data$mean - 3 * .data$sd,
-        ymax = .data$mean + 3 * .data$sd
+        ymax = .data$mean + 3 * .data$sd,
       ),
       stat = "identity"
     ) +
     xlab(NULL) +
-    ggtitle(plot_title)
+    ggtitle(plot_title) +
+    theme(legend.position = "none")
 }
 
 #' stat_categorical_plot
@@ -91,10 +92,6 @@ stat_categorical_plot <- function(summary_stats, plot_title) {
 }
 
 .process_numeric_stats <- function(summary_stats) {
-  # We expect only single concept ID at this point
-  # NOTE: this might change when we support bundles of concepts, in which case we might want to
-  # display the entire batch in one plot
-  stopifnot("Expecting a single concept ID" = length(unique(summary_stats$concept_id)) == 1)
   stopifnot(c("concept_id", "summary_attribute", "value_as_number") %in% names(summary_stats))
 
   tidyr::pivot_wider(summary_stats,
