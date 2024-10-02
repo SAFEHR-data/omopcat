@@ -13,7 +13,13 @@ mod_plots_ui <- function(id) {
   tagList(
     layout_columns(
       card(plotOutput(ns("monthly_counts")), height = 250),
-      card(plotOutput(ns("summary_stats")), height = 250)
+      card(
+        navset_card_underline(
+          nav_panel("Numeric concepts", plotOutput(ns("numeric_stats"))),
+          nav_panel("Categorical concepts", plotOutput(ns("categorical_stats"))),
+        ),
+        height = 250
+      )
     )
   )
 }
@@ -59,11 +65,19 @@ mod_plots_server <- function(id, selected_concepts, selected_dates) {
       )
     })
 
-    output$summary_stats <- renderPlot({
+    output$numeric_stats <- renderPlot({
       req(nrow(summary_stats()) > 0)
-      summary_stat_plot(
+      stat_numeric_plot(
         summary_stats(),
-        plot_title = "Summary Statistics for the selected concepts"
+        plot_title = "Summary Statistics for the numeric concepts"
+      )
+    })
+
+    output$categorical_stats <- renderPlot({
+      req(nrow(summary_stats()) > 0)
+      stat_categorical_plot(
+        summary_stats(),
+        plot_title = "Summary Statistics for the categorical concepts"
       )
     })
   })
