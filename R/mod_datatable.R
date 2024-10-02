@@ -10,6 +10,7 @@
 mod_datatable_ui <- function(id) {
   ns <- NS(id)
   tagList(
+    actionButton(ns("clear_rows"), "Clear selected rows"),
     DT::DTOutput(ns("datatable"))
   )
 }
@@ -92,9 +93,12 @@ mod_update_datatable_selection_server <- function(id, bundle_concepts) {
       selected_concept_ids <- bundle_concepts()
       match(selected_concept_ids, all_concepts$concept_id)
     })
+    datatable_proxy <- DT::dataTableProxy("datatable", session = session, deferUntilFlush = FALSE)
     observeEvent(row_indices(), {
-      datatable_proxy <- DT::dataTableProxy("datatable", session = session)
-      DT::selectRows(datatable_proxy, row_indices())
+      DT::selectRows(datatable_proxy, selected = row_indices())
+    })
+    observeEvent(input$clear_rows, {
+      DT::selectRows(datatable_proxy, selected = NULL)
     })
   })
 }
