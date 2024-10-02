@@ -34,21 +34,21 @@ mod_plots_server <- function(id, selected_concepts, selected_dates) {
   stopifnot(is.reactive(selected_dates))
 
   moduleServer(id, function(input, output, session) {
-    selected_concept_id <- reactive(selected_concepts()$concept_id)
+    selected_concept_ids <- reactive(selected_concepts()$concept_id)
 
     ## Filter data based on selected concept and date range
     monthly_counts <- reactive({
-      req(length(selected_concept_id()) > 0)
+      req(length(selected_concept_ids()) > 0)
       req(selected_dates)
       get_monthly_counts() |>
-        dplyr::filter(.data$concept_id == selected_concept_id()) |>
+        dplyr::filter(.data$concept_id %in% selected_concept_ids()) |>
         filter_dates(selected_dates())
     })
 
     summary_stats <- reactive({
-      req(length(selected_concept_id()) > 0)
+      req(length(selected_concept_ids()) > 0)
       get_summary_stats() |>
-        dplyr::filter(.data$concept_id == selected_concept_id())
+        dplyr::filter(.data$concept_id %in% selected_concept_ids())
     })
 
     output$monthly_counts <- renderPlot({
