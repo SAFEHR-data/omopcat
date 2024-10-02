@@ -69,13 +69,9 @@ stat_numeric_plot <- function(summary_stats, plot_title) {
 #'
 #' @return A `ggplot2` object.
 #'
-#' @importFrom ggplot2 ggplot aes geom_col labs
+#' @importFrom ggplot2 ggplot aes geom_col labs facet_wrap vars
 #' @noRd
 stat_categorical_plot <- function(summary_stats, plot_title) {
-  # We expect only single concept ID at this point
-  # NOTE: this might change when we support bundles of concepts, in which case we might want to
-  # display the entire batch in one plot
-  stopifnot("Expecting a single concept ID" = length(unique(summary_stats$concept_id)) == 1)
   stopifnot(c("concept_id", "value_as_string", "value_as_number") %in% names(summary_stats))
 
   summary_stats$value_as_string <- as.factor(summary_stats$value_as_string)
@@ -88,7 +84,8 @@ stat_categorical_plot <- function(summary_stats, plot_title) {
   ggplot(summary_stats, aes(.data$value_as_string, .data$value_as_number)) +
     geom_col(aes(fill = .data$value_as_string), show.legend = FALSE) +
     labs(x = "Category", y = "Frequency") +
-    ggtitle(plot_title)
+    ggtitle(plot_title) +
+    facet_wrap(vars(.data$concept_name), scales = "free")
 }
 
 .process_numeric_stats <- function(summary_stats) {
