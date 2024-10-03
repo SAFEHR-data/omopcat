@@ -20,9 +20,9 @@ app_ui <- function(request) {
       ),
       nav_panel(
         title = "Dashboard",
+        .low_frequency_disclaimer(),
         card(mod_datatable_ui("concepts")),
-        mod_plots_ui("plots"),
-        .low_frequency_disclaimer()
+        mod_plots_ui("plots")
       ),
       nav_panel(
         title = "Export",
