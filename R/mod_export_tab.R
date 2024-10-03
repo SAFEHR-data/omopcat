@@ -1,3 +1,20 @@
+#' export_tab UI Function
+#'
+#' UI for the export tab.
+#'
+#' @param id,input,output,session Internal parameters for {shiny}.
+#'
+#' @noRd
+#'
+#' @importFrom shiny NS tagList
+mod_export_tab_ui <- function(id) {
+  ns <- NS(id)
+  tagList(
+    mod_exportsummary_ui(ns("exportsummary")),
+    mod_export_ui(ns("export"))
+  )
+}
+
 #' export datatable UI Function
 #'
 #' @description A shiny Module.
@@ -28,21 +45,18 @@ mod_exportsummary_ui <- function(namespace) {
   )
 }
 
-#' export_tab UI Function
+#' export_tab Server Functions
 #'
-#' UI for the export tab.
-#'
-#' @param id,input,output,session Internal parameters for {shiny}.
+#' @param data A reactive data.frame containing the data to be exported
 #'
 #' @noRd
-#'
-#' @importFrom shiny NS tagList
-mod_export_tab_ui <- function(id) {
-  ns <- NS(id)
-  tagList(
-    mod_exportsummary_ui(ns("exportsummary")),
-    mod_export_ui(ns("export"))
-  )
+mod_export_tab_server <- function(id, data) {
+  stopifnot(is.reactive(data))
+
+  moduleServer(id, function(input, output, session) {
+    mod_exportsummary_server("exportsummary", data)
+    mod_export_server("export", data)
+  })
 }
 
 #' datatable Server Functions
@@ -73,19 +87,5 @@ mod_exportsummary_server <- function(id, data) {
         group_by(.data$vocabulary_id) |>
         summarise(concepts = n_distinct(.data$concept_id))
     )
-  })
-}
-
-#' export_tab Server Functions
-#'
-#' @param data A reactive data.frame containing the data to be exported
-#'
-#' @noRd
-mod_export_tab_server <- function(id, data) {
-  stopifnot(is.reactive(data))
-
-  moduleServer(id, function(input, output, session) {
-    mod_exportsummary_server("exportsummary", data)
-    mod_export_server("export", data)
   })
 }
