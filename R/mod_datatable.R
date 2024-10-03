@@ -21,7 +21,6 @@ mod_datatable_ui <- function(id) {
 #' date range. The datatable allows the user to select a concept by clicking its row.
 #' The selected row is returned as a reactive object.
 #'
-#' @param monthly_counts A data frame containing the monthly counts of records per concept
 #' @param selected_dates A reactive object containing the selected dates
 #'
 #' @return The selected row as a reactive object
@@ -84,6 +83,16 @@ join_counts_to_concepts <- function(concepts, monthly_counts, selected_dates) {
   dplyr::inner_join(concepts, summarised_counts, by = "concept_id")
 }
 
+#' update_datatable_selection Server Function
+#'
+#' @description Updates the selected rows in the datatable based on the concept IDs
+#' provided. This is used to automatically select rows when a user selects concepts
+#' in another part of the app.
+#'
+#' @param bundle_concepts A reactive object containing the concept IDs to select as
+#' an integer vector.
+#'
+#' @noRd
 mod_update_datatable_selection_server <- function(id, bundle_concepts) {
   stopifnot(is.reactive(bundle_concepts))
   all_concepts <- get_concepts_table()
