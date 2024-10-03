@@ -20,15 +20,21 @@ mod_datatable_ui <- function(id) {
 #' @description Generates a `DT::datatable` with the concepts and their counts for the selected
 #' date range. The datatable allows the user to select a concept by clicking its row.
 #' The selected row is returned as a reactive object.
+#' Updates the selected rows in the datatable based on the concept IDs
+#' provided. This is used to automatically select rows when a user selects concepts
+#' in another part of the app.
 #'
 #' @param selected_dates A reactive object containing the selected dates
+#' @param bundle_concepts A reactive object containing the concept IDs to select as
+#' an integer vector.
 #'
 #' @return The selected row as a reactive object
 #'
 #' @noRd
 #' @importFrom dplyr group_by summarise
-mod_datatable_server <- function(id, selected_dates) {
+mod_datatable_server <- function(id, selected_dates, bundle_concepts) {
   stopifnot(is.reactive(selected_dates))
+  stopifnot(is.reactive(bundle_concepts))
 
   all_concepts <- get_concepts_table()
   monthly_counts <- get_monthly_counts()
@@ -64,6 +70,19 @@ mod_datatable_server <- function(id, selected_dates) {
       selection = list(mode = "multiple", selected = 1, target = "row")
     )
 
+    ## Automatically select rows in datatable when a bundle is selected
+    row_indices <- reactive({
+      selected_concept_ids <- bundle_concepts()
+      match(selected_concept_ids, concepts_with_counts()$concept_id)
+    })
+    datatable_proxy <- DT::dataTableProxy("datatable", session = session, deferUntilFlush = FALSE)
+    observeEvent(row_indices(), {
+      DT::selectRows(datatable_proxy, selected = row_indices())
+    })
+    observeEvent(input$clear_rows, {
+      DT::selectRows(datatable_proxy, selected = NULL) # nocov
+    })
+
     reactive(concepts_with_counts()[input$datatable_rows_selected, ])
   })
 }
@@ -81,33 +100,4 @@ join_counts_to_concepts <- function(concepts, monthly_counts, selected_dates) {
     )
   # Use inner_join so we only keep concepts for which we have counts in the selected dates
   dplyr::inner_join(concepts, summarised_counts, by = "concept_id")
-}
-
-#' update_datatable_selection Server Function
-#'
-#' @description Updates the selected rows in the datatable based on the concept IDs
-#' provided. This is used to automatically select rows when a user selects concepts
-#' in another part of the app.
-#'
-#' @param bundle_concepts A reactive object containing the concept IDs to select as
-#' an integer vector.
-#'
-#' @noRd
-mod_update_datatable_selection_server <- function(id, bundle_concepts) {
-  stopifnot(is.reactive(bundle_concepts))
-  all_concepts <- get_concepts_table()
-
-  moduleServer(id, function(input, output, session) {
-    row_indices <- reactive({
-      selected_concept_ids <- bundle_concepts()
-      match(selected_concept_ids, all_concepts$concept_id)
-    })
-    datatable_proxy <- DT::dataTableProxy("datatable", session = session, deferUntilFlush = FALSE)
-    observeEvent(row_indices(), {
-      DT::selectRows(datatable_proxy, selected = row_indices())
-    })
-    observeEvent(input$clear_rows, {
-      DT::selectRows(datatable_proxy, selected = NULL)
-    })
-  })
 }
