@@ -39,7 +39,6 @@ mod_select_bundle_ui <- function(id) {
 #'
 #' @importFrom rlang .data
 mod_select_bundle_server <- function(id) {
-  all_concepts <- get_concepts_table()
   all_bundles <- all_bundles()
 
   moduleServer(id, function(input, output, session) {
