@@ -1,12 +1,12 @@
 concept_id,concept_name,summary_attribute,value_as_number,value_as_string
-3003573,C Ag [Presence] on Red Blood Cells,frequency,2,Not present
+3003573,C Ag [Presence] on Red Blood Cells,frequency,2.5,Not present
 3005673,Hemoglobin A1c/Hemoglobin.total in Blood by HPLC,mean,123.66666666666669,NA
 3005673,Hemoglobin A1c/Hemoglobin.total in Blood by HPLC,sd,9.993331109628397,NA
-3021714,Do sup(a) Ag [Presence] on Red Blood Cells,frequency,1,NA
-3021714,Do sup(a) Ag [Presence] on Red Blood Cells,frequency,1,NA
+3021714,Do sup(a) Ag [Presence] on Red Blood Cells,frequency,2.5,NA
+3021714,Do sup(a) Ag [Presence] on Red Blood Cells,frequency,2.5,NA
 3022250,Lactate dehydrogenase [Enzymatic activity/volume] in Serum or Plasma by Lactate to pyruvate reaction,mean,128.83333333333334,NA
 3022250,Lactate dehydrogenase [Enzymatic activity/volume] in Serum or Plasma by Lactate to pyruvate reaction,sd,23.65938855225694,NA
-4092281,Ex-cigarette smoker,frequency,1,Well nourished
+4092281,Ex-cigarette smoker,frequency,2.5,Well nourished
 4276526,Cigarette smoker,mean,12.8,NA
 4276526,Cigarette smoker,sd,3.469870314579495,NA
 4298794,Smoker,mean,5.666666666666667,NA
