@@ -27,10 +27,9 @@ mod_export_tab_ui <- function(id) {
 #' @importFrom bslib card page_fluid layout_columns
 mod_exportsummary_ui <- function(namespace) {
   ns <- NS(namespace)
-  page_fluid(
+  tagList(
     p(
-      textOutput(ns("row_count"), inline = TRUE),
-      span("concepts have been selected for export:"),
+      textOutput(ns("concept_count"))
     ),
     layout_columns(
       card(tableOutput(ns("by_domain"))),
@@ -40,7 +39,8 @@ mod_exportsummary_ui <- function(namespace) {
         sm = c(7),
         md = c(6, 6),
         lg = c(4, 4, 4)
-      )
+      ),
+      max_height = "200px"
     )
   )
 }
@@ -71,7 +71,11 @@ mod_exportsummary_server <- function(id, data) {
   stopifnot(is.reactive(data))
 
   moduleServer(id, function(input, output, session) {
-    output$row_count <- renderText(n_distinct(data()$concept_id))
+    output$concept_count <- renderText(
+      cli::pluralize(
+        "{n_distinct(data()$concept_id)} concept{?s} {?has/have} been selected for export:"
+      )
+    )
     output$by_domain <- renderTable(
       data() |>
         group_by(.data$domain_id) |>
