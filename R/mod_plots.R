@@ -36,8 +36,7 @@ mod_plots_server <- function(id, selected_concept, selected_dates) {
   ## Set default theme for ggplot2
   ggplot2::theme_set(
     ggplot2::theme_minimal(
-      base_size = 16,
-      base_family = "sans"
+      base_size = 16
     )
   )
 
