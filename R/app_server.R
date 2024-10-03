@@ -7,6 +7,10 @@
 app_server <- function(input, output, session) {
   # Get the input tables
   concepts_table <- mod_select_bundle_server("select_bundle")
+  selected_bundle_id <- mod_bundles_summary_server("bundles")
+
+  # Updated the selected bundle when a row is selected in the bundles table
+  mod_update_select_bundle_server("select_bundle", selected_bundle_id)
 
   # Filter concepts table based on user-selected concepts, showing all by default
   selected_data <- mod_select_concepts_server("select_concepts", concepts_table)

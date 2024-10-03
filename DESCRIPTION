@@ -31,7 +31,8 @@ Imports:
     cli,
     nanoparquet,
     rlang,
-    omopbundles (>= 0.1.1)
+    omopbundles (>= 0.1.1),
+    purrr
 Suggests:
     devtools,
     usethis,
