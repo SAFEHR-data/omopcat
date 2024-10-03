@@ -41,6 +41,10 @@ mod_exportsummary_ui <- function(namespace) {
         lg = c(4, 4, 4)
       ),
       max_height = "200px"
+    ),
+    card(
+      card_header("Preview of the data to be exported"),
+      DT::DTOutput(ns("export_data"))
     )
   )
 }
@@ -90,6 +94,12 @@ mod_exportsummary_server <- function(id, data) {
       data() |>
         group_by(.data$vocabulary_id) |>
         summarise(concepts = n_distinct(.data$concept_id))
+    )
+    output$export_data <- DT::renderDT(
+      data(),
+      selection = "none",
+      rownames = FALSE,
+      options = list(pageLength = 5)
     )
   })
 }
