@@ -19,7 +19,7 @@ monthly_count_plot <- function(monthly_counts) {
 
   monthly_counts$date <- .convert_to_date(monthly_counts$date_year, monthly_counts$date_month)
 
-  ggplot(monthly_counts, aes(x = .data$date, y = .data$person_count)) +
+  ggplot(monthly_counts, aes(x = .data$date, y = .data$record_count)) +
     geom_bar(aes(fill = .data$concept_name), stat = "identity") +
     xlab("Month") +
     ylab("Number of records") +
