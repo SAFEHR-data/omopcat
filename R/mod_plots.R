@@ -14,16 +14,14 @@ mod_plots_ui <- function(id) {
     layout_columns(
       card(
         card_header("Distribution of Monthly Records for the selected concepts"),
-        plotly::plotlyOutput(ns("monthly_counts")),
-        height = 250
+        plotly::plotlyOutput(ns("monthly_counts"))
       ),
       card(
         card_header("Summary Statistics for the selected concepts"),
         navset_card_underline(
           nav_panel("Numeric concepts", plotOutput(ns("numeric_stats"))),
           nav_panel("Categorical concepts", plotOutput(ns("categorical_stats"))),
-        ),
-        height = 250
+        )
       )
     )
   )
