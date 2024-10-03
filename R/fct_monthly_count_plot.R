@@ -11,7 +11,7 @@
 #'
 #' @return A ggplot2 object containing the bar plot, or `NULL` if no data is provided.
 #'
-#' @importFrom ggplot2 ggplot aes geom_bar ggtitle xlab ylab
+#' @importFrom ggplot2 ggplot aes geom_bar ggtitle xlab ylab theme labs
 #' @noRd
 monthly_count_plot <- function(monthly_counts) {
   stopifnot(is.data.frame(monthly_counts))
@@ -20,9 +20,11 @@ monthly_count_plot <- function(monthly_counts) {
   monthly_counts$date <- .convert_to_date(monthly_counts$date_year, monthly_counts$date_month)
 
   ggplot(monthly_counts, aes(x = .data$date, y = .data$person_count)) +
-    geom_bar(stat = "identity", fill = "dodgerblue") +
+    geom_bar(aes(fill = .data$concept_name), stat = "identity") +
     xlab("Month") +
-    ylab("Number of records")
+    ylab("Number of records") +
+    labs(fill = NULL) +
+    theme(legend.position = "none")
 }
 
 .convert_to_date <- function(date_year, date_month) {
