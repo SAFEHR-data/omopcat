@@ -48,14 +48,19 @@ get_monthly_counts <- function() {
 
 get_summary_stats <- function() {
   if (should_use_dev_data()) {
-    return(
-      readr::read_csv(
-        app_sys("dev_data", "omopcat_summary_stats.csv"),
-        col_types = readr::cols(concept_id = readr::col_integer())
-      )
+    out <- readr::read_csv(
+      app_sys("dev_data", "omopcat_summary_stats.csv"),
+      col_types = readr::cols(concept_id = readr::col_integer())
     )
+  } else {
+    out <- .read_parquet_table("omopcat_summary_stats")
   }
-  .read_parquet_table("omopcat_summary_stats")
+  dplyr::mutate(out,
+    value_as_number = ifelse(.data$summary_attribute == "frequency",
+      replace_low_frequencies(.data$value_as_number),
+      .data$value_as_number
+    )
+  )
 }
 
 filter_dates <- function(x, date_range) {
