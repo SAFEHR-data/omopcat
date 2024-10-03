@@ -39,3 +39,29 @@ test_that("select_bundle server can return all concepts", {
     expect_setequal(out(), get_concepts_table()$concept_id)
   })
 })
+
+# This is quite a trivial test, as it is not possible to check the effects of shiny::update*
+# functions with testServer. So this test just does the minimal checking whether the server
+# can run without errors.
+test_that("update_select_bundle server works", {
+  testServer(mod_update_select_bundle_server,
+    args = list(selected_bundle_id = reactiveVal()),
+    {
+      ns <- session$ns
+      # Pre-defined golem tests
+      expect_true(inherits(ns, "function"))
+      expect_true(grepl(id, ns("")))
+      expect_true(grepl("test", ns("test")))
+
+      # Set the selected bundle ID and check that it is returned by the select_bundle server
+      selected_bundle_id("smoking")
+      session$flushReact()
+
+      # The tests below don't actually check anything meaningful
+      expect_no_error({
+        selection <- mod_select_bundle_server("test")
+      })
+      expect_true(is.reactive(selection))
+    }
+  )
+})

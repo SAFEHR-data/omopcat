@@ -57,3 +57,23 @@ mod_select_bundle_server <- function(id) {
     })
   })
 }
+
+#' update_select_bundle server function
+#'
+#' @description Updates the selected bundle in the dropdown menu when the reactive
+#' input changes.
+#'
+#' @param selected_bundle_id A reactive character value containing the bundle ID
+#' to be selected in the dropdown menu.
+#'
+#' @noRd
+mod_update_select_bundle_server <- function(id, selected_bundle_id) {
+  stopifnot(is.reactive(selected_bundle_id))
+
+  moduleServer(id, function(input, output, session) {
+    observeEvent(selected_bundle_id(), {
+      req(selected_bundle_id())
+      updateSelectInput(session, "select_bundle", selected = selected_bundle_id())
+    })
+  })
+}

@@ -32,7 +32,8 @@ Imports:
     nanoparquet,
     rlang,
     omopbundles (>= 0.1.1),
-    plotly (>= 4.10.4)
+    plotly (>= 4.10.4),
+    purrr
 Suggests:
     devtools,
     usethis,
