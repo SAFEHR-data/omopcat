@@ -20,8 +20,8 @@ mod_plots_ui <- function(id) {
       card(
         card_header("Summary Statistics for the selected concepts"),
         navset_card_underline(
-          nav_panel("Numeric concepts", plotly::plotlyOutput(ns("numeric_stats"))),
-          nav_panel("Categorical concepts", plotly::plotlyOutput(ns("categorical_stats"))),
+          nav_panel("Numeric concepts", plotOutput(ns("numeric_stats"))),
+          nav_panel("Categorical concepts", plotOutput(ns("categorical_stats"))),
         ),
         height = 250
       )
@@ -67,12 +67,12 @@ mod_plots_server <- function(id, selected_concepts, selected_dates) {
       monthly_count_plot(monthly_counts())
     })
 
-    output$numeric_stats <- plotly::renderPlotly({
+    output$numeric_stats <- renderPlot({
       req(nrow(summary_stats()) > 0)
       stat_numeric_plot(summary_stats())
     })
 
-    output$categorical_stats <- plotly::renderPlotly({
+    output$categorical_stats <- renderPlot({
       req(nrow(summary_stats()) > 0)
       stat_categorical_plot(summary_stats())
     })
