@@ -29,14 +29,13 @@ test_that("module ui works", {
   }
 })
 
-test_that("select_bundle server can return all concepts", {
+test_that("select_bundle server can take 'none' as an option", {
   testServer(mod_select_bundle_server, {
     out <- session$getReturned()
-    session$setInputs(select_bundle = "all")
+    session$setInputs(select_bundle = "none")
 
     expect_true(is.reactive(out))
-    expect_type(out(), "integer")
-    expect_setequal(out(), get_concepts_table()$concept_id)
+    expect_null(out())
   })
 })
 

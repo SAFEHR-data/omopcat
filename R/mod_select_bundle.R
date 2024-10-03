@@ -14,13 +14,13 @@ mod_select_bundle_ui <- function(id) {
   stopifnot(c("id", "bundle_name") %in% names(bundles_table))
 
   ## Select bundles based on their ID but use the bundle name for display in the menu
-  bundle_choices <- c("all", bundles_table$id)
-  names(bundle_choices) <- c("All bundles", bundles_table$bundle_name)
+  bundle_choices <- c("none", bundles_table$id)
+  names(bundle_choices) <- c("(none selected)", bundles_table$bundle_name)
 
   tagList(
     selectInput(ns("select_bundle"), "Select bundle",
       choices = bundle_choices,
-      selected = "all"
+      selected = "none"
     )
   )
 }
@@ -46,8 +46,8 @@ mod_select_bundle_server <- function(id) {
     reactive({
       req(input$select_bundle)
 
-      if (input$select_bundle == "all") {
-        return(all_concepts$concept_id)
+      if (input$select_bundle == "none") {
+        return(NULL)
       }
 
       selected_bundle_id <- input$select_bundle
