@@ -38,6 +38,13 @@ mod_plots_server <- function(id, selected_concepts, selected_dates) {
   stopifnot(is.reactive(selected_concepts))
   stopifnot(is.reactive(selected_dates))
 
+  ## Set default theme for ggplot2
+  ggplot2::theme_set(
+    ggplot2::theme_minimal(
+      base_size = 16
+    )
+  )
+
   moduleServer(id, function(input, output, session) {
     selected_concept_ids <- reactive(selected_concepts()$concept_id)
 
