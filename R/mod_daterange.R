@@ -7,16 +7,16 @@
 #' @importFrom shiny NS tagList
 mod_date_range_ui <- function(id) {
   ns <- NS(id)
+  min_date <- as.Date("2019-04-01", "%Y-%m-%d")
+  max_date <- as.Date("2024-08-01", "%Y-%m-%d")
 
   tagList(
-    dateRangeInput(
+    sliderInput(
       ns("date_range"), "Date range",
-      min = as.Date("2019-04-01", "%Y-%m-%d"),
-      max = as.Date("2024-08-01", "%Y-%m-%d"),
-      start = as.Date("2019-04-01"),
-      end = as.Date("2024-08-01"),
-      startview = "decade",
-      format = "yyyy-mm",
+      min = min_date,
+      max = max_date,
+      value = c(min_date, max_date),
+      timeFormat = "%Y-%m"
     )
   )
 }
