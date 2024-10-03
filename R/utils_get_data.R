@@ -93,6 +93,7 @@ filter_dates <- function(x, date_range) {
   dplyr::mutate(
     df,
     records_per_person = replace_low_frequencies(.data$records_per_person),
-    person_count = replace_low_frequencies(.data$person_count)
+    person_count = replace_low_frequencies(.data$person_count),
+    record_count = replace_low_frequencies(.data$record_count)
   )
 }
