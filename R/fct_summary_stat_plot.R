@@ -12,7 +12,6 @@
 #'
 #' @return A `ggplot2` object or `NULL` if no numeric concepts are present.
 #'
-#' @importFrom ggplot2 ggplot aes geom_boxplot theme
 #' @noRd
 stat_numeric_plot <- function(summary_stats) {
   # Select only numeric concepts
@@ -54,7 +53,6 @@ stat_numeric_plot <- function(summary_stats) {
 #'
 #' @return A `ggplot2` object or `NULL` if no numeric concepts are present.
 #'
-#' @importFrom ggplot2 ggplot aes geom_col labs facet_wrap vars
 #' @noRd
 stat_categorical_plot <- function(summary_stats) {
   ## Select only categorical concepts
