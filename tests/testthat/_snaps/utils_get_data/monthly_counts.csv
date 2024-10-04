@@ -1,23 +1,23 @@
 concept_id,concept_name,date_year,date_month,record_count,person_count,records_per_person
-3003573,C Ag [Presence] on Red Blood Cells,2020,5,1,2.5,2.5
-3005673,Hemoglobin A1c/Hemoglobin.total in Blood by HPLC,2019,8,1,2.5,2.5
-3005673,Hemoglobin A1c/Hemoglobin.total in Blood by HPLC,2020,8,1,2.5,2.5
-3005673,Hemoglobin A1c/Hemoglobin.total in Blood by HPLC,2021,2,1,2.5,2.5
-3005673,Hemoglobin A1c/Hemoglobin.total in Blood by HPLC,2021,6,1,2.5,2.5
-3005673,Hemoglobin A1c/Hemoglobin.total in Blood by HPLC,2021,11,1,2.5,2.5
-3021714,Do sup(a) Ag [Presence] on Red Blood Cells,2020,11,1,2.5,2.5
-3021714,Do sup(a) Ag [Presence] on Red Blood Cells,2020,12,1,2.5,2.5
-3022250,Lactate dehydrogenase [Enzymatic activity/volume] in Serum or Plasma by Lactate to pyruvate reaction,2021,9,1,2.5,2.5
-3022250,Lactate dehydrogenase [Enzymatic activity/volume] in Serum or Plasma by Lactate to pyruvate reaction,2021,10,1,2.5,2.5
-3022250,Lactate dehydrogenase [Enzymatic activity/volume] in Serum or Plasma by Lactate to pyruvate reaction,2021,12,1,2.5,2.5
-3022250,Lactate dehydrogenase [Enzymatic activity/volume] in Serum or Plasma by Lactate to pyruvate reaction,2023,4,1,2.5,2.5
-4092281,Ex-cigarette smoker,2022,6,1,2.5,2.5
-4276526,Cigarette smoker,2021,5,1,2.5,2.5
-4276526,Cigarette smoker,2022,12,1,2.5,2.5
-4298794,Smoker,2019,2,1,2.5,2.5
-4298794,Smoker,2021,7,1,2.5,2.5
-40760007,HIV 1+2 Ab+HIV1 p24 Ag [Presence] in Serum or Plasma by Immunoassay,2019,9,1,2.5,2.5
-40762352,Hemoglobin A1c/Hemoglobin.total in Blood by IFCC protocol,2019,5,1,2.5,2.5
-40762352,Hemoglobin A1c/Hemoglobin.total in Blood by IFCC protocol,2019,10,1,2.5,2.5
-40762352,Hemoglobin A1c/Hemoglobin.total in Blood by IFCC protocol,2020,6,1,2.5,2.5
-40762352,Hemoglobin A1c/Hemoglobin.total in Blood by IFCC protocol,2021,10,1,2.5,2.5
+3003573,C Ag [Presence] on Red Blood Cells,2020,5,2.5,2.5,2.5
+3005673,Hemoglobin A1c/Hemoglobin.total in Blood by HPLC,2019,8,2.5,2.5,2.5
+3005673,Hemoglobin A1c/Hemoglobin.total in Blood by HPLC,2020,8,2.5,2.5,2.5
+3005673,Hemoglobin A1c/Hemoglobin.total in Blood by HPLC,2021,2,2.5,2.5,2.5
+3005673,Hemoglobin A1c/Hemoglobin.total in Blood by HPLC,2021,6,2.5,2.5,2.5
+3005673,Hemoglobin A1c/Hemoglobin.total in Blood by HPLC,2021,11,2.5,2.5,2.5
+3021714,Do sup(a) Ag [Presence] on Red Blood Cells,2020,11,2.5,2.5,2.5
+3021714,Do sup(a) Ag [Presence] on Red Blood Cells,2020,12,2.5,2.5,2.5
+3022250,Lactate dehydrogenase [Enzymatic activity/volume] in Serum or Plasma by Lactate to pyruvate reaction,2021,9,2.5,2.5,2.5
+3022250,Lactate dehydrogenase [Enzymatic activity/volume] in Serum or Plasma by Lactate to pyruvate reaction,2021,10,2.5,2.5,2.5
+3022250,Lactate dehydrogenase [Enzymatic activity/volume] in Serum or Plasma by Lactate to pyruvate reaction,2021,12,2.5,2.5,2.5
+3022250,Lactate dehydrogenase [Enzymatic activity/volume] in Serum or Plasma by Lactate to pyruvate reaction,2023,4,2.5,2.5,2.5
+4092281,Ex-cigarette smoker,2022,6,2.5,2.5,2.5
+4276526,Cigarette smoker,2021,5,2.5,2.5,2.5
+4276526,Cigarette smoker,2022,12,2.5,2.5,2.5
+4298794,Smoker,2019,2,2.5,2.5,2.5
+4298794,Smoker,2021,7,2.5,2.5,2.5
+40760007,HIV 1+2 Ab+HIV1 p24 Ag [Presence] in Serum or Plasma by Immunoassay,2019,9,2.5,2.5,2.5
+40762352,Hemoglobin A1c/Hemoglobin.total in Blood by IFCC protocol,2019,5,2.5,2.5,2.5
+40762352,Hemoglobin A1c/Hemoglobin.total in Blood by IFCC protocol,2019,10,2.5,2.5,2.5
+40762352,Hemoglobin A1c/Hemoglobin.total in Blood by IFCC protocol,2020,6,2.5,2.5,2.5
+40762352,Hemoglobin A1c/Hemoglobin.total in Blood by IFCC protocol,2021,10,2.5,2.5,2.5

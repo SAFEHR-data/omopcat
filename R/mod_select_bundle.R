@@ -14,13 +14,13 @@ mod_select_bundle_ui <- function(id) {
   stopifnot(c("id", "bundle_name") %in% names(bundles_table))
 
   ## Select bundles based on their ID but use the bundle name for display in the menu
-  bundle_choices <- c("all", bundles_table$id)
-  names(bundle_choices) <- c("All bundles", bundles_table$bundle_name)
+  bundle_choices <- c("none", bundles_table$id)
+  names(bundle_choices) <- c("(none selected)", bundles_table$bundle_name)
 
   tagList(
     selectInput(ns("select_bundle"), "Select bundle",
       choices = bundle_choices,
-      selected = "all"
+      selected = "none"
     )
   )
 }
@@ -33,28 +33,26 @@ mod_select_bundle_ui <- function(id) {
 #'
 #' @param bundles_table A data.frame containing the available bundles
 #'
-#' @return The concepts table for the selected bundle as a reactive data.frame.
+#' @return The concept IDs  for the selected bundle as a reactive.
 #'
 #' @noRd
 #'
 #' @importFrom rlang .data
 mod_select_bundle_server <- function(id) {
-  all_concepts <- get_concepts_table()
   all_bundles <- all_bundles()
 
   moduleServer(id, function(input, output, session) {
     reactive({
       req(input$select_bundle)
 
-      if (input$select_bundle == "all") {
-        return(all_concepts)
+      if (input$select_bundle == "none") {
+        return(NULL)
       }
 
       selected_bundle_id <- input$select_bundle
       domain <- all_bundles[all_bundles$id == selected_bundle_id, ]$domain
-      bundle_concepts <- get_bundle_concepts(selected_bundle_id, domain)
-      all_concepts |>
-        dplyr::filter(.data$concept_id %in% bundle_concepts)
+
+      return(get_bundle_concepts(selected_bundle_id, domain))
     })
   })
 }

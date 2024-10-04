@@ -53,7 +53,8 @@ test_that("Test low frequency stats replacement for monthly counts", {
   mock_monthly_counts <- data.frame(
     concept_id = c(1, 2, 3, 4, 5, 6, 7),
     person_count = c(0, 0, 1000, 1000, 1, 1000, 1),
-    records_per_person = c(0, 1000, 0, 1000, 1000, 1, 1)
+    records_per_person = c(0, 1000, 0, 1000, 1000, 1, 1),
+    record_count = c(0, 1000, 0, 1000, 1000, 1, 1)
   )
   replacement <- as.double(Sys.getenv("LOW_FREQUENCY_REPLACEMENT"))
   results <- .manage_low_frequency(mock_monthly_counts)
@@ -67,4 +68,9 @@ test_that("Test low frequency stats replacement for monthly counts", {
   expect_equal(sum(results$records_per_person == 1), 0)
   expect_equal(sum(results$records_per_person == replacement), 2)
   expect_equal(sum(results$records_per_person == 1000), 2)
+
+  expect_equal(sum(results$record_count == 0), 0)
+  expect_equal(sum(results$record_count == 1), 0)
+  expect_equal(sum(results$record_count == replacement), 2)
+  expect_equal(sum(results$record_count == 1000), 2)
 })

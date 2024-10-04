@@ -5,7 +5,7 @@ test_that("monthly_count_plot correctly parses dates", {
     expected_data$date_year, "-", expected_data$date_month, "-01"
   ))
 
-  p <- monthly_count_plot(mock_counts, plot_title = "test")
+  p <- monthly_count_plot(mock_counts)
   expect_s3_class(p, "ggplot")
   expect_identical(as.data.frame(p$data), expected_data)
   expect_false(is.null(p$mapping))

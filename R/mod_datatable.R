@@ -10,7 +10,17 @@
 mod_datatable_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    DT::DTOutput(ns("datatable"))
+    card(
+      card_header(
+        class = "d-flex justify-content-between",
+        "Concepts overview",
+        tooltip(
+          actionButton(ns("clear_rows"), icon("broom")),
+          "Clear selected rows"
+        )
+      ),
+      DT::DTOutput(ns("datatable"))
+    )
   )
 }
 
@@ -19,16 +29,21 @@ mod_datatable_ui <- function(id) {
 #' @description Generates a `DT::datatable` with the concepts and their counts for the selected
 #' date range. The datatable allows the user to select a concept by clicking its row.
 #' The selected row is returned as a reactive object.
+#' Updates the selected rows in the datatable based on the concept IDs
+#' provided. This is used to automatically select rows when a user selects concepts
+#' in another part of the app.
 #'
-#' @param monthly_counts A data frame containing the monthly counts of records per concept
 #' @param selected_dates A reactive object containing the selected dates
+#' @param bundle_concepts A reactive object containing the concept IDs to select as
+#' an integer vector.
 #'
 #' @return The selected row as a reactive object
 #'
 #' @noRd
 #' @importFrom dplyr group_by summarise
-mod_datatable_server <- function(id, selected_dates = NULL) {
-  stopifnot(is.reactive(selected_dates) || is.null(selected_dates))
+mod_datatable_server <- function(id, selected_dates, bundle_concepts) {
+  stopifnot(is.reactive(selected_dates))
+  stopifnot(is.reactive(bundle_concepts))
 
   all_concepts <- get_concepts_table()
   monthly_counts <- get_monthly_counts()
@@ -61,8 +76,21 @@ mod_datatable_server <- function(id, selected_dates = NULL) {
         "Vocabulary ID" = "vocabulary_id",
         "Concept Class ID" = "concept_class_id"
       ),
-      selection = list(mode = "single", selected = 1, target = "row")
+      selection = list(mode = "multiple", selected = 1, target = "row")
     )
+
+    ## Automatically select rows in datatable when a bundle is selected
+    row_indices <- reactive({
+      selected_concept_ids <- bundle_concepts()
+      match(selected_concept_ids, concepts_with_counts()$concept_id)
+    })
+    datatable_proxy <- DT::dataTableProxy("datatable", session = session, deferUntilFlush = FALSE)
+    observeEvent(row_indices(), {
+      DT::selectRows(datatable_proxy, selected = row_indices())
+    })
+    observeEvent(input$clear_rows, {
+      DT::selectRows(datatable_proxy, selected = NULL) # nocov
+    })
 
     reactive(concepts_with_counts()[input$datatable_rows_selected, ])
   })
@@ -76,8 +104,8 @@ join_counts_to_concepts <- function(concepts, monthly_counts, selected_dates) {
     dplyr::group_by(.data$concept_id) |>
     dplyr::summarise(
       total_records = sum(.data$record_count),
-      mean_persons = mean(.data$person_count, na.rm = TRUE),
-      mean_records_per_person = mean(.data$records_per_person, na.rm = TRUE)
+      mean_persons = round(mean(.data$person_count, na.rm = TRUE)),
+      mean_records_per_person = round(mean(.data$records_per_person, na.rm = TRUE))
     )
   # Use inner_join so we only keep concepts for which we have counts in the selected dates
   dplyr::inner_join(concepts, summarised_counts, by = "concept_id")

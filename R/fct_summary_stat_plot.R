@@ -1,62 +1,47 @@
-#' summary_stat_plot
-#'
-#' Wrapper function to generate a plot for a summary statistic depending on its type
-#' (categorical or numeric).
-#'
-#' @param summary_stats A `data.frame` containing the summary statistics.
-#' @param plot_title A `character`, to be used as title of the plot.
-#'
-#' @return A `ggplot2` object.
-#'
-#' @noRd
-summary_stat_plot <- function(summary_stats, plot_title) {
-  if (.is_categorical(summary_stats)) {
-    stat_categorical_plot(summary_stats, plot_title)
-  } else {
-    stat_numeric_plot(summary_stats, plot_title)
-  }
-}
-
 #' stat_numeric_plot
 #'
-#' Generates a boxplot of the summary statistics for a numeric concept.
+#' Generates a boxplot of the summary statistics for numeric concepts.
 #' Uses pre-calculated `mean` and `sd` to generate the boxplot.
 #'
 #' Expects the input data to have the following columns:
-#' - `concept_id`: The concept ID.
+#' - `concept_id`: The concept IDs.
 #' - `summary_attribute`: The type of the summary attribute, e.g. `mean` or `sd`.
 #' - `value_as_number`: The value of the summary attribute as a numeric value.
 #'
 #' @param summary_stats A `data.frame` containing the summary statistics.
-#' @param plot_title A `character`, to be used as title of the plot.
 #'
-#' @return A `ggplot2` object.
+#' @return A `ggplot2` object or `NULL` if no numeric concepts are present.
 #'
-#' @importFrom ggplot2 ggplot aes geom_boxplot
 #' @noRd
-stat_numeric_plot <- function(summary_stats, plot_title) {
+stat_numeric_plot <- function(summary_stats) {
+  # Select only numeric concepts
+  summary_stats <- .numeric_stats(summary_stats)
+  if (nrow(summary_stats) == 0) {
+    return(NULL)
+  }
+
   processed_stats <- .process_numeric_stats(summary_stats)
 
-  mean <- sd <- concept_id <- NULL
-  ggplot(processed_stats, aes(x = factor(concept_id))) +
+  ggplot(processed_stats, aes(x = factor(.data$concept_id), fill = factor(.data$concept_id))) +
     geom_boxplot(
       aes(
-        lower = mean - sd,
-        upper = mean + sd,
-        middle = mean,
-        ymin = mean - 3 * sd,
-        ymax = mean + 3 * sd
+        lower = .data$mean - .data$sd,
+        upper = .data$mean + .data$sd,
+        middle = .data$mean,
+        ymin = .data$mean - 3 * .data$sd,
+        ymax = .data$mean + 3 * .data$sd,
       ),
       stat = "identity"
     ) +
     xlab(NULL) +
-    ggtitle(plot_title)
+    theme(legend.position = "none")
 }
 
 #' stat_categorical_plot
 #'
-#' Generates a bar plot of the category frequencies for a categorical concept.
+#' Generates a bar plot of the category frequencies for categorical concepts.
 #' Uses pre-calculated frequencies to generate the plot.
+#' In case of multiple concepts, a faceted plot is generated.
 #'
 #' Expects the input data to have the following columns:
 #' - `concept_id`: The concept ID.
@@ -65,17 +50,17 @@ stat_numeric_plot <- function(summary_stats, plot_title) {
 #' - `value_as_number`: The value of the summary attribute as a numeric value.
 #'
 #' @param summary_stats A `data.frame` containing the summary statistics.
-#' @param plot_title A `character`, to be used as title of the plot.
 #'
-#' @return A `ggplot2` object.
+#' @return A `ggplot2` object or `NULL` if no numeric concepts are present.
 #'
-#' @importFrom ggplot2 ggplot aes geom_col labs
 #' @noRd
-stat_categorical_plot <- function(summary_stats, plot_title) {
-  # We expect only single concept ID at this point
-  # NOTE: this might change when we support bundles of concepts, in which case we might want to
-  # display the entire batch in one plot
-  stopifnot("Expecting a single concept ID" = length(unique(summary_stats$concept_id)) == 1)
+stat_categorical_plot <- function(summary_stats) {
+  ## Select only categorical concepts
+  summary_stats <- .categorical_stats(summary_stats)
+  if (nrow(summary_stats) == 0) {
+    return(NULL)
+  }
+
   stopifnot(c("concept_id", "value_as_string", "value_as_number") %in% names(summary_stats))
 
   summary_stats$value_as_string <- as.factor(summary_stats$value_as_string)
@@ -85,18 +70,13 @@ stat_categorical_plot <- function(summary_stats, plot_title) {
     .desc = TRUE
   )
 
-  value_as_string <- value_as_number <- NULL
-  ggplot(summary_stats, aes(value_as_string, value_as_number)) +
-    geom_col(aes(fill = value_as_string), show.legend = FALSE) +
+  ggplot(summary_stats, aes(.data$value_as_string, .data$value_as_number)) +
+    geom_col(aes(fill = .data$value_as_string), show.legend = FALSE) +
     labs(x = "Category", y = "Frequency") +
-    ggtitle(plot_title)
+    facet_wrap(vars(.data$concept_name), scales = "free")
 }
 
 .process_numeric_stats <- function(summary_stats) {
-  # We expect only single concept ID at this point
-  # NOTE: this might change when we support bundles of concepts, in which case we might want to
-  # display the entire batch in one plot
-  stopifnot("Expecting a single concept ID" = length(unique(summary_stats$concept_id)) == 1)
   stopifnot(c("concept_id", "summary_attribute", "value_as_number") %in% names(summary_stats))
 
   tidyr::pivot_wider(summary_stats,
@@ -106,6 +86,10 @@ stat_categorical_plot <- function(summary_stats, plot_title) {
   )
 }
 
-.is_categorical <- function(summary_stats) {
-  "frequency" %in% summary_stats$summary_attribute
+.categorical_stats <- function(summary_stats) {
+  summary_stats[summary_stats$summary_attribute == "frequency", ]
+}
+
+.numeric_stats <- function(summary_stats) {
+  summary_stats[summary_stats$summary_attribute %in% c("mean", "sd"), ]
 }

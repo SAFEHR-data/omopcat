@@ -11,11 +11,11 @@ test_that("select_bundle reacts to bundle selection", {
     session$setInputs(select_bundle = select_bundle)
 
     expect_true(is.reactive(out))
-    expect_s3_class(out(), "data.frame")
-    expect_in(c("concept_id", "concept_name"), names(out()))
+    expect_type(out(), "integer")
+    expect_length(out(), 6)
 
     expected_concepts <- get_bundle_concepts("smoking", "observation")
-    expect_in(out()$concept_id, expected_concepts)
+    expect_setequal(out(), expected_concepts)
   })
 })
 
@@ -29,15 +29,13 @@ test_that("module ui works", {
   }
 })
 
-test_that("select_bundle server can return all concepts", {
+test_that("select_bundle server can take 'none' as an option", {
   testServer(mod_select_bundle_server, {
     out <- session$getReturned()
-    session$setInputs(select_bundle = "all")
+    session$setInputs(select_bundle = "none")
 
     expect_true(is.reactive(out))
-    expect_s3_class(out(), "data.frame")
-    expect_in(c("concept_id", "concept_name"), names(out()))
-    expect_equal(out()$concept_id, get_concepts_table()$concept_id)
+    expect_null(out())
   })
 })
 
