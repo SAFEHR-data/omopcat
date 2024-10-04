@@ -21,7 +21,7 @@ app_ui <- function(request) {
       nav_panel(
         title = "Concepts",
         .low_frequency_disclaimer(),
-        card(mod_datatable_ui("concepts")),
+        mod_datatable_ui("concepts"),
         mod_plots_ui("plots")
       ),
       nav_panel(

@@ -9,8 +9,12 @@
 #' @importFrom shiny NS tagList
 mod_datatable_ui <- function(id) {
   ns <- NS(id)
-  tagList(
-    actionButton(ns("clear_rows"), "Clear selected rows"),
+  card(
+    card_header(
+      class = "d-flex justify-content-between",
+      "Concepts overview",
+      actionButton(ns("clear_rows"), icon("broom"))
+    ),
     DT::DTOutput(ns("datatable"))
   )
 }
