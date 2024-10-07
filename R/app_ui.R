@@ -14,17 +14,22 @@ app_ui <- function(request) {
       title = .app_title(),
       sidebar = sidebar(
         title = "Filtering options",
+        mod_select_bundle_ui("select_bundle"),
         mod_select_concepts_ui("select_concepts"),
         mod_date_range_ui("date_range"),
       ),
       nav_panel(
-        title = "Dashboard",
-        card(mod_datatable_ui("totals")),
-        layout_columns(
-          card(mod_plots_ui("monthly_counts")),
-          card(mod_plots_ui("summary_stats"))
-        ),
-        .low_frequency_disclaimer()
+        title = "Concepts",
+        .low_frequency_disclaimer(),
+        mod_datatable_ui("concepts"),
+        mod_plots_ui("plots")
+      ),
+      nav_panel(
+        title = "Bundles",
+        card(
+          mod_bundles_summary_ui("bundles"),
+          full_screen = TRUE
+        )
       ),
       nav_panel(
         title = "Export",
@@ -74,7 +79,10 @@ golem_add_external_resources <- function() {
 .low_frequency_disclaimer <- function() {
   tags$div(
     class = "alert alert-warning",
-    "Note: to avoid identifiability of the data, we convert all `records_per_person` and `person_count`",
-    glue::glue("values below {Sys.getenv('LOW_FREQUENCY_THRESHOLD')} to {Sys.getenv('LOW_FREQUENCY_REPLACEMENT')}.")
+    glue::glue(
+      "Note: to ensure patients are not identifiable, counts",
+      " below {Sys.getenv('LOW_FREQUENCY_THRESHOLD')}",
+      " are converted to {Sys.getenv('LOW_FREQUENCY_REPLACEMENT')}."
+    )
   )
 }

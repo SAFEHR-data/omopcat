@@ -31,8 +31,9 @@ Imports:
     cli,
     nanoparquet,
     rlang,
-    htmltools,
-    omopbundles (>= 0.1.1)
+    omopbundles (>= 0.1.1),
+    plotly (>= 4.10.4),
+    purrr
 Suggests:
     devtools,
     usethis,

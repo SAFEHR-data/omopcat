@@ -54,7 +54,7 @@ run_app()
 
 or by setting it in a local [`.Renviron`](https://usethis.r-lib.org/reference/edit.html) file.
 
-Note that running the app locally in production mode should only be done for teting purposes.
+Note that running the app locally in production mode should only be done for testing purposes.
 To run a truly productionised version, we provide a [containerised deployment](#deployment).
 
 ## Deploying with Docker

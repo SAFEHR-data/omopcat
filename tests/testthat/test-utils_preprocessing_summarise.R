@@ -13,7 +13,7 @@ measurement <- data.frame(
 test_that("calculate_monthly_counts produces the expected results", {
   res <- calculate_monthly_counts(measurement, measurement_concept_id, measurement_date)
   expect_s3_class(res, "data.frame")
-  expect_named(res, c("concept_id", "date_year", "date_month", "person_count", "records_per_person"))
+  expect_named(res, c("concept_id", "date_year", "date_month", "record_count", "person_count", "records_per_person"))
   expect_equal(nrow(res), 1)
   expect_equal(res$person_count, 3)
   expect_equal(res$records_per_person, 4 / 3)
@@ -24,7 +24,7 @@ db_measurement <- dplyr::copy_to(db, measurement, name = "measurement", overwrit
 test_that("calculate_monthly_counts works on Database-stored tables", {
   res <- calculate_monthly_counts(db_measurement, measurement_concept_id, measurement_date)
   expect_s3_class(res, "data.frame")
-  expect_named(res, c("concept_id", "date_year", "date_month", "person_count", "records_per_person"))
+  expect_named(res, c("concept_id", "date_year", "date_month", "record_count", "person_count", "records_per_person"))
 })
 
 test_that("calculate_summary_stats produces the expected results", {

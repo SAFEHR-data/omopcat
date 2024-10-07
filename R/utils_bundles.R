@@ -26,7 +26,7 @@ all_bundles <- function(version = "latest") {
 #' Retrieve concepts for a given bundle
 #'
 #' This is essentially a wrapper around [`omopbundles::concept_by_bundle()`]
-#' to retrieve the concepts belonging to a spcecific bundle, defined by its `id` and `domain`,
+#' to retrieve the concepts belonging to a specific bundle, defined by its `id` and `domain`,
 #' but returning only the concept IDs as a vector.
 #'
 #' @param id The id of the bundle to retrieve concepts for.

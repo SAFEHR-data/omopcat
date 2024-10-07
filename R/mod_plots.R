@@ -11,7 +11,17 @@
 mod_plots_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    plotOutput(ns("summary_plot"), height = 250)
+    layout_columns(
+      card(
+        card_header("Distribution of Monthly Records for the selected concepts"),
+        plotly::plotlyOutput(ns("monthly_counts"))
+      ),
+      navset_card_underline(
+        title = "Summary Statistics for the selected concepts",
+        nav_panel("Numeric concepts", plotOutput(ns("numeric_stats"))),
+        nav_panel("Categorical concepts", plotOutput(ns("categorical_stats"))),
+      )
+    )
   )
 }
 
@@ -20,63 +30,52 @@ mod_plots_ui <- function(id) {
 #' Generates the plot of the requested `type`. When no concept is selected, or no data is available,
 #' an error is raised.
 #'
-#' @param data `data.frame` containing the data to be plotted.
-#' @param selected_concept Reactive value containing the selected concept, used for filtering
+#' @param selected_concepts Reactive value containing the selected concepts, used for filtering
 #' @param selected_dates Optional reactive value if date filtering needs to be applied
-#' @param type The type of plot to be generated.
 #'
 #' @noRd
-mod_plots_server <- function(id, selected_concept, selected_dates = NULL,
-                             type = c("monthly_counts", "summary_stats")) {
-  stopifnot(is.reactive(selected_concept))
-  stopifnot(is.reactive(selected_dates) || is.null(selected_dates))
+mod_plots_server <- function(id, selected_concepts, selected_dates) {
+  stopifnot(is.reactive(selected_concepts))
+  stopifnot(is.reactive(selected_dates))
 
-  plot_func <- switch(type,
-    monthly_counts = monthly_count_plot,
-    summary_stats = summary_stat_plot,
-    cli::cli_abort("Invalid type: {type}")
-  )
-  data <- switch(type,
-    monthly_counts = get_monthly_counts(),
-    summary_stats = get_summary_stats(),
-    cli::cli_abort("Invalid type: {type}")
+  ## Set default theme for ggplot2
+  ggplot2::theme_set(
+    ggplot2::theme_minimal(
+      base_size = 16
+    )
   )
 
   moduleServer(id, function(input, output, session) {
-    selected_concept_id <- reactive(selected_concept()$concept_id)
-    selected_concept_name <- reactive(selected_concept()$concept_name)
+    selected_concept_ids <- reactive(selected_concepts()$concept_id)
 
     ## Filter data based on selected concept and date range
-    filtered_data <- reactive({
-      req(length(selected_concept_name()) > 0)
-      out <- data[data$concept_id == selected_concept_id(), ]
-
-      if (!is.null(selected_dates)) {
-        req(selected_dates())
-        out <- .filter_dates(out, selected_dates())
-      }
-      out
+    monthly_counts <- reactive({
+      req(length(selected_concept_ids()) > 0)
+      req(selected_dates)
+      get_monthly_counts() |>
+        dplyr::filter(.data$concept_id %in% selected_concept_ids()) |>
+        filter_dates(selected_dates())
     })
 
-    output$summary_plot <- renderPlot({
-      ## Return empty plot if no data is available
-      req(filtered_data())
-      if (nrow(filtered_data()) == 0) {
-        stop("No data available for the selected date range")
-      }
-      plot_func(filtered_data(), selected_concept_name())
+    summary_stats <- reactive({
+      req(length(selected_concept_ids()) > 0)
+      get_summary_stats() |>
+        dplyr::filter(.data$concept_id %in% selected_concept_ids())
+    })
+
+    output$monthly_counts <- plotly::renderPlotly({
+      req(nrow(monthly_counts()) > 0)
+      monthly_count_plot(monthly_counts())
+    })
+
+    output$numeric_stats <- renderPlot({
+      req(nrow(summary_stats()) > 0)
+      stat_numeric_plot(summary_stats())
+    })
+
+    output$categorical_stats <- renderPlot({
+      req(nrow(summary_stats()) > 0)
+      stat_categorical_plot(summary_stats())
     })
   })
-}
-
-
-.filter_dates <- function(x, date_range) {
-  date_range <- as.Date(date_range)
-  if (date_range[2] < date_range[1]) {
-    stop("Invalid date range, end date is before start date")
-  }
-
-  dates <- lubridate::make_date(year = x$date_year, month = x$date_month)
-  keep_dates <- dplyr::between(dates, date_range[1], date_range[2])
-  dplyr::filter(x, keep_dates)
 }
