@@ -16,7 +16,7 @@ There are four tabs at the top : **Concepts, Bundles, Export & help**
 ##### Concepts tab
 
 1. On the left **Select bundle** to select a group of related concepts to appear in the **Select concepts** box. 
-1. In the **Select concepts** box delete and re-add concepts to set which appear in the **Concepts overview** table.
+1. In the **Select concepts** box delete and re-add concepts to set which appear in the **Export** tab.
 1. Set a **Date range** to calculate record and patient counts in the **Concepts overview** table. 
 1. Select row(s) in the **Concepts overview** table. Attributes of the top selected concept will be plotted below.
 
@@ -27,7 +27,7 @@ A table shows all Bundles (groups of related concepts) and how many concepts the
 
 ##### Export tab
 
-View concepts that have been selected in the **Concepts tab** and press **Export CSV** to create a text file of selected concepts that can be used in the omop_es extraction system.
+View concepts that have been selected in the **Select concepts** box and press **Export CSV** to create a text file of selected concepts that can be used in the omop_es extraction system.
 
 
 #### How omopcat works
