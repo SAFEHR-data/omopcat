@@ -18,7 +18,7 @@ There are four tabs at the top : **Concepts, Bundles, Export & help**
 1. On the left **Select bundle** to select a group of related concepts to appear in the **Select concepts** box. 
 1. In the **Select concepts** box delete and re-add concepts to set which appear in the **Concepts overview** table.
 1. Set a **Date range** to calculate record and patient counts in the **Concepts overview** table. 
-1. Select row(s) in the **Concepts overview** table. Attributes of the top selected concept will be plotted below. Selected rows will appear in the Export tab.
+1. Select row(s) in the **Concepts overview** table. Attributes of the top selected concept will be plotted below.
 
 
 ##### Bundles tab
