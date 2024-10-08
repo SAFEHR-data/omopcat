@@ -32,10 +32,7 @@ repos:
       # -   id: codemeta-description-updated
       - id: use-tidy-description
       # - id: lintr  # disabling lintr hook as it doesn't seem to correctly load the package
-<<<<<<< HEAD
-=======
       # see also https://github.com/lorenzwalthert/precommit/issues/440
->>>>>>> main
       - id: parsable-R
       - id: no-browser-statement
       - id: no-print-statement
