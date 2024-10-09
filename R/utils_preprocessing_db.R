@@ -1,5 +1,11 @@
 # nocov start
 
+connect_to_db <- function(..., .envir = parent.frame()) {
+  con <- DBI::dbConnect(...)
+  withr::defer(DBI::dbDisconnect(con), envir = .envir)
+  con
+}
+
 #' Connect to duckdb database
 #'
 #' @param db_path path to the duckdb database file
@@ -14,11 +20,7 @@ connect_to_test_duckdb <- function(db_path, ..., .envir = parent.frame()) {
   }
 
   # Connect to the duckdb test database
-  con <- DBI::dbConnect(
-    duckdb::duckdb(dbdir = db_path)
-  )
-  withr::defer(DBI::dbDisconnect(con), envir = .envir)
-  con
+  connect_to_db(duckdb::duckdb(dbdir = db_path))
 }
 
 
