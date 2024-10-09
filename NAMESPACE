@@ -2,7 +2,7 @@
 
 export(calculate_monthly_counts)
 export(calculate_summary_stats)
-export(connect_to_db)
+export(connect_to_test_duckdb)
 export(process_monthly_counts)
 export(process_summary_stats)
 export(query_concepts_table)

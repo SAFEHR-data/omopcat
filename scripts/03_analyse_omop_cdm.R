@@ -13,7 +13,7 @@ name <- Sys.getenv("TEST_DB_NAME")
 version <- Sys.getenv("TEST_DB_OMOP_VERSION")
 
 db_path <- glue::glue("{dir}/{name}_{version}_1.0.duckdb")
-con <- connect_to_db(db_path)
+con <- connect_to_test_duckdb(db_path)
 
 fs::dir_create(
   out_path <- here::here("data/test_data")

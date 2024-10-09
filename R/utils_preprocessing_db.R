@@ -8,7 +8,7 @@
 #'
 #' @return A [`DBI::DBIConnection-class`] object
 #' @export
-connect_to_db <- function(db_path, ..., .envir = parent.frame()) {
+connect_to_test_duckdb <- function(db_path, ..., .envir = parent.frame()) {
   if (!file.exists(db_path)) {
     cli::cli_abort("Database file {.file {db_path}} not found")
   }

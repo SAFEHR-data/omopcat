@@ -16,7 +16,7 @@ version <- Sys.getenv("TEST_DB_OMOP_VERSION")
 
 db_path <- glue::glue("{dir}/{name}_{version}_1.0.duckdb")
 
-con <- connect_to_db(db_path)
+con <- connect_to_test_duckdb(db_path)
 
 
 # Insert dummy tables -------------------------------------------------------------------------
