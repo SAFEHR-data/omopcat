@@ -33,7 +33,9 @@ Imports:
     rlang,
     omopbundles (>= 0.1.1),
     plotly (>= 4.10.4),
-    purrr
+    purrr,
+    htmltools,
+    markdown
 Suggests:
     devtools,
     usethis,
