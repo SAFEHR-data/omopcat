@@ -1,3 +1,5 @@
+# omopcat (development version)
+
 # omopcat 0.2.0
 
 This version adds support for OMOP bundles. The app name also changed from `calypso` to `omopcat`.
