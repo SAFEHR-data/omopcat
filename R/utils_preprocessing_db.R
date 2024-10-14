@@ -1,5 +1,14 @@
 # nocov start
 
+#' Connec to a database
+#'
+#' General helper to connect to a databae through [`DBI::dbConnect()`], while ensuring
+#' that the connection is closed when the connection object goes out of scope.
+#'
+#' @param ... arguments passed on to [`DBI::dbConnect()`]
+#'
+#' @return A [`DBI::DBIConnection-class`] object
+#' @export
 connect_to_db <- function(..., .envir = parent.frame()) {
   con <- DBI::dbConnect(...)
   withr::defer(DBI::dbDisconnect(con), envir = .envir)
