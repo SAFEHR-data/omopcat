@@ -21,7 +21,7 @@ RUN if [ ! -f "${OMOPCAT_DATA_PATH}/omopcat_concepts.parquet" ]; then \
     fi;
 
 EXPOSE 3838
-CMD ["R", "-e", "options('shiny.port'=3838,shiny.host='0.0.0.0');library(omopcat);omopcat::run_app()"]
+CMD ["R", "-e", "options('shiny.port'=3838,shiny.host='0.0.0.0');omopcat::run_app()"]
 
 # to build: docker build -f deploy/Dockerfile --platform=linux/amd64 -t omopcat .
 # to run: docker run -p 3838:3838 omopcat
