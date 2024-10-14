@@ -35,7 +35,8 @@ Imports:
     plotly (>= 4.10.4),
     purrr,
     htmltools,
-    markdown
+    markdown,
+    CDMConnector
 Suggests:
     devtools,
     usethis,
@@ -43,7 +44,6 @@ Suggests:
     testthat (>= 3.0.0),
     spelling,
     here,
-    CDMConnector,
     lintr,
     dbplyr,
     RSQLite,
