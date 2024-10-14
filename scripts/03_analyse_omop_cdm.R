@@ -6,6 +6,7 @@ cli::cli_h1("Generating summarys statistics")
 library(omopcat)
 
 if (Sys.getenv("ENV") == "prod") {
+  name <- Sys.getenv("DB_NAME")
   con <- connect_to_db(
     RPostgres::Postgres(),
     dbname = Sys.getenv("DB_NAME"),
