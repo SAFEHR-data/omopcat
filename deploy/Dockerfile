@@ -11,10 +11,13 @@ COPY deploy/omopcat_*.tar.gz /app.tar.gz
 RUN R -e 'remotes::install_local("/app.tar.gz", upgrade="never")' && \
     rm /app.tar.gz
 
+ARG OMOPCAT_DATA_PATH
+
 # Run pre-processing script when input data is missing
 ADD scripts ./scripts
-RUN if [ ! -f "${OMOPCAT_DATA_PATH}/omopcat_concepts.parquet"]; \
-    then echo "Running prod_data pre-processing" && R scripts/create_prod_data.R; \
+COPY deploy/.Renviron .Renviron
+RUN if [ ! -f "${OMOPCAT_DATA_PATH}/omopcat_concepts.parquet" ]; then \
+    Rscript scripts/create_prod_data.R || exit 1; \
     fi;
 
 EXPOSE 3838
