@@ -41,7 +41,9 @@ cdm <- CDMConnector::cdm_from_con(
   cdm_name = name
 )
 
+cli::cli_progress_step("Calculating monthly counts...")
 monthly_counts <- process_monthly_counts(cdm)
+cli::cli_progress_step("Calculating summary statistics...")
 summary_stats <- process_summary_stats(cdm)
 ids <- unique(c(monthly_counts$concept_id, summary_stats$concept_id))
 concepts_table <- query_concepts_table(cdm, ids)
