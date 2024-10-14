@@ -3,10 +3,7 @@ cli::cli_h1("Generating summarys statistics")
 
 # Setup ---------------------------------------------------------------------------------------
 
-suppressPackageStartupMessages({
-  library(tidyverse)
-  library(omopcat)
-})
+library(omopcat)
 
 if (Sys.getenv("ENV") == "prod") {
   con <- connect_to_db(
