@@ -5,6 +5,7 @@ services:
       args:
         HTTP_PROXY: ${HTTP_PROXY}
         HTTPS_PROXY: ${HTTPS_PROXY}
+        OMOPCAT_DATA_PATH: /etc/omopcat/data
     image: omopcat:latest
     platform: linux/amd64
     restart: unless-stopped
@@ -15,6 +16,13 @@ services:
       OMOPCAT_DATA_PATH: /etc/omopcat/data
       LOW_FREQUENCY_THRESHOLD: 5
       LOW_FREQUENCY_REPLACEMENT: 2.5
+      # Enviornment variables required for the data pre-processing
+      # these should be declared in a separate .env file
+      DB_NAME: ${DB_NAME}
+      HOST: ${HOST}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_CDM_SCHEMA: ${DB_CDM_SCHEMA}
     volumes:
       - ../data/prod_data:/etc/omopcat/data
     ports:
