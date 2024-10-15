@@ -35,7 +35,8 @@ Imports:
     plotly (>= 4.10.4),
     purrr,
     htmltools,
-    markdown
+    markdown,
+    bsicons
 Suggests:
     devtools,
     usethis,

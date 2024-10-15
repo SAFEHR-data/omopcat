@@ -13,7 +13,13 @@ mod_datatable_ui <- function(id) {
     card(
       card_header(
         class = "d-flex justify-content-between",
-        "Concepts overview",
+        span(
+          "Concepts overview",
+          tooltip(
+            bsicons::bs_icon("exclamation-circle"),
+            .low_frequency_disclaimer()
+          )
+        ),
         tooltip(
           actionButton(ns("clear_rows"), icon("broom")),
           "Clear selected rows"
@@ -21,6 +27,14 @@ mod_datatable_ui <- function(id) {
       ),
       DT::DTOutput(ns("datatable"))
     )
+  )
+}
+
+.low_frequency_disclaimer <- function() {
+  glue::glue(
+    "Note: to ensure patients are not identifiable, counts",
+    " below {Sys.getenv('LOW_FREQUENCY_THRESHOLD')}",
+    " are converted to {Sys.getenv('LOW_FREQUENCY_REPLACEMENT')}."
   )
 }
 
