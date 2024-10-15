@@ -74,18 +74,17 @@ mod_datatable_server <- function(id, selected_dates, bundle_concepts) {
         # Reorder and select the columns we want to display
         dplyr::select(
           "concept_id", "concept_name",
-          "total_records", "mean_persons", "mean_records_per_person",
+          "total_records", "mean_persons",
           "domain_id", "vocabulary_id", "concept_class_id"
         )
     })
     output$datatable <- DT::renderDT(concepts_with_counts(),
       rownames = FALSE,
       colnames = c(
-        "Concept ID" = "concept_id",
-        "Concept Name" = "concept_name",
-        "Total Records" = "total_records",
-        "Average Persons per Month" = "mean_persons",
-        "Average Records per Person per Month" = "mean_records_per_person",
+        "ID" = "concept_id",
+        "Name" = "concept_name",
+        "Records" = "total_records",
+        "Patients" = "mean_persons",
         "Domain ID" = "domain_id",
         "Vocabulary ID" = "vocabulary_id",
         "Concept Class ID" = "concept_class_id"
