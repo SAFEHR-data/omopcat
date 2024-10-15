@@ -79,6 +79,7 @@ mod_datatable_server <- function(id, selected_dates, bundle_concepts) {
         )
     })
     output$datatable <- DT::renderDT(concepts_with_counts(),
+      fillContainer = TRUE,
       rownames = FALSE,
       colnames = c(
         "ID" = "concept_id",
