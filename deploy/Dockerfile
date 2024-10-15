@@ -3,6 +3,13 @@ FROM rocker/shiny-verse:4.4.1
 WORKDIR /app
 COPY deploy/renv.lock.prod renv.lock
 
+ARG HTTP_PROXY
+ARG HTTPS_PROXY
+
+# Record proxy settings in Renviron
+RUN echo "HTTP_PROXY=${HTTP_PROXY}" >> .Renviron && \
+    echo "HTTPS_PROXY=${HTTPS_PROXY}" >> .Renviron
+
 # Install renv and restore environment
 RUN install2.r --error --skipinstalled renv && \
     R -e 'renv::restore()'
