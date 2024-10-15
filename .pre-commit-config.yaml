@@ -28,6 +28,8 @@ repos:
           - rlang
           - SAFEHR-data/omop-bundles
           - plotly
+          - markdown
+          - bsicons
       # codemeta must be above use-tidy-description when both are used
       # -   id: codemeta-description-updated
       - id: use-tidy-description
