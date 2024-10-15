@@ -6,6 +6,7 @@
 #' that the connection is closed when the connection object goes out of scope.
 #'
 #' @param ... arguments passed on to [`DBI::dbConnect()`]
+#' @param .envir passed on to [`withr::defer()`]
 #'
 #' @return A [`DBI::DBIConnection-class`] object
 #' @export
@@ -30,7 +31,7 @@ connect_to_test_duckdb <- function(db_path, ..., .envir = parent.frame()) {
 
   # Connect to the duckdb test database
   rlang::check_installed("duckdb", reason = "to set up test database connection")
-  connect_to_db(duckdb::duckdb(dbdir = db_path))
+  connect_to_db(duckdb::duckdb(dbdir = db_path), .envir = .envir)
 }
 
 
@@ -70,8 +71,12 @@ read_parquet_sorted <- function(path, options = nanoparquet::parquet_options()) 
     arrange(across(everything()))
 }
 
-# Function to produce the 'omopcat_concepts' table
-# from a list of concept ids
+#' Function to produce the 'omopcat_concepts' table from a list of concept ids
+#'
+#' @param cdm A [`CDMConnector`] object, e.g. from [`CDMConnector::cdm_from_con()`]
+#' @param concepts A vector of concept IDs
+#'
+#' @return A `data.frame` with the concept table
 #' @export
 query_concepts_table <- function(cdm, concepts) {
   # Extract columns from concept table
@@ -89,7 +94,11 @@ query_concepts_table <- function(cdm, concepts) {
     collect()
 }
 
-# Function to produce the 'omopcat_monthly_counts' table
+#' Generate the 'omopcat_monthly_counts' table
+#'
+#' @param cdm A [`CDMConnector`] object, e.g. from [`CDMConnector::cdm_from_con()`]
+#'
+#' @return A `data.frame` with the monthly counts
 #' @export
 process_monthly_counts <- function(cdm) {
   # Combine results for all tables
@@ -112,7 +121,11 @@ process_monthly_counts <- function(cdm) {
     select("concept_id", "concept_name", everything())
 }
 
-# Function to produce the 'omopcat_summary_stats' table
+#' Generate the 'omopcat_summary_stats' table
+
+#' @param cdm A [`CDMConnector`] object, e.g. from [`CDMConnector::cdm_from_con()`]
+#'
+#' @return A `data.frame` with the summary statistics
 #' @export
 process_summary_stats <- function(cdm) {
   table_names <- c("measurement", "observation")

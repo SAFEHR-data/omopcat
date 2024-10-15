@@ -8,6 +8,8 @@ connect_to_db(..., .envir = parent.frame())
 }
 \arguments{
 \item{...}{arguments passed on to \code{\link[DBI:dbConnect]{DBI::dbConnect()}}}
+
+\item{.envir}{passed on to \code{\link[withr:defer]{withr::defer()}}}
 }
 \value{
 A \code{\link[DBI:DBIConnection-class]{DBI::DBIConnection}} object
