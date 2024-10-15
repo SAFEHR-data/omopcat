@@ -13,14 +13,17 @@ mod_plots_ui <- function(id) {
   tagList(
     layout_columns(
       card(
+        full_screen = TRUE,
         card_header("Distribution of Monthly Records for the selected concepts"),
         plotly::plotlyOutput(ns("monthly_counts"))
       ),
       navset_card_underline(
+        full_screen = TRUE,
         title = "Summary Statistics for the selected concepts",
         nav_panel("Numeric concepts", plotOutput(ns("numeric_stats"))),
         nav_panel("Categorical concepts", plotOutput(ns("categorical_stats"))),
-      )
+      ),
+      min_height = 200
     )
   )
 }
