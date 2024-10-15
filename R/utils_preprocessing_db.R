@@ -29,6 +29,7 @@ connect_to_test_duckdb <- function(db_path, ..., .envir = parent.frame()) {
   }
 
   # Connect to the duckdb test database
+  rlang::check_installed("duckdb", reason = "to set up test database connection")
   connect_to_db(duckdb::duckdb(dbdir = db_path))
 }
 

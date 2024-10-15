@@ -20,7 +20,6 @@ Imports:
     golem (>= 0.4.1),
     shiny (>= 1.9.1),
     DBI,
-    duckdb,
     glue,
     tidyr,
     withr,
@@ -47,7 +46,8 @@ Suggests:
     lintr,
     dbplyr,
     RSQLite,
-    precommit
+    precommit,
+    duckdb
 Remotes: SAFEHR-data/omop-bundles
 Encoding: UTF-8
 LazyData: true
