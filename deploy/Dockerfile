@@ -3,16 +3,12 @@ FROM rocker/shiny-verse:4.4.1
 WORKDIR /app
 COPY deploy/renv.lock.prod renv.lock
 
-ARG HTTP_PROXY
-ARG HTTPS_PROXY
-
-# Record proxy settings in Renviron
-RUN echo "HTTP_PROXY=${HTTP_PROXY}" >> .Renviron && \
-    echo "HTTPS_PROXY=${HTTPS_PROXY}" >> .Renviron
-
 # Install renv and restore environment
+# omopbundles is installed separately as renv is giving problems
+# with GitHub packages
+RUN R -e 'remotes::install_github("SAFEHR-data/omop-bundles")'
 RUN install2.r --error --skipinstalled renv && \
-    R -e 'renv::restore()'
+    R -e 'renv::restore(exclude = "omopbundles")'
 
 COPY deploy/omopcat_*.tar.gz /app.tar.gz
 RUN R -e 'remotes::install_local("/app.tar.gz", upgrade="never")' && \
@@ -24,7 +20,7 @@ ARG OMOPCAT_DATA_PATH
 ADD scripts ./scripts
 COPY deploy/.Renviron .Renviron
 RUN if [ ! -f "${OMOPCAT_DATA_PATH}/omopcat_concepts.parquet" ]; then \
-    Rscript scripts/create_prod_data.R || exit 1; \
+    R -e 'source("scripts/create_prod_data.R")' || exit 1; \
     fi;
 
 EXPOSE 3838
