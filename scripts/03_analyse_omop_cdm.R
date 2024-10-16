@@ -6,7 +6,9 @@ cli::cli_h1("Generating summarys statistics")
 library(omopcat)
 
 if (Sys.getenv("ENV") == "prod") {
-  out_path <- file.path(Sys.getenv("OMOPCAT_DATA_PATH"))
+  fs::dir_create({
+    out_path <- file.path(Sys.getenv("OMOPCAT_DATA_PATH"))
+  })
   cli::cli_alert_info("out_path set to {out_path}")
 
   name <- Sys.getenv("DB_NAME")
