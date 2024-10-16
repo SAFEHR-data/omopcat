@@ -6,6 +6,8 @@ cli::cli_h1("Generating summarys statistics")
 library(omopcat)
 
 if (Sys.getenv("ENV") == "prod") {
+  out_path <- Sys.getenv("OMOPCAT_DATA_PATH")
+
   name <- Sys.getenv("DB_NAME")
   con <- connect_to_db(
     RPostgres::Postgres(),
@@ -15,7 +17,6 @@ if (Sys.getenv("ENV") == "prod") {
     user = Sys.getenv("DB_USERNAME"),
     password = Sys.getenv("DB_PASSWORD")
   )
-  out_path <- Sys.getenv("OMOPCAT_DATA_PATH")
 } else {
   dir <- Sys.getenv("EUNOMIA_DATA_FOLDER")
   name <- Sys.getenv("TEST_DB_NAME")
@@ -51,9 +52,9 @@ all_tables <- list(
   monthly_counts = monthly_counts,
   summary_stats = summary_stats
 )
-paths <- purrr::map_chr(names(all_tables), ~ glue::glue("{out_path}/omopcat_{.x}.parquet"))
+paths <- purrr::map_chr(names(all_tables), ~ file.path(out_path, glue::glue("omopcat_{.x}.parquet")))
 
 # Write the tables to disk as parquet
 purrr::walk2(all_tables, paths, ~ nanoparquet::write_parquet(.x, .y))
 
-cli::cli_alert_success("Summary statistics generated successfully and written to {.file {fs::path_rel(paths)}}")
+cli::cli_alert_success("Summary statistics generated successfully and written to {.file paths}")
