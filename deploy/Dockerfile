@@ -11,7 +11,7 @@ RUN install2.r --error --skipinstalled renv && \
     R -e 'renv::restore(exclude = "omopbundles")'
 
 COPY deploy/omopcat_*.tar.gz /app.tar.gz
-RUN R -e 'remotes::install_local("/app.tar.gz", upgrade="never")' && \
+RUN R -e 'remotes::install_local("/app.tar.gz", upgrade="never", dependencies = FALSE)' && \
     rm /app.tar.gz
 
 ARG OMOPCAT_DATA_PATH
