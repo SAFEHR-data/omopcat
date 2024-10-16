@@ -6,7 +6,8 @@ cli::cli_h1("Generating summarys statistics")
 library(omopcat)
 
 if (Sys.getenv("ENV") == "prod") {
-  out_path <- Sys.getenv("OMOPCAT_DATA_PATH")
+  out_path <- file.path(Sys.getenv("OMOPCAT_DATA_PATH"))
+  cli::cli_alert_info("out_path set to {out_path}")
 
   name <- Sys.getenv("DB_NAME")
   con <- connect_to_db(
@@ -57,4 +58,4 @@ paths <- purrr::map_chr(names(all_tables), ~ file.path(out_path, glue::glue("omo
 # Write the tables to disk as parquet
 purrr::walk2(all_tables, paths, ~ nanoparquet::write_parquet(.x, .y))
 
-cli::cli_alert_success("Summary statistics generated successfully and written to {.file paths}")
+cli::cli_alert_success("Summary statistics generated successfully and written to {.file {paths}}")
