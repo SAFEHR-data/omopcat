@@ -10,8 +10,11 @@ required_envvars <- c(
   "HOST",
   "PORT",
   "DB_USERNAME",
-  "DB_PASSWORD"
+  "DB_PASSWORD",
+  "OMOPCAT_DATA_PATH"
 )
+
+out_path <- Sys.getenv("OMOPCAT_DATA_PATH")
 
 check_envvars <- function(x) {
   missing <- Sys.getenv(x) == ""
@@ -27,9 +30,9 @@ check_envvars(required_envvars)
 source(here::here("scripts/03_analyse_omop_cdm.R"))
 
 expected_files <- c(
-  here::here("data/prod_data/omopcat_concepts.parquet"),
-  here::here("data/prod_data/omopcat_monthly_counts.parquet"),
-  here::here("data/prod_data/omopcat_summary_stats.parquet")
+  file.path(out_path, "omopcat_concepts.parquet"),
+  file.path(out_path, "omopcat_monthly_counts.parquet"),
+  file.path(out_path, "omopcat_summary_stats.parquet")
 )
 
 check_exists <- function(path) {

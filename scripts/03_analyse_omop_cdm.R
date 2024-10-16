@@ -15,9 +15,7 @@ if (Sys.getenv("ENV") == "prod") {
     user = Sys.getenv("DB_USERNAME"),
     password = Sys.getenv("DB_PASSWORD")
   )
-  fs::dir_create(
-    out_path <- here::here("data/prod_data")
-  )
+  out_path <- Sys.getenv("OMOPCAT_DATA_PATH")
 } else {
   dir <- Sys.getenv("EUNOMIA_DATA_FOLDER")
   name <- Sys.getenv("TEST_DB_NAME")
