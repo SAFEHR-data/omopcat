@@ -35,7 +35,8 @@ Imports:
     purrr,
     htmltools,
     markdown,
-    CDMConnector
+    CDMConnector,
+    RPostgres
 Suggests:
     devtools,
     usethis,
