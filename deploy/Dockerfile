@@ -18,7 +18,6 @@ ARG OMOPCAT_DATA_PATH
 
 ADD scripts ./scripts
 COPY deploy/.Renviron .Renviron
-RUN R -e '' || exit 1
 
 EXPOSE 3838
 CMD ["R", "-e", \
