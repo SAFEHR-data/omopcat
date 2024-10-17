@@ -27,17 +27,24 @@ check_envvars <- function(x) {
 }
 check_envvars(required_envvars)
 
-source(here::here("scripts/03_analyse_omop_cdm.R"))
-
 expected_files <- c(
   file.path(out_path, "omopcat_concepts.parquet"),
   file.path(out_path, "omopcat_monthly_counts.parquet"),
   file.path(out_path, "omopcat_summary_stats.parquet")
 )
 
-check_exists <- function(path) {
-  if (!file.exists(path)) {
-    cli::cli_abort("Expected file not found: {.file {path}}")
-  }
+# Only run pre-processing if the expected files don't exist
+exists <- file.exists(expected_files)
+if (!all(exists)) {
+  source(here::here("scripts/03_analyse_omop_cdm.R"))
+  # Sanity check: make sure the expected files were created
+  purrr::walk(expected_files, function(path) {
+    if (!file.exists(path)) {
+      cli::cli_abort("Expected file not found: {.file {path}}")
+    }
+  })
+} else {
+  cli::cli_alert_info("All expected files already exist. Skipping pre-processing.")
+  cli::cli_alert_info("To force re-processing, delete the following files:")
+  cli::cli_ul(paths)
 }
-purrr::walk(expected_files, check_exists)
