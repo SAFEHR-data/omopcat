@@ -25,6 +25,3 @@ CMD ["R", "-e", \
     source('scripts/create_prod_data.R'); \
     omopcat::run_app()" \
     ]
-
-# to build: docker build -f deploy/Dockerfile --platform=linux/amd64 -t omopcat .
-# to run: docker run -p 3838:3838 omopcat
