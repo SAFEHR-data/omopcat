@@ -18,13 +18,12 @@ ARG OMOPCAT_DATA_PATH
 
 ADD scripts ./scripts
 COPY deploy/.Renviron .Renviron
-RUN R -e '' || exit 1
 
 EXPOSE 3838
 CMD ["R", "-e", \
-    "options('shiny.port'=3838,shiny.host='0.0.0.0');" \
-    "source('scripts/create_prod_data.R');" \
-    "omopcat::run_app()" \
+    "options('shiny.port'=3838,shiny.host='0.0.0.0'); \
+    source('scripts/create_prod_data.R'); \
+    omopcat::run_app()" \
     ]
 
 # to build: docker build -f deploy/Dockerfile --platform=linux/amd64 -t omopcat .
