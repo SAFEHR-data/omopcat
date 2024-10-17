@@ -33,8 +33,8 @@ Running the production version of the app requires to populate the
 the necessary `parquet` files (see [`data/test_data`](../data/test_data/) for an example).
 
 We provide the [`scripts/create_prod_data.R`](../scripts/create_prod_data.R)
-script to facilitate this. This script will be run automatically when building the Docker image if
-the mounted data directory is found to be empty.
+script to facilitate this. This script will be run automatically when running the Docker container
+if the mounted data directory is found to be empty.
 
 A few environment variables are required to run this script:
 
@@ -47,8 +47,8 @@ A few environment variables are required to run this script:
     permissions for the user to be able to use the
     [`CDMConnector`](https://darwin-eu.github.io/CDMConnector/index.html) package
 
-These should be defined in a local `.env` file (not git-tracked) in the `deploy/` directory.
-See the `.env.sample` file for a template.
+These should be defined in a local `.Renviron` file (not git-tracked) in the `deploy/` directory.
+See the `.Renviron.sample` file for a template.
 
 ## Build Docker images and run the app
 
