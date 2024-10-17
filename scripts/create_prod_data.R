@@ -46,5 +46,5 @@ if (!all(exists)) {
 } else {
   cli::cli_alert_info("All expected files already exist. Skipping pre-processing.")
   cli::cli_alert_info("To force re-processing, delete the following files:")
-  cli::cli_ul(paths)
+  cli::cli_ul(expected_files[exists])
 }
