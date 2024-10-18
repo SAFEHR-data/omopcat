@@ -68,7 +68,10 @@ calculate_summary_stats <- function(omop_table, concept_name) {
   categorical_concepts <- filter(omop_table, !is.null(value_as_concept_id) & value_as_concept_id != 0)
 
   numeric_stats <- .summarise_numeric_concepts(numeric_concepts) |> collect()
-  categorical_stats <- .summarise_categorical_concepts(categorical_concepts) |> collect()
+  categorical_stats <- .summarise_categorical_concepts(categorical_concepts) |>
+    # Convert value_as_number to double to make it compatible with numeric stats
+    mutate(value_as_number = as.double(.data$value_as_number)) |>
+    collect()
   bind_rows(numeric_stats, categorical_stats)
 }
 

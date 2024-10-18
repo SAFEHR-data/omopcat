@@ -1,10 +1,13 @@
 services:
   omopcat:
     build:
-      context: .
+      # Use repo root as context so we can copy scripts directory to container
+      context: ..
+      dockerfile: deploy/Dockerfile
       args:
         HTTP_PROXY: ${HTTP_PROXY}
         HTTPS_PROXY: ${HTTPS_PROXY}
+        OMOPCAT_DATA_PATH: /etc/omopcat/data
     image: omopcat:latest
     platform: linux/amd64
     restart: unless-stopped

@@ -26,6 +26,30 @@ renv::snapshot(project = ".", lockfile = "./deploy/renv.lock.prod", type = "expl
 This `renv.lock.prod` file will be a subset of the `renv.lock` that is in the package root. The
 latter also includes development dependencies, which are not necessary to run the app in production.
 
+## Populate the `data/prod_data` directory
+
+Running the production version of the app requires to populate the
+[`data/prod_data`](../data/prod_data/) directory with
+the necessary `parquet` files (see [`data/test_data`](../data/test_data/) for an example).
+
+We provide the [`scripts/create_prod_data.R`](../scripts/create_prod_data.R)
+script to facilitate this. This script will be run automatically when running the Docker container
+if the mounted data directory is found to be empty.
+
+A few environment variables are required to run this script:
+
+* `DB_NAME`: the name of the database to connect to
+* `HOST`: the host of the database
+* `PORT`: the port on which to connect to the database
+* `DB_USERNAME`: the username to connect to the database
+* `DB_PASSWORD`: the password to connect to the database
+* `DB_CDM_SCHEMA`: the schema of the CDM database, note that this needs to have both read and write
+    permissions for the user to be able to use the
+    [`CDMConnector`](https://darwin-eu.github.io/CDMConnector/index.html) package
+
+These should be defined in a local `.Renviron` file (not git-tracked) in the `deploy/` directory.
+See the `.Renviron.sample` file for a template.
+
 ## Build Docker images and run the app
 
 To launch the test version of the app, run:
@@ -42,9 +66,6 @@ To launch the production version of the up, run:
 ```shell
 docker compose up -d --build
 ```
-
-Note that this will require to populate the [`data/prod_data`](../data/prod_data/) directory with
-the necessary `parquet` files (see [`data/test_data`](../data/test_data/ for an example).
 
 This will build the container and install the necessary dependencies to run the app.
 The `-d` flag runs the `docker compose` command in "detached" mode, meaning the app will be run

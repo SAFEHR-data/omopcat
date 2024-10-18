@@ -3,13 +3,13 @@ cli::cli_h1("Setting up test database")
 library(omopcat)
 
 # Create an duckdb database from Eunomia datasets
-db_path <-  CDMConnector::eunomia_dir(
+db_path <- CDMConnector::eunomia_dir(
   dataset_name = Sys.getenv("TEST_DB_NAME"),
   cdm_version = Sys.getenv("TEST_DB_OMOP_VERSION"),
   database_file = tempfile(fileext = ".duckdb")
 )
 
-con <- connect_to_db(db_path)
+con <- connect_to_test_duckdb(db_path)
 
 # Use 'cdm_from_con' to load the dataset and verify integrity
 CDMConnector::cdm_from_con(

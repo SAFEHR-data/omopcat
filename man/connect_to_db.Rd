@@ -2,14 +2,12 @@
 % Please edit documentation in R/utils_preprocessing_db.R
 \name{connect_to_db}
 \alias{connect_to_db}
-\title{Connect to duckdb database}
+\title{Connec to a database}
 \usage{
-connect_to_db(db_path, ..., .envir = parent.frame())
+connect_to_db(..., .envir = parent.frame())
 }
 \arguments{
-\item{db_path}{path to the duckdb database file}
-
-\item{...}{unused}
+\item{...}{arguments passed on to \code{\link[DBI:dbConnect]{DBI::dbConnect()}}}
 
 \item{.envir}{passed on to \code{\link[withr:defer]{withr::defer()}}}
 }
@@ -17,5 +15,6 @@ connect_to_db(db_path, ..., .envir = parent.frame())
 A \code{\link[DBI:DBIConnection-class]{DBI::DBIConnection}} object
 }
 \description{
-Connect to duckdb database
+General helper to connect to a databae through \code{\link[DBI:dbConnect]{DBI::dbConnect()}}, while ensuring
+that the connection is closed when the connection object goes out of scope.
 }
