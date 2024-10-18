@@ -16,7 +16,7 @@ run_app <- function(
   # Synchronise environment variable settings and golem options for running in prod
   if (get_golem_config("app_prod")) {
     options("golem.app.prod" = TRUE)
-    .check_env()
+    .check_envvars("OMOPCAT_DATA_PATH")
   }
 
   with_golem_options(
@@ -32,10 +32,12 @@ run_app <- function(
   )
 }
 
-.check_env <- function() {
-  required <- "OMOPCAT_DATA_PATH"
-  missing <- required[!required %in% names(Sys.getenv())]
-  if (length(missing) > 0) {
-    cli::cli_abort("The following environment variables are missing: {.envvar {missing}}")
+.check_envvars <- function(required) {
+  missing <- Sys.getenv(required) == ""
+  if (any(missing)) {
+    cli::cli_abort(c(
+      "x" = "Environment variable{?s} {.envvar {required[missing]}} not set",
+      "i" = "Make sure to define the environment variables (e.g. in a local {.file .Renviron} file)"
+    ), call = rlang::caller_env())
   }
 }

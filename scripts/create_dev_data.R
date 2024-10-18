@@ -4,16 +4,15 @@
 
 here::i_am("scripts/create_dev_data.R")
 
+Sys.setenv("ENV" = "dev")
 # Path to download Eunomia datasets
 Sys.setenv(EUNOMIA_DATA_FOLDER = file.path("data-raw/test_db/eunomia"))
 # Name of the synthetic dataset to use
 Sys.setenv(TEST_DB_NAME = "synthea-allergies-10k")
 # OMOP CDM version
 Sys.setenv(TEST_DB_OMOP_VERSION = "5.3")
-# Schema name for data
-Sys.setenv(TEST_DB_CDM_SCHEMA = "main")
-# Schema name for results
-Sys.setenv(TEST_DB_RESULTS_SCHEMA = "main")
+# Schema name for data and results
+Sys.setenv(DB_CDM_SCHEMA = "main")
 
 source(here::here("scripts/01_setup_test_db.R"))
 source(here::here("scripts/02_insert_dummy_tables.R"))

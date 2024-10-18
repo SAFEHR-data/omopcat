@@ -20,7 +20,6 @@ Imports:
     golem (>= 0.4.1),
     shiny (>= 1.9.1),
     DBI,
-    duckdb,
     glue,
     tidyr,
     withr,
@@ -35,7 +34,9 @@ Imports:
     plotly (>= 4.10.4),
     purrr,
     htmltools,
-    markdown
+    markdown,
+    CDMConnector,
+    RPostgres
 Suggests:
     devtools,
     usethis,
@@ -43,11 +44,11 @@ Suggests:
     testthat (>= 3.0.0),
     spelling,
     here,
-    CDMConnector,
     lintr,
     dbplyr,
     RSQLite,
-    precommit
+    precommit,
+    duckdb
 Remotes: SAFEHR-data/omop-bundles
 Encoding: UTF-8
 LazyData: true
