@@ -29,6 +29,7 @@ repos:
           - SAFEHR-data/omop-bundles
           - plotly
           - markdown
+          - bsicons
           - CDMConnector
       # codemeta must be above use-tidy-description when both are used
       # -   id: codemeta-description-updated
