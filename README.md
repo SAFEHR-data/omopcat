@@ -2,8 +2,8 @@
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![R-CMD-check](https://github.com/SAFEHR-data/omop-data-catalogue/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/SAFEHR-data/omop-data-catalogue/actions/workflows/R-CMD-check.yaml)
-[![codecov](https://codecov.io/gh/SAFEHR-data/omop-data-catalogue/graph/badge.svg?token=51UZPgLZMZ)](https://codecov.io/gh/SAFEHR-data/omop-data-catalogue)
+[![R-CMD-check](https://github.com/SAFEHR-data/omopcat/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/SAFEHR-data/omopcat/actions/workflows/R-CMD-check.yaml)
+[![codecov](https://codecov.io/gh/SAFEHR-data/omopcat/graph/badge.svg?token=51UZPgLZMZ)](https://codecov.io/gh/SAFEHR-data/omopcat)
 <!-- badges: end -->
 
 The `omopcat` web app provides an interactive dashboard to display a catalogue of available OMOP data. It enables
@@ -15,7 +15,7 @@ and subsequently export a selection of concepts of interest.
 1. [Installation](#installation)
 1. [Usage](#usage)
 1. [Deployment](#deploying-with-docker)
-1. [Developer instructions](https://github.com/SAFEHR-data/omop-data-catalogue/wiki/)
+1. [Developer instructions](https://github.com/SAFEHR-data/omopcat/wiki/)
 
 ## Installation
 
@@ -25,7 +25,7 @@ You can install the development version of omopcat from within R like so:
 install.packages("remotes")
 usethis::create_github_token()
 credentials::set_github_pat()
-remotes::install_github("SAFEHR-data/omop-data-catalogue")
+remotes::install_github("SAFEHR-data/omopcat")
 ```
 
 You will need to copy the PAT from the web page that `usethis::create_github_token`
@@ -41,7 +41,7 @@ run_app()
 ```
 
 By default, this will run the app in `dev` mode and use a small dummy data set to host the app 
-([see the wiki for more details](https://github.com/SAFEHR-data/omop-data-catalogue/wiki/Data)).
+([see the wiki for more details](https://github.com/SAFEHR-data/omopcat/wiki/Data)).
 
 To run the app in production mode, set the `GOLEM_CONFIG_ACTIVE` environment variable to `production`.
 From within R this can be done by

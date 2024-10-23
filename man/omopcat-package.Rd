@@ -11,8 +11,8 @@ A Shiny app to display an OMOP data catalogue in an interactive dashboard. Enabl
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/SAFEHR-data/omop-data-catalogue}
-  \item Report bugs at \url{https://github.com/SAFEHR-data/omop-data-catalogue/issues}
+  \item \url{https://github.com/SAFEHR-data/omopcat}
+  \item Report bugs at \url{https://github.com/SAFEHR-data/omopcat/issues}
 }
 
 }
