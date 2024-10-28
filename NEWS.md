@@ -23,7 +23,7 @@ This version adds support for OMOP bundles. The app name also changed from `caly
 * Refactored the plots module (@milanmlft, #77)
 * Set default ggplot2 theme with larger font size (@milanmlft, #82)
 
-**Full Changelog**: https://github.com/SAFEHR-data/omop-data-catalogue/compare/v0.1.0...v0.2.0
+**Full Changelog**: https://github.com/SAFEHR-data/omopcat/compare/v0.1.0...v0.2.0
 
 # omopcat 0.1.0
 

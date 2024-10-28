@@ -36,7 +36,7 @@ omopcat has a pre-processing step that summarises an OMOP extraction by calculat
 
 #### Contact
 
-https://github.com/SAFEHR-data/omop-data-catalogue
+https://github.com/SAFEHR-data/omopcat
 
 omopcat is made by the SAFEHR-data development team at UCLH and UCL supported by the [UCLH
 Biomedical Research Centre](https://www.uclhospitals.brc.nihr.ac.uk/).
