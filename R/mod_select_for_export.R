@@ -7,7 +7,7 @@
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
-mod_select_concepts_ui <- function(id) {
+mod_select_for_export_ui <- function(id) {
   ns <- NS(id)
   tagList(
     actionButton(ns("add_to_export"), "Add selection to export"),
@@ -22,7 +22,7 @@ mod_select_concepts_ui <- function(id) {
 #' @return A reactive data.frame filtered on the selected concepts
 #'
 #' @noRd
-mod_select_concepts_server <- function(id, selected_concepts) {
+mod_select_for_export_server <- function(id, selected_concepts) {
   stopifnot(is.reactive(selected_concepts))
 
   moduleServer(id, function(input, output, session) {

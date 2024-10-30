@@ -23,7 +23,7 @@ app_server <- function(input, output, session) {
   mod_plots_server("plots", selected_concept_row, selected_dates)
 
   # Update data to be exported with the selected concepts
-  selected_data <- mod_select_concepts_server("select_concepts", selected_concept_row)
+  selected_data <- mod_select_for_export_server("select_concepts", selected_concept_row)
 
   # Generate the export tab based on the selected data
   mod_export_tab_server("export_tab", selected_data)

@@ -1,7 +1,7 @@
-test_that("mod_select_concepts_server reacts to concept selection", {
+test_that("mod_select_for_export_server reacts to concept selection", {
   select_concepts <- get_concepts_table()$concept_name[c(2, 3)]
   testServer(
-    mod_select_concepts_server,
+    mod_select_for_export_server,
     # Add here your module params
     args = list(concept_ids = reactiveVal(select_concepts)),
     {
@@ -23,10 +23,10 @@ test_that("mod_select_concepts_server reacts to concept selection", {
 })
 
 test_that("module ui works", {
-  ui <- mod_select_concepts_ui(id = "test")
+  ui <- mod_select_for_export_ui(id = "test")
   golem::expect_shinytaglist(ui)
   # Check that formals have not been removed
-  fmls <- formals(mod_select_concepts_ui)
+  fmls <- formals(mod_select_for_export_ui)
   for (i in c("id")) {
     expect_true(i %in% names(fmls))
   }
