@@ -1,4 +1,4 @@
-test_that("app ui", {
+test_that("app ui is set up correctly", {
   ui <- app_ui()
   golem::expect_shinytaglist(ui)
   # Check that formals have not been removed
@@ -8,7 +8,7 @@ test_that("app ui", {
   }
 })
 
-test_that("app server", {
+test_that("app server is set up correctly", {
   server <- app_server
   expect_type(server, "closure")
   # Check that formals have not been removed
@@ -30,32 +30,27 @@ test_that("golem-config works", {
   expect_false(get_golem_config("app_prod", config = "dev", file = config_file))
 })
 
-# Configure this test to fit your need.
-# testServer() function makes it possible to test code in server functions and modules, without
-# needing to run the full Shiny application
-testServer(app_server, {
-  # Set and test an input
-  session$setInputs(x = 2)
-  expect_equal(input$x, 2)
-
-  # nolint start
-  # Example of tests you can do on the server:
-  # - Checking reactiveValues
-  # expect_equal(r$lg, 'EN')
-  # - Checking output
-  # expect_equal(output$txt, "Text")
-  # nolint end
+test_that("Golem option for running in production is consistent with Environment variable", {
+  withr::local_envvar(
+    GOLEM_CONFIG_ACTIVE = "production",
+    OMOPCAT_DATA_PATH = "/path/to/data" # needs to be set when running in prod
+  )
+  run_app()
+  expect_true(getOption("golem.app.prod"))
 })
 
 # Configure this test to fit your need
-test_that("app launches", {
+test_that("app launches without errors", {
   golem::expect_running(sleep = 5)
 })
 
-test_that("Env check fails when envvars missing", {
-  withr::local_envvar(OMOPCAT_DATA_PATH = NULL)
+test_that("Running app in prod fails if data path not set", {
+  withr::local_envvar(
+    GOLEM_CONFIG_ACTIVE = "production",
+    OMOPCAT_DATA_PATH = NULL
+  )
   expect_error(
-    .check_envvars("OMOPCAT_DATA_PATH"),
+    run_app(),
     "Environment variable `OMOPCAT_DATA_PATH` not set"
   )
 })
