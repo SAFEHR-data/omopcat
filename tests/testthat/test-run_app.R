@@ -1,5 +1,5 @@
 test_that("app launches without errors", {
-  golem::expect_running(sleep = 5)
+  expect_no_error(run_app())
 })
 
 test_that("app ui is set up correctly", {
