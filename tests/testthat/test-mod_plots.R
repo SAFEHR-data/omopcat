@@ -4,7 +4,7 @@ mock_date_range <- reactiveVal(c("2019-04-01", "2024-08-01"))
 test_that("mod_plots_server reacts to changes in the selected concept", {
   testServer(
     mod_plots_server,
-    args = list(selected_concept = mock_concept_row, selected_dates = mock_date_range),
+    args = list(selected_concepts = mock_concept_row, selected_dates = mock_date_range),
     {
       ns <- session$ns
       expect_true(inherits(ns, "function"))
@@ -27,7 +27,7 @@ test_that("mod_plots_server reacts to changes in the selected concept", {
 test_that("mod_plots_server reacts to changes in the selected date range", {
   testServer(
     mod_plots_server,
-    args = list(selected_concept = mock_concept_row, selected_dates = mock_date_range),
+    args = list(selected_concepts = mock_concept_row, selected_dates = mock_date_range),
     {
       ns <- session$ns
       expect_true(inherits(ns, "function"))
@@ -70,7 +70,7 @@ test_that("Date filtering works as expected", {
 test_that("mod_plots_server fails when input is missing", {
   testServer(
     mod_plots_server,
-    args = list(selected_concept = reactiveVal(NULL), selected_dates = mock_date_range),
+    args = list(selected_concepts = reactiveVal(NULL), selected_dates = mock_date_range),
     {
       # When no concept_id is selected, no output should be generated
       # shiny::req() silently returns an error when the input is missing
@@ -82,7 +82,7 @@ test_that("mod_plots_server fails when input is missing", {
 test_that("mod_plots_server generates an error when no data is available for the selected concept", {
   testServer(
     mod_plots_server,
-    args = list(selected_concept = reactiveVal(NULL), selected_dates = mock_date_range),
+    args = list(selected_concepts = reactiveVal(NULL), selected_dates = mock_date_range),
     {
       mock_concept_row(list(concept_id = 9999999, concept_name = "idontexist"))
       session$flushReact()
