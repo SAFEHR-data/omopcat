@@ -16,7 +16,7 @@ app_ui <- function(request) {
         title = "Filtering options",
         mod_date_range_ui("date_range"),
         mod_select_bundle_ui("select_bundle"),
-        mod_select_for_export_ui("select_concepts")
+        mod_select_for_export_ui("select_for_export")
       ),
       nav_panel(
         title = "Concepts",

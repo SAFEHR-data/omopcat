@@ -17,14 +17,14 @@ app_server <- function(input, output, session) {
   # Populate the main concepts table in the dashboard with all concepts and their
   # records and patients counts
   # Get the selected row from the datatable as a reactive output
-  selected_concept_row <- mod_datatable_server("concepts", selected_dates, bundle_concepts)
+  selected_concepts <- mod_datatable_server("concepts", selected_dates, bundle_concepts)
 
   # Generate the plots based on the selected data
-  mod_plots_server("plots", selected_concept_row, selected_dates)
+  mod_plots_server("plots", selected_concepts, selected_dates)
 
   # Update data to be exported with the selected concepts
-  selected_data <- mod_select_for_export_server("select_concepts", selected_concept_row)
+  data_for_export <- mod_select_for_export_server("select_for_export", selected_concepts)
 
   # Generate the export tab based on the selected data
-  mod_export_tab_server("export_tab", selected_data)
+  mod_export_tab_server("export_tab", data_for_export)
 }
