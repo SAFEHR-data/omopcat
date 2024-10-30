@@ -17,30 +17,29 @@ mod_select_for_export_ui <- function(id) {
 
 #' select_concepts Server Functions
 #'
-#' @param concept_ids A reactive vector of concept IDs from which to select the concepts
+#' @param concepts_data A reactive data frame of concepts data
 #'
-#' @return A reactive data.frame filtered on the selected concepts
+#' @return A reactive character vector of selected concept IDs
 #'
 #' @noRd
-mod_select_for_export_server <- function(id, selected_concepts) {
-  stopifnot(is.reactive(selected_concepts))
+mod_select_for_export_server <- function(id, concepts_data) {
+  stopifnot(is.reactive(concepts_data))
 
   moduleServer(id, function(input, output, session) {
-    # Create initial 0-row data.frame with same structure as selected_concepts
+    # Store selection in a reactiveValues object so we can update and return it later
     r <- reactiveValues()
-    r$current_selection <- isolate(selected_concepts()[0, ])
+    r$current_selection <- character()
 
     # When the add_to_export button is clicked, update the selected_concepts data
     observeEvent(input$add_to_export, {
-      r$current_selection <- dplyr::full_join(
+      r$current_selection <- unique(c(
         r$current_selection,
-        selected_concepts(),
-        by = names(r$current_selection)
-      )
+        concepts_data()$concept_id
+      ))
     })
 
     output$concepts_for_export <- renderText({
-      nrow(r$current_selection)
+      length(r$current_selection)
     })
 
     return(reactive(r$current_selection))
