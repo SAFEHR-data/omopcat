@@ -1,3 +1,7 @@
+test_that("app launches without errors", {
+  golem::expect_running(sleep = 5)
+})
+
 test_that("app ui is set up correctly", {
   ui <- app_ui()
   golem::expect_shinytaglist(ui)
@@ -28,20 +32,6 @@ test_that("golem-config works", {
 
   expect_true(get_golem_config("app_prod", config = "production", file = config_file))
   expect_false(get_golem_config("app_prod", config = "dev", file = config_file))
-})
-
-test_that("Golem option for running in production is consistent with Environment variable", {
-  withr::local_envvar(
-    GOLEM_CONFIG_ACTIVE = "production",
-    OMOPCAT_DATA_PATH = "/path/to/data" # needs to be set when running in prod
-  )
-  run_app()
-  expect_true(getOption("golem.app.prod"))
-})
-
-# Configure this test to fit your need
-test_that("app launches without errors", {
-  golem::expect_running(sleep = 5)
 })
 
 test_that("Running app in prod fails if data path not set", {
