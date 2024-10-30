@@ -10,8 +10,8 @@
 mod_select_concepts_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    actionButton(ns("add_to_export"), "Add selected rows to export"),
-    verbatimTextOutput(ns("concepts_for_export"))
+    actionButton(ns("add_to_export"), "Add selection to export"),
+    value_box("Concepts selected for export", value = textOutput(ns("concepts_for_export")))
   )
 }
 
@@ -24,6 +24,7 @@ mod_select_concepts_ui <- function(id) {
 #' @noRd
 mod_select_concepts_server <- function(id, selected_concepts) {
   stopifnot(is.reactive(selected_concepts))
+
   moduleServer(id, function(input, output, session) {
     # When the add_to_export button is clicked, update the selected_concepts data
     selected_concepts_data <- eventReactive(input$add_to_export, {
@@ -31,7 +32,7 @@ mod_select_concepts_server <- function(id, selected_concepts) {
     })
 
     output$concepts_for_export <- renderText({
-      paste(selected_concepts_data()$concept_name, collapse = "\n")
+      nrow(selected_concepts_data())
     })
 
     return(reactive(selected_concepts_data()))
