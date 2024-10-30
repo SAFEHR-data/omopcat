@@ -10,7 +10,8 @@
 mod_select_concepts_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    selectInput(ns("select_concepts"), "Select concepts", choices = NULL, multiple = TRUE)
+    actionButton(ns("add_to_export"), "Add selected rows to export"),
+    verbatimTextOutput(ns("concepts_for_export"))
   )
 }
 
@@ -21,20 +22,18 @@ mod_select_concepts_ui <- function(id) {
 #' @return A reactive data.frame filtered on the selected concepts
 #'
 #' @noRd
-mod_select_concepts_server <- function(id, concept_ids) {
-  all_concepts <- get_concepts_table()
-
+mod_select_concepts_server <- function(id, selected_concepts) {
+  stopifnot(is.reactive(selected_concepts))
   moduleServer(id, function(input, output, session) {
-    observeEvent(concept_ids(), {
-      concept_names <- reactive({
-        all_concepts$concept_name[all_concepts$concept_id %in% concept_ids()]
-      })
-      updateSelectInput(session, "select_concepts",
-        choices = concept_names(),
-        ## Have all present concepts selected by default
-        selected = concept_names(),
-      )
+    # When the add_to_export button is clicked, update the selected_concepts data
+    selected_concepts_data <- eventReactive(input$add_to_export, {
+      selected_concepts()
     })
-    reactive(all_concepts[all_concepts$concept_name %in% input$select_concepts, ])
+
+    output$concepts_for_export <- renderText({
+      paste(selected_concepts_data()$concept_name, collapse = "\n")
+    })
+
+    return(reactive(selected_concepts_data()))
   })
 }
