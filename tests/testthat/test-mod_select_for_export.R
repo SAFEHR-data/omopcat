@@ -1,9 +1,9 @@
-test_that("mod_select_for_export_server reacts to concept selection", {
+test_that("mod_select_for_export_server only reacts to button click", {
   select_concepts <- get_concepts_table()$concept_name[c(2, 3)]
   testServer(
     mod_select_for_export_server,
     # Add here your module params
-    args = list(concept_ids = reactiveVal(select_concepts)),
+    args = list(selected_concepts = reactiveVal(select_concepts)),
     {
       ns <- session$ns
       # Pre-defined golem tests
@@ -15,9 +15,12 @@ test_that("mod_select_for_export_server reacts to concept selection", {
       session$setInputs(select_concepts = select_concepts)
       session$flushReact()
 
-      expect_s3_class(out(), "data.frame")
-      expect_equal(nrow(out()), 2)
-      expect_identical(out()$concept_name, select_concepts)
+      # We can't test the reactivity to the button click,
+      # but we can check that the returned selection doesn't react
+      # to the select_concepts input
+      expect_true(is.reactive(out))
+      # The returned value is an empty reactive at this point, so this should error
+      expect_error(nrow(out()))
     }
   )
 })
