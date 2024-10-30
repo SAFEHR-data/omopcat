@@ -26,15 +26,23 @@ mod_select_for_export_server <- function(id, selected_concepts) {
   stopifnot(is.reactive(selected_concepts))
 
   moduleServer(id, function(input, output, session) {
+    # Create initial 0-row data.frame with same structure as selected_concepts
+    r <- reactiveValues()
+    r$current_selection <- isolate(selected_concepts()[0, ])
+
     # When the add_to_export button is clicked, update the selected_concepts data
-    selected_concepts_data <- eventReactive(input$add_to_export, {
-      selected_concepts()
+    observeEvent(input$add_to_export, {
+      r$current_selection <- dplyr::full_join(
+        r$current_selection,
+        selected_concepts(),
+        by = names(r$current_selection)
+      )
     })
 
     output$concepts_for_export <- renderText({
-      nrow(selected_concepts_data())
+      nrow(r$current_selection)
     })
 
-    return(reactive(selected_concepts_data()))
+    return(reactive(r$current_selection))
   })
 }
