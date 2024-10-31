@@ -11,6 +11,7 @@ repos:
           - bslib
           - config
           - DT
+          - fs
           - ggplot2
           - golem
           - shiny

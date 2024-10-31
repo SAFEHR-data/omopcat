@@ -41,6 +41,7 @@ Imports:
 Suggests:
     devtools,
     usethis,
+    fs,
     styler,
     testthat (>= 3.0.0),
     spelling,
