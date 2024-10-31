@@ -2,7 +2,7 @@ services:
   omopcat:
     build:
       # Use repo root as context so we can copy scripts directory to container
-      context: ..
+      context: .
       dockerfile: deploy/Dockerfile
       args:
         HTTP_PROXY: ${HTTP_PROXY}
@@ -19,6 +19,6 @@ services:
       LOW_FREQUENCY_THRESHOLD: 5
       LOW_FREQUENCY_REPLACEMENT: 2.5
     volumes:
-      - ../data/prod_data:/etc/omopcat/data
+      - ./data/prod_data:/etc/omopcat/data
     ports:
       - 3838:3838

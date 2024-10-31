@@ -4,4 +4,4 @@ services:
       file: docker-compose.yml
       service: omopcat
     volumes:
-      - ../data/test_data:/etc/omopcat/data
+      - ./data/test_data:/etc/omopcat/data
