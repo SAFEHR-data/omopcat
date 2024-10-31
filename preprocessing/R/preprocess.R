@@ -46,7 +46,7 @@ preprocess <- function(out_path = Sys.getenv("PREPROCESS_OUT_PATH")) {
     .check_prod_env()
   }
 
-  cli::cli_alert_info("Running pre-processing with {.var out_path} = {.file {out_path}}")
+  cli::cli_alert_info("Running pre-processing with {.var out_path} = {.path {out_path}}")
   # TODO: run pre-processing
   return(invisible(TRUE))
 }
@@ -61,15 +61,14 @@ preprocess <- function(out_path = Sys.getenv("PREPROCESS_OUT_PATH")) {
     "HOST",
     "PORT",
     "DB_USERNAME",
-    "DB_PASSWORD",
-    "PREPROCESS_OUT_PATH"
+    "DB_PASSWORD"
   )
 
   missing <- Sys.getenv(required_envvars) == ""
   if (any(missing)) {
-    cli::cli_abort(c(
-      "x" = "Environment variable{?s} {.envvar {required_envvars[missing]}} not set",
-      "i" = "Make sure to define the environment variables in a local {.file .Renviron} file"
-    ), call = rlang::caller_env())
+    cli::cli_abort(
+      "Environment variable{?s} {.envvar {required_envvars[missing]}} not set",
+      call = rlang::caller_env()
+    )
   }
 }
