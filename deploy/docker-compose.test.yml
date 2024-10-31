@@ -1,5 +1,5 @@
 services:
-  calyspo_test:
+  omopcat_test:
     extends:
       file: docker-compose.yml
       service: omopcat
