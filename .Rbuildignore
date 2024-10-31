@@ -3,6 +3,7 @@ $run_dev.*
 ^.here$
 ^LICENSE\.md$
 ^\.Rproj\.user$
+^\.env.*$
 ^\.github$
 ^\.lintr$
 ^\.pre-commit-config\.yaml$
@@ -13,6 +14,7 @@ $run_dev.*
 ^data-raw$
 ^deploy$
 ^dev$
+^docker-compose.*\.yml$
 ^preprocessing$
 ^renv$
 ^renv\.lock$
