@@ -16,6 +16,12 @@ test_that("mod_select_for_export_server only reacts to button click", {
       expect_type(out(), "character")
       expect_length(out(), 0)
 
+      # Clicking the button without input should just do nothing
+      session$setInputs(add_to_export = 1)
+      session$flushReact()
+      expect_length(out(), 0)
+
+
       # Update input data, the output should not be updated
       n_selected <- 10
       concepts_data(data.frame(concept_id = seq_len(n_selected)))
@@ -23,7 +29,7 @@ test_that("mod_select_for_export_server only reacts to button click", {
       expect_length(out(), 0)
 
       # Mimic button clicking, the output show now be updated
-      session$setInputs(add_to_export = 1)
+      session$setInputs(add_to_export = 2)
       session$flushReact()
       expect_length(out(), n_selected)
     }
