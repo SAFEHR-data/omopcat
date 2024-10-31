@@ -1,25 +1,10 @@
-FROM rocker/shiny-verse:4.4.1
+FROM rocker/tidyverse:4.4.1
 
-WORKDIR /app
-COPY deploy/renv.lock.prod renv.lock
+WORKDIR /pkg
+ADD preprocessing .
 
-# Install renv and restore environment
-# omopbundles is installed separately as renv is giving problems
-# with GitHub packages
-RUN R -e 'remotes::install_github("SAFEHR-data/omop-bundles")'
-RUN install2.r --error --skipinstalled renv && \
-    R -e 'renv::restore(exclude = "omopbundles")'
+ENV OMOPCAT_DATA_PATH=${OMOPCAT_DATA_PATH}
 
-COPY deploy/omopcat_*.tar.gz /app.tar.gz
-RUN R -e 'remotes::install_local("/app.tar.gz", upgrade="never", dependencies = FALSE)' && \
-    rm /app.tar.gz
+RUN R -e 'remotes::install_local(path = ".", dependencies = TRUE)'
 
-ARG OMOPCAT_DATA_PATH
-
-ADD scripts ./scripts
-COPY preprocessing/.Renviron .Renviron
-
-EXPOSE 3838
-CMD ["R", "-e", \
-    source('scripts/create_prod_data.R'); \
-    ]
+CMD ["R", "-e", "omopcat.preprocessing::preprocess()"]
