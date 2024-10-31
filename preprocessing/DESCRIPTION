@@ -16,6 +16,7 @@ RoxygenNote: 7.3.2
 Imports:
     cli,
     fs,
+    nanoparquet,
     rlang,
     withr
 Suggests:
