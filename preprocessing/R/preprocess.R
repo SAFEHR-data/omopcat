@@ -8,19 +8,14 @@
 #'
 #' @noRd
 #' @export
-preprocess <- function(out_path = Sys.getenv("OMOPCAT_DATA_PATH")) {
+preprocess <- function(out_path = Sys.getenv("PREPROCESS_OUT_PATH")) {
   if (out_path == "") {
     cli::cli_abort(c(
       "x" = "{.var out_path} should not be empty.",
-      "i" = "Have you set the {.envvar OMOPCAT_DATA_PATH} environment variable?"
+      "i" = "Have you set the {.envvar PREPROCESS_OUT_PATH} environment variable?"
     ))
   }
   fs::dir_create(out_path)
-
-  if (.running_in_production()) {
-    cli::cli_alert_info("Running in production mode")
-    .check_prod_env()
-  }
 
   out_files <- c(
     file.path(out_path, "omopcat_concepts.parquet"),
@@ -39,6 +34,11 @@ preprocess <- function(out_path = Sys.getenv("OMOPCAT_DATA_PATH")) {
     return(invisible(out_files))
   }
 
+  if (.running_in_production()) {
+    cli::cli_alert_info("Running in production mode")
+    .check_prod_env()
+  }
+
   cli::cli_alert_info("Running pre-processing with {.var out_path} = {.file {out_path}}")
   # TODO: run pre-processing
   return(invisible(out_files))
@@ -55,13 +55,13 @@ preprocess <- function(out_path = Sys.getenv("OMOPCAT_DATA_PATH")) {
     "PORT",
     "DB_USERNAME",
     "DB_PASSWORD",
-    "OMOPCAT_DATA_PATH"
+    "PREPROCESS_OUT_PATH"
   )
 
   missing <- Sys.getenv(required_envvars) == ""
   if (any(missing)) {
     cli::cli_abort(c(
-      "x" = "Environment variable{?s} {.envvar {x[missing]}} not set",
+      "x" = "Environment variable{?s} {.envvar {required_envvars[missing]}} not set",
       "i" = "Make sure to define the environment variables in a local {.file .Renviron} file"
     ), call = rlang::caller_env())
   }
