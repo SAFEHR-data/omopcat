@@ -11,7 +11,7 @@ mod_select_for_export_ui <- function(id) {
   ns <- NS(id)
   tagList(
     actionButton(ns("add_to_export"), "Add selection to export"),
-    value_box("Concepts selected for export", value = textOutput(ns("concepts_for_export")))
+    value_box("Concepts selected for export", value = textOutput(ns("n_concepts_for_export")))
   )
 }
 
@@ -38,7 +38,7 @@ mod_select_for_export_server <- function(id, concepts_data) {
       ))
     })
 
-    output$concepts_for_export <- renderText({
+    output$n_concepts_for_export <- renderText({
       length(r$current_selection)
     })
 
