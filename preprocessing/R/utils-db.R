@@ -1,15 +1,14 @@
 # nocov start
 
-#' Connec to a database
+#' Connect to a database
 #'
-#' General helper to connect to a databae through [`DBI::dbConnect()`], while ensuring
+#' General helper to connect to a database through [`DBI::dbConnect()`], while ensuring
 #' that the connection is closed when the connection object goes out of scope.
 #'
 #' @param ... arguments passed on to [`DBI::dbConnect()`]
 #' @param .envir passed on to [`withr::defer()`]
 #'
 #' @return A [`DBI::DBIConnection-class`] object
-#' @export
 connect_to_db <- function(..., .envir = parent.frame()) {
   con <- DBI::dbConnect(...)
   withr::defer(DBI::dbDisconnect(con), envir = .envir)
@@ -23,7 +22,6 @@ connect_to_db <- function(..., .envir = parent.frame()) {
 #' @param .envir passed on to [`withr::defer()`]
 #'
 #' @return A [`DBI::DBIConnection-class`] object
-#' @export
 connect_to_test_duckdb <- function(db_path, ..., .envir = parent.frame()) {
   if (!file.exists(db_path)) {
     cli::cli_abort("Database file {.file {db_path}} not found")
@@ -43,7 +41,6 @@ connect_to_test_duckdb <- function(db_path, ..., .envir = parent.frame()) {
 #' @param schema character, name of the schema to be used
 #'
 #' @return `TRUE`, invisibly, if the operation was successful
-#' @export
 write_table <- function(data, con, table, schema) {
   DBI::dbWriteTable(
     conn = con,
@@ -60,7 +57,6 @@ write_table <- function(data, con, table, schema) {
 #' @inheritParams nanoparquet::read_parquet
 #'
 #' @return A `data.frame` with the results sorted by all columns
-#' @export
 #' @importFrom dplyr arrange across everything
 read_parquet_sorted <- function(path, options = nanoparquet::parquet_options()) {
   if (!file.exists(path)) {
@@ -77,7 +73,6 @@ read_parquet_sorted <- function(path, options = nanoparquet::parquet_options()) 
 #' @param concepts A vector of concept IDs
 #'
 #' @return A `data.frame` with the concept table
-#' @export
 query_concepts_table <- function(cdm, concepts) {
   # Extract columns from concept table
   cdm$concept |>
@@ -99,7 +94,6 @@ query_concepts_table <- function(cdm, concepts) {
 #' @param cdm A [`CDMConnector`] object, e.g. from [`CDMConnector::cdm_from_con()`]
 #'
 #' @return A `data.frame` with the monthly counts
-#' @export
 process_monthly_counts <- function(cdm) {
   # Combine results for all tables
   out <- bind_rows( # nolint start
@@ -126,7 +120,6 @@ process_monthly_counts <- function(cdm) {
 #' @param cdm A [`CDMConnector`] object, e.g. from [`CDMConnector::cdm_from_con()`]
 #'
 #' @return A `data.frame` with the summary statistics
-#' @export
 process_summary_stats <- function(cdm) {
   table_names <- c("measurement", "observation")
   concept_names <- c("measurement_concept_id", "observation_concept_id")
