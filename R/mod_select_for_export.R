@@ -28,6 +28,8 @@ mod_select_for_export_server <- function(id, concepts_data) {
   moduleServer(id, function(input, output, session) {
     # Store selection in a reactiveValues object so we can update and return it later
     r <- reactiveValues()
+    # Initialise empty character vector, note that this will guarantee current_selection
+    # will remain a character as anything appended to it will be coerced to character
     r$current_selection <- character()
 
     # When the add_to_export button is clicked, update the selected_concepts data
