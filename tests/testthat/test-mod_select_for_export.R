@@ -11,17 +11,46 @@ test_that("mod_select_for_export_server only reacts to button click", {
       expect_true(grepl("test", ns("test")))
 
       out <- session$getReturned()
-      concepts_data(reactive(data.frame(concept_id = 1:10)))
-      session$flushReact()
 
-      # We can't test the reactivity to the button click,
-      # but we can check that the returned selection doesn't react
-      # to the select_concepts input
       expect_true(is.reactive(out))
       expect_type(out(), "character")
       expect_length(out(), 0)
+
+      # Update input data, the output should not be updated
+      n_selected <- 10
+      concepts_data(data.frame(concept_id = seq_len(n_selected)))
+      session$flushReact()
+      expect_length(out(), 0)
+
+      # Mimic button clicking, the output show now be updated
+      session$setInputs(add_to_export = 1)
+      session$flushReact()
+      expect_length(out(), n_selected)
     }
   )
+})
+
+test_that("export selection does not remove previously selected items", {
+  # The module is designed to keep the previously selected items in the output
+  # even if the corresponding rows are deselected
+  testServer(mod_select_for_export_server, args = list(concepts_data = reactiveVal()), {
+    out <- session$getReturned()
+
+    # Initial selection followed by first button click
+    initial_selection <- data.frame(concept_id = c("foo", "bar", "baz"))
+    concepts_data(initial_selection)
+    session$setInputs(add_to_export = 1)
+    session$flushReact()
+    expect_identical(out(), initial_selection$concept_id)
+
+    # Update selection, with new value and removing the old ones
+    # Second button click should add the new item to the output without erasing the previous ones
+    new_selection <- data.frame(concept_id = "hello")
+    concepts_data(new_selection)
+    session$setInputs(add_to_export = 2)
+    session$flushReact()
+    expect_identical(out(), c(initial_selection$concept_id, new_selection$concept_id))
+  })
 })
 
 test_that("module ui works", {
