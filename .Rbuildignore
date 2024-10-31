@@ -7,11 +7,13 @@ $run_dev.*
 ^\.lintr$
 ^\.pre-commit-config\.yaml$
 ^\.renvignore$
+^app$
 ^codecov\.yml$
 ^data$
 ^data-raw$
 ^deploy$
 ^dev$
+^preprocessing$
 ^renv$
 ^renv\.lock$
 ^scripts$
