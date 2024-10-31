@@ -14,8 +14,12 @@ COPY deploy/omopcat_*.tar.gz /app.tar.gz
 RUN R -e 'remotes::install_local("/app.tar.gz", upgrade="never", dependencies = FALSE)' && \
     rm /app.tar.gz
 
+ARG OMOPCAT_DATA_PATH
+
+ADD scripts ./scripts
+COPY preprocessing/.Renviron .Renviron
+
 EXPOSE 3838
 CMD ["R", "-e", \
-    "options('shiny.port'=3838,shiny.host='0.0.0.0'); \
-    omopcat::run_app()" \
+    source('scripts/create_prod_data.R'); \
     ]
