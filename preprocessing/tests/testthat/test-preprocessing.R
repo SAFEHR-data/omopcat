@@ -28,3 +28,10 @@ test_that("preprocessing fails if envvars are missing", {
   )
   expect_error(preprocess(out_path = tempfile()), "not set")
 })
+
+test_that("Setting up CDM object works for non-prod data", {
+  skip_if_not_installed("duckdb")
+  withr::local_envvar(ENV = "test")
+  cdm <- .setup_cdm_object()
+  expect_equal(CDMConnector::cdmVersion(cdm), "5.3")
+})
