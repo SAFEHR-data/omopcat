@@ -1,5 +1,15 @@
 # omopcat 0.2.1
 
+Updating GAE deployment with full Epic extract.
+
+* Add simple CI to check docker build (@milanmlft, #89)
+* Updates to generate production data on GAE (@milanmlft in #87)
+* Various UI improvements (@milanmlft in #88)
+* docs: Rename repo `omop-data-catalogue` -> `omopcat` (@milanmlft in #98)
+* test: Improve app-level tests and increase coverage (@milanmlft in #103)
+
+**Full Changelog**: https://github.com/SAFEHR-data/omopcat/compare/v0.2.0...v0.2.1
+
 # omopcat 0.2.0
 
 This version adds support for OMOP bundles. The app name also changed from `calypso` to `omopcat`.
