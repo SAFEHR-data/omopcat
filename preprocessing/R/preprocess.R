@@ -100,19 +100,16 @@ preprocess <- function(out_path = Sys.getenv("PREPROCESS_OUT_PATH")) {
       password = Sys.getenv("DB_PASSWORD")
     )
   } else {
-    dir <- Sys.getenv("EUNOMIA_DATA_FOLDER")
-    name <- Sys.getenv("TEST_DB_NAME")
-    version <- Sys.getenv("TEST_DB_OMOP_VERSION")
-
-    db_path <- glue::glue("{dir}/{name}_{version}_1.0.duckdb")
-    con <- connect_to_test_duckdb(db_path)
+    name <- "eunomia"
+    rlang::check_installed("duckdb")
+    con <- connect_to_db(duckdb::duckdb(CDMConnector::eunomia_dir()))
   }
 
   # Load the data in a CDMConnector object
   CDMConnector::cdm_from_con(
     con = con,
-    cdm_schema = Sys.getenv("DB_CDM_SCHEMA"),
-    write_schema = Sys.getenv("DB_CDM_SCHEMA"),
+    cdm_schema = Sys.getenv("DB_CDM_SCHEMA", unset = "main"),
+    write_schema = Sys.getenv("DB_CDM_SCHEMA", unset = "main"),
     cdm_name = name
   )
 }

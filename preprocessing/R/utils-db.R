@@ -15,23 +15,7 @@ connect_to_db <- function(..., .envir = parent.frame()) {
   con
 }
 
-#' Connect to duckdb database
-#'
-#' @param db_path path to the duckdb database file
-#' @param ... unused
-#' @param .envir passed on to [`withr::defer()`]
-#'
-#' @return A [`DBI::DBIConnection-class`] object
-connect_to_test_duckdb <- function(db_path, ..., .envir = parent.frame()) {
-  if (!file.exists(db_path)) {
-    cli::cli_abort("Database file {.file {db_path}} not found")
-  }
-
-  # Connect to the duckdb test database
-  rlang::check_installed("duckdb", reason = "to set up test database connection")
-  connect_to_db(duckdb::duckdb(dbdir = db_path), .envir = .envir)
-}
-
+# TODO: remove what is not used anymore
 
 #' Write data to a table in the database
 #'

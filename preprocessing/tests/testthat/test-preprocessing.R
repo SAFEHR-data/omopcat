@@ -27,13 +27,4 @@ test_that("preprocessing fails if envvars are missing", {
     DB_CDM_SCHEMA = NULL
   )
   expect_error(preprocess(out_path = tempfile()), "not set")
-
-  withr::local_envvar(
-    ENV = "test",
-    TEST_DB_DIR = NULL,
-    TEST_DB_NAME = NULL,
-    TEST_DB_OMOP_VERSION = NULL,
-    DB_CDM_SCHEMA = NULL
-  )
-  expect_error(preprocess(out_path = tempfile()), "not set")
 })
