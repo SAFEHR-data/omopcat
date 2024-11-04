@@ -16,14 +16,24 @@ test_that("preprocessing is skipped if files already exist", {
   expect_false(preprocess(out_path = out_path))
 })
 
-test_that("preprocessing fails in production if envvars are missing", {
+test_that("preprocessing fails if envvars are missing", {
   withr::local_envvar(
     ENV = "prod",
     DB_NAME = NULL,
     HOST = NULL,
     PORT = NULL,
     DB_USERNAME = NULL,
-    DB_PASSWORD = NULL
+    DB_PASSWORD = NULL,
+    DB_CDM_SCHEMA = NULL
+  )
+  expect_error(preprocess(out_path = tempfile()), "not set")
+
+  withr::local_envvar(
+    ENV = "test",
+    TEST_DB_DIR = NULL,
+    TEST_DB_NAME = NULL,
+    TEST_DB_OMOP_VERSION = NULL,
+    DB_CDM_SCHEMA = NULL
   )
   expect_error(preprocess(out_path = tempfile()), "not set")
 })
