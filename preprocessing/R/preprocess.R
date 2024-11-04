@@ -9,7 +9,7 @@
 #' If all these files already exist, the pipeline will not be run.
 #'
 #' @param out_path The directory where the pre-processed data will be written to.
-#'   Defaults  to the `OMOPCAT_DATA_PATH` environment variable.
+#'   Defaults  to the `PREPROCESS_OUT_PATH` environment variable.
 #'
 #' @return Whether the pre-processing was run: `TRUE` or `FALSE`, invisibly.
 #'
