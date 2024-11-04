@@ -25,5 +25,5 @@ test_that("preprocessing fails in production if envvars are missing", {
     DB_USERNAME = NULL,
     DB_PASSWORD = NULL
   )
-  expect_error(preprocess(out_path = "foo"), "not set")
+  expect_error(preprocess(out_path = tempfile()), "not set")
 })
