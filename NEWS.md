@@ -1,4 +1,4 @@
-# omopcat (development version)
+# omopcat 0.2.1
 
 # omopcat 0.2.0
 
