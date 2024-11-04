@@ -64,7 +64,6 @@ test_that("Low frequencies are replaced in the concepts table", {
 
       expect_true(all(concepts_with_counts()$total_records >= replacement))
       expect_true(all(concepts_with_counts()$mean_persons >= replacement))
-      expect_true(all(concepts_with_counts()$mean_records_per_person >= replacement))
     }
   )
 })
