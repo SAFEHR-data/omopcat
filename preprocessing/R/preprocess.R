@@ -88,6 +88,15 @@ preprocess <- function(out_path = Sys.getenv("PREPROCESS_OUT_PATH")) {
   }
 }
 
+#' Set up a CDM object from a database connection
+#'
+#' When running in production, sets up a CDM object from the database settings
+#' configured through the relevant environment variables.
+#'
+#' When not in production, creates a CDM from one of the CDMConnector example
+#' datasets (`"GiBleed"` by default), using [`CDMConnector::eunomia_dir()`].
+#' This is intended for use in testing and development.
+#' @noRd
 .setup_cdm_object <- function() {
   if (.running_in_production()) {
     name <- Sys.getenv("DB_NAME")
@@ -97,12 +106,14 @@ preprocess <- function(out_path = Sys.getenv("PREPROCESS_OUT_PATH")) {
       host = Sys.getenv("HOST"),
       port = Sys.getenv("PORT"),
       user = Sys.getenv("DB_USERNAME"),
-      password = Sys.getenv("DB_PASSWORD")
+      password = Sys.getenv("DB_PASSWORD"),
+      .envir = parent.frame()
     )
   } else {
-    name <- "eunomia"
+    name <- Sys.getenv("TEST_DB_NAME", unset = "GiBleed")
+    duckdb_path <- CDMConnector::eunomia_dir(dataset_name = name)
     rlang::check_installed("duckdb")
-    con <- connect_to_db(duckdb::duckdb(CDMConnector::eunomia_dir()))
+    con <- connect_to_db(duckdb::duckdb(duckdb_path), .envir = parent.frame())
   }
 
   # Load the data in a CDMConnector object
