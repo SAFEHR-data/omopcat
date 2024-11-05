@@ -1,2 +1,67 @@
+#' Generate the 'omopcat_monthly_counts' table
+#'
+#' @param cdm A [`CDMConnector`] object, e.g. from [`CDMConnector::cdm_from_con()`]
+#'
+#' @return A `data.frame` with the monthly counts
 generate_monthly_counts <- function(cdm) {
+  # Combine results for all tables
+  out <- dplyr::bind_rows( # nolint start
+    cdm$condition_occurrence |> calculate_monthly_counts(condition_concept_id, condition_start_date),
+    cdm$drug_exposure |> calculate_monthly_counts(drug_concept_id, drug_exposure_start_date),
+    cdm$procedure_occurrence |> calculate_monthly_counts(procedure_concept_id, procedure_date),
+    cdm$device_exposure |> calculate_monthly_counts(device_concept_id, device_exposure_start_date),
+    cdm$measurement |> calculate_monthly_counts(measurement_concept_id, measurement_date),
+    cdm$observation |> calculate_monthly_counts(observation_concept_id, observation_date),
+    cdm$specimen |> calculate_monthly_counts(specimen_concept_id, specimen_date)
+  ) # nolint end
+
+  # Map concept names to the concept IDs
+  concept_names <- dplyr::select(cdm$concept, .data$concept_id, .data$concept_name) |>
+    dplyr::filter(.data$concept_id %in% out$concept_id) |>
+    dplyr::collect()
+  out |>
+    dplyr::left_join(concept_names, by = c("concept_id" = "concept_id")) |>
+    dplyr::select("concept_id", "concept_name", everything())
+}
+
+
+#' Calculate monthly statistics for an OMOP concept
+#'
+#' @param omop_table A table from the OMOP CDM
+#' @param concept_col The name of the concept column to calculate statistics for
+#' @param date_col The name of the date column to calculate statistics for
+#'
+#' @return A `data.frame` with the following columns:
+#'   - `concept_id`: The concept ID
+#'   - `concept_name`: The concept name
+#'   - `date_year`: The year of the date
+#'   - `date_month`: The month of the date
+#'   - `person_count`: The number of unique patients per concept for each month
+#'   - `records_per_person`: The average number of records per person per concept for each month
+#' @keywords internal
+calculate_monthly_counts <- function(omop_table, concept_col, date_col) {
+  # Extract year and month from date column
+  omop_table <- dplyr::mutate(omop_table,
+    concept_id = {{ concept_col }},
+    date_year = lubridate::year({{ date_col }}),
+    date_month = lubridate::month({{ date_col }})
+  )
+
+  omop_table |>
+    dplyr::group_by(.data$date_year, .data$date_month, .data$concept_id) |>
+    dplyr::summarise(
+      record_count = dplyr::n(),
+      person_count = dplyr::n_distinct(.data$person_id),
+      records_per_person = dplyr::n() / dplyr::n_distinct(.data$person_id)
+    ) |>
+    dplyr::select(
+      "concept_id",
+      "date_year",
+      "date_month",
+      "record_count",
+      "person_count",
+      "records_per_person"
+    ) |>
+    ## Collect in case we're dealing with a database-stored table
+    dplyr::collect()
 }

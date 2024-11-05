@@ -73,32 +73,6 @@ query_concepts_table <- function(cdm, concepts) {
     collect()
 }
 
-#' Generate the 'omopcat_monthly_counts' table
-#'
-#' @param cdm A [`CDMConnector`] object, e.g. from [`CDMConnector::cdm_from_con()`]
-#'
-#' @return A `data.frame` with the monthly counts
-process_monthly_counts <- function(cdm) {
-  # Combine results for all tables
-  out <- bind_rows( # nolint start
-    cdm$condition_occurrence |> calculate_monthly_counts(condition_concept_id, condition_start_date),
-    cdm$drug_exposure |> calculate_monthly_counts(drug_concept_id, drug_exposure_start_date),
-    cdm$procedure_occurrence |> calculate_monthly_counts(procedure_concept_id, procedure_date),
-    cdm$device_exposure |> calculate_monthly_counts(device_concept_id, device_exposure_start_date),
-    cdm$measurement |> calculate_monthly_counts(measurement_concept_id, measurement_date),
-    cdm$observation |> calculate_monthly_counts(observation_concept_id, observation_date),
-    cdm$specimen |> calculate_monthly_counts(specimen_concept_id, specimen_date)
-  ) # nolint end
-
-  # Map concept names to the concept IDs
-  concept_names <- select(cdm$concept, .data$concept_id, .data$concept_name) |>
-    filter(.data$concept_id %in% out$concept_id) |>
-    collect()
-  out |>
-    dplyr::left_join(concept_names, by = c("concept_id" = "concept_id")) |>
-    select("concept_id", "concept_name", everything())
-}
-
 #' Generate the 'omopcat_summary_stats' table
 
 #' @param cdm A [`CDMConnector`] object, e.g. from [`CDMConnector::cdm_from_con()`]
