@@ -31,9 +31,9 @@ calculate_monthly_counts <- function(omop_table, concept, date) {
     # otherwise the records_per_person might end up as an int
     # and the *_count vars as int64, which can give problems later
     mutate(
-      record_count = as.integer(record_count),
-      person_count = as.integer(person_count),
-      records_per_person = as.double(record_count) / as.double(person_count)
+      record_count = as.integer(.data$record_count),
+      person_count = as.integer(.data$person_count),
+      records_per_person = as.double(.data$record_count) / as.double(.data$person_count)
     ) |>
     select(
       "concept_id",
