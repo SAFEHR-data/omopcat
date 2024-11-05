@@ -5,7 +5,7 @@ measurement <- data.frame(
   person_id = c(1, 1, 2, 3),
   measurement_type_concept_id = 12345,
   measurement_concept_id = 1,
-  measurement_date = as.Date("2020-01-01"),
+  measurement_date = "2020-01-01",
   value_as_number = c(2, 1, 2, 1),
   value_as_concept_id = 0
 )
@@ -22,9 +22,15 @@ test_that("calculate_monthly_counts produces the expected results", {
 db <- dbplyr::src_memdb()
 db_measurement <- dplyr::copy_to(db, measurement, name = "measurement", overwrite = TRUE)
 test_that("calculate_monthly_counts works on Database-stored tables", {
-  res <- calculate_monthly_counts(db_measurement, measurement_concept_id, measurement_date)
-  expect_s3_class(res, "data.frame")
-  expect_named(res, c("concept_id", "date_year", "date_month", "record_count", "person_count", "records_per_person"))
+  ref <- calculate_monthly_counts(measurement, measurement_concept_id, measurement_date)
+  db_res <- calculate_monthly_counts(db_measurement, measurement_concept_id, measurement_date)
+
+  expect_s3_class(db_res, "data.frame")
+  expect_named(db_res, c("concept_id", "date_year", "date_month", "record_count", "person_count", "records_per_person"))
+  expect_type(db_res$record_count, "integer")
+  expect_type(db_res$person_count, "integer")
+  expect_type(db_res$records_per_person, "double")
+  expect_identical(db_res, ref)
 })
 
 test_that("calculate_summary_stats produces the expected results", {
