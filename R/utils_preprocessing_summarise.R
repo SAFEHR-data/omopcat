@@ -17,8 +17,8 @@ calculate_monthly_counts <- function(omop_table, concept, date) {
   # Extract year and month from date column
   omop_table <- mutate(omop_table,
     concept_id = {{ concept }},
-    date_year = lubridate::year({{ date }}),
-    date_month = lubridate::month({{ date }})
+    date_year = as.integer(lubridate::year({{ date }})),
+    date_month = as.integer(lubridate::month({{ date }}))
   )
 
   omop_table |>
@@ -26,7 +26,14 @@ calculate_monthly_counts <- function(omop_table, concept, date) {
     summarise(
       record_count = n(),
       person_count = n_distinct(.data$person_id),
-      records_per_person = n() / n_distinct(.data$person_id)
+    ) |>
+    # NOTE: Explicitly cast types to avoid unexpected SQL behaviour,
+    # otherwise the records_per_person might end up as an int
+    # and the *_count vars as int64, which can give problems later
+    mutate(
+      record_count = as.integer(record_count),
+      person_count = as.integer(person_count),
+      records_per_person = as.double(record_count) / as.double(person_count)
     ) |>
     select(
       "concept_id",
