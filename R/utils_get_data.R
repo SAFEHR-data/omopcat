@@ -5,7 +5,7 @@
 #'
 #' @noRd
 should_use_dev_data <- function() {
-  golem::app_dev() && Sys.getenv("OMOPCAT_DATA_PATH") == ""
+  !app_prod() && Sys.getenv("OMOPCAT_DATA_PATH") == ""
 }
 
 

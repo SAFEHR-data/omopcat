@@ -14,8 +14,7 @@ run_app <- function(
     uiPattern = "/",
     ...) {
   # Synchronise environment variable settings and golem options for running in prod
-  if (get_golem_config("app_prod")) {
-    options("golem.app.prod" = TRUE)
+  if (app_prod()) {
     .check_envvars("OMOPCAT_DATA_PATH")
   }
 
@@ -30,6 +29,16 @@ run_app <- function(
     ),
     golem_opts = list(...)
   )
+}
+
+#' Determine if the application is running in production mode
+#'
+#' Relies only on the `GOLEM_CONFIG_ACTIVE` environment variable.
+#' This is a replacement for [`golem::app_prod()`], which relies on
+#' the `"golem.app.prod"` option, but not on the environment variable.
+#' @noRd
+app_prod <- function() {
+  return(get_golem_config("app_prod"))
 }
 
 .check_envvars <- function(required) {
