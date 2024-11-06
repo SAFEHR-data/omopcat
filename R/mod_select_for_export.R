@@ -10,7 +10,7 @@
 mod_select_for_export_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    actionButton(ns("add_to_export"), "Add selection to export"),
+    actionButton(ns("add_to_export"), "Add current selection to export"),
     value_box("Concepts selected for export", value = textOutput(ns("n_concepts_for_export")))
   )
 }
