@@ -50,6 +50,17 @@ mod_plots_server <- function(id, selected_concepts, selected_dates) {
 
   summary_stats <- get_summary_stats()
   monthly_counts <- get_monthly_counts()
+
+  # Check for duplicated rows, potentially a problem with the source data
+  if (nrow(summary_stats) > dplyr::n_distinct(summary_stats)) {
+    cli::cli_warn(c(
+      "Duplicate rows detected in summary stats. Only keeping distinct rows.",
+      "i" = "This might point to a problem with the source data"
+    ))
+    summary_stats <- dplyr::distinct(summary_stats)
+  }
+
+
   moduleServer(id, function(input, output, session) {
     selected_concept_ids <- reactive(selected_concepts()$concept_id)
 
