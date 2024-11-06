@@ -51,15 +51,17 @@ mod_exportsummary_ui <- function(namespace) {
 
 #' export_tab Server Functions
 #'
-#' @param data A reactive data.frame containing the data to be exported
+#' @param concepts A reactive character vector containing IDs of the concepts to be exported
 #'
 #' @noRd
-mod_export_tab_server <- function(id, data) {
-  stopifnot(is.reactive(data))
+mod_export_tab_server <- function(id, concepts) {
+  stopifnot(is.reactive(concepts))
+  all_concepts <- get_concepts_table()
 
   moduleServer(id, function(input, output, session) {
-    mod_exportsummary_server("exportsummary", data)
-    mod_export_server("export", data)
+    export_data <- reactive(all_concepts[all_concepts$concept_id %in% concepts(), ])
+    mod_exportsummary_server("exportsummary", export_data)
+    mod_export_server("export", export_data)
   })
 }
 
