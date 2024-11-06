@@ -1,19 +1,19 @@
-### omopcat is for viewing OMOP concept data available.
+# `omopcat` help
 
-<br> <br>
+`omopcat` is for viewing OMOP concept data available.
 
-#### omopcat allows you to :
+It allows you to:
 
 * view a summary of OMOP data available (minimum time period 1 month, no Confidential Patient Information)
 * search available OMOP data
 * get an indication of the frequency of records and patients for each concept
 * export a list of selected concepts that can be used in the omop_es extraction system
 
-#### using omopcat   
+## Using `omopcat`   
 
 There are four tabs at the top : **Concepts, Bundles, Export & help**
 
-##### Concepts tab
+### Concepts tab
 
 1. On the left **Select bundle** to select a group of related concepts to appear in the **Select concepts** box. 
 1. In the **Select concepts** box delete and re-add concepts to set which appear in the **Export** tab.
@@ -21,28 +21,31 @@ There are four tabs at the top : **Concepts, Bundles, Export & help**
 1. Select row(s) in the **Concepts overview** table. Attributes of the top selected concept will be plotted below.
 
 
-##### Bundles tab
+### Bundles tab
 
 A table shows all Bundles (groups of related concepts) and how many concepts there are in each. Select a concept (row) to populate the **Select bundle** box on the left.
 
-##### Export tab
+### Export tab
 
 View concepts that have been selected in the **Select concepts** box and press **Export CSV** to create a text file of selected concepts that can be used in the omop_es extraction system.
 
 
-#### How omopcat works
+## How `omopcat` works
 
-omopcat has a pre-processing step that summarises an OMOP extraction by calculating monthly counts for all concepts. These monthly counts are used by the omopcat app to enable users to query data availability by concept.
+`omopcat` has a pre-processing step that summarises an OMOP extraction by calculating monthly counts for all concepts. These monthly counts are used by the `omopcat` app to enable users to query data availability by concept.
 
-#### Contact
+## Contact
 
 https://github.com/SAFEHR-data/omopcat
 
-omopcat is made by the SAFEHR-data development team at UCLH and UCL supported by the [UCLH
+If you encounter any issues with the app, feel free to
+[open an issue on GitHub](https://github.com/SAFEHR-data/omopcat/issues/new).
+
+`omopcat` is made by the SAFEHR-data development team at UCLH and UCL supported by the [UCLH
 Biomedical Research Centre](https://www.uclhospitals.brc.nihr.ac.uk/).
 
 
-#### Licence
+## Licence
 
 Copyright 2024 UCLH SAFEHR-data
 
