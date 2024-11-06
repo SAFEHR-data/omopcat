@@ -16,7 +16,7 @@ mod_manual_ui <- function(id) {
         class = "alert alert-warning",
         .low_frequency_disclaimer()
       ),
-      includeMarkdown(app_sys("app/www/help_tab.md"))
+      includeMarkdown(app_sys("app/help_tab.md"))
     )
   )
 }
