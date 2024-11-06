@@ -14,12 +14,12 @@ test_that("mod_plots_server reacts to changes in the selected concept", {
       selected_row <- list(concept_id = 3003573L, concept_name = "test")
       mock_concept_row(selected_row) # update reactive value
       session$flushReact()
-      expect_identical(unique(summary_stats()$concept_id), selected_row$concept_id)
+      expect_identical(unique(filtered_summary_stats()$concept_id), selected_row$concept_id)
 
       selected_row2 <- list(concept_id = 4276526L, concept_name = "test")
       mock_concept_row(selected_row2) # update reactive value
       session$flushReact()
-      expect_identical(unique(summary_stats()$concept_id), selected_row2$concept_id)
+      expect_identical(unique(filtered_summary_stats()$concept_id), selected_row2$concept_id)
     }
   )
 })
@@ -29,7 +29,6 @@ test_that("mod_plots_server reacts to changes in the selected date range", {
     mod_plots_server,
     args = list(selected_concepts = mock_concept_row, selected_dates = mock_date_range),
     {
-      ns <- session$ns
       expect_true(inherits(ns, "function"))
       expect_true(grepl(id, ns("")))
       expect_true(grepl("test", ns("test")))
@@ -39,13 +38,13 @@ test_that("mod_plots_server reacts to changes in the selected date range", {
       selected_dates <- c("2019-01-01", "2019-12-31")
       mock_date_range(selected_dates)
       session$flushReact()
-      expect_true(all(monthly_counts()$date_year == 2019))
+      expect_true(all(filtered_monthly_counts()$date_year == 2019))
 
       ## Case when no data for given range
       selected_dates2 <- c("3019-01-01", "3019-12-31")
       mock_date_range(selected_dates2)
       session$flushReact()
-      expect_equal(nrow(monthly_counts()), 0)
+      expect_equal(nrow(filtered_monthly_counts()), 0)
     }
   )
 })
