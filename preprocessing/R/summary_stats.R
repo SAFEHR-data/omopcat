@@ -46,12 +46,12 @@ calculate_summary_stats <- function(omop_table, concept_name) {
 
   omop_table <- rename(omop_table, concept_id = all_of(concept_name))
 
-  ## Avoid "no visible binding" notes
-  value_as_number <- value_as_concept_id <- NULL
-
-  numeric_concepts <- filter(omop_table, !is.na(value_as_number))
+  numeric_concepts <- filter(omop_table, !is.na(.data$value_as_number))
   # beware CDM docs: NULL=no categorical result, 0=categorical result but no mapping
-  categorical_concepts <- filter(omop_table, !is.null(value_as_concept_id) & value_as_concept_id != 0)
+  categorical_concepts <- filter(
+    omop_table,
+    !is.null(.data$value_as_concept_id) & .data$value_as_concept_id != 0
+  )
 
   numeric_stats <- .summarise_numeric_concepts(numeric_concepts) |> collect()
   categorical_stats <- .summarise_categorical_concepts(categorical_concepts) |>
@@ -64,17 +64,18 @@ calculate_summary_stats <- function(omop_table, concept_name) {
 #' @importFrom dplyr group_by summarise
 #' @importFrom stats sd
 .summarise_numeric_concepts <- function(omop_table) {
-  value_as_number <- concept_id <- NULL
-
   # Calculate mean and sd
   stats <- omop_table |>
-    group_by(concept_id) |>
-    summarise(mean = mean(value_as_number, na.rm = TRUE), sd = sd(value_as_number, na.rm = TRUE))
+    group_by(.data$concept_id) |>
+    summarise(
+      mean = mean(.data$value_as_number, na.rm = TRUE),
+      sd = sd(.data$value_as_number, na.rm = TRUE)
+    )
 
   # Wrangle output to expected format
   stats |>
     tidyr::pivot_longer(
-      cols = c(mean, sd),
+      cols = c("mean", "sd"),
       names_to = "summary_attribute",
       values_to = "value_as_number"
     )
@@ -82,19 +83,17 @@ calculate_summary_stats <- function(omop_table, concept_name) {
 
 #' @importFrom dplyr count mutate select
 .summarise_categorical_concepts <- function(omop_table) {
-  concept_id <- value_as_concept_id <- summary_attribute <- NULL
-
   # Calculate frequencies
   frequencies <- omop_table |>
-    count(concept_id, value_as_concept_id)
+    count(.data$concept_id, .data$value_as_concept_id)
 
   # Wrangle output into the expected format
   frequencies |>
     mutate(summary_attribute = "frequency") |>
     select(
-      concept_id,
-      summary_attribute,
-      value_as_number = n,
-      value_as_concept_id
+      "concept_id",
+      "summary_attribute",
+      value_as_number = "n",
+      "value_as_concept_id"
     )
 }
