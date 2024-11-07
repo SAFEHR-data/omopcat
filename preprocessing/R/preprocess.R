@@ -12,8 +12,6 @@
 #'   Defaults  to the `PREPROCESS_OUT_PATH` environment variable.
 #'
 #' @return Whether the pre-processing was run: `TRUE` or `FALSE`, invisibly.
-#'
-#' @noRd
 #' @export
 preprocess <- function(out_path = Sys.getenv("PREPROCESS_OUT_PATH")) {
   if (out_path == "") {
