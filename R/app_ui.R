@@ -16,7 +16,7 @@ app_ui <- function(request) {
         title = "Filtering options",
         mod_date_range_ui("date_range"),
         mod_select_bundle_ui("select_bundle"),
-        mod_select_concepts_ui("select_concepts")
+        mod_select_for_export_ui("select_for_export")
       ),
       nav_panel(
         title = "Concepts",
@@ -69,7 +69,7 @@ golem_add_external_resources <- function() {
 
 .app_title <- function() {
   title <- glue::glue('omopcat v{get_golem_config("golem_version")}')
-  if (golem::app_dev()) {
+  if (!app_prod()) {
     title <- glue::glue("{title} (dev)")
   }
   title

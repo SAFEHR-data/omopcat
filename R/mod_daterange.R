@@ -8,7 +8,7 @@
 mod_date_range_ui <- function(id) {
   ns <- NS(id)
   min_date <- as.Date("2019-04-01", "%Y-%m-%d")
-  max_date <- as.Date("2024-08-01", "%Y-%m-%d")
+  max_date <- lubridate::today()
 
   tagList(
     sliderInput(

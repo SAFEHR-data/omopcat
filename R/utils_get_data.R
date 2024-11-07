@@ -5,7 +5,7 @@
 #'
 #' @noRd
 should_use_dev_data <- function() {
-  golem::app_dev() && Sys.getenv("OMOPCAT_DATA_PATH") == ""
+  !app_prod() && Sys.getenv("OMOPCAT_DATA_PATH") == ""
 }
 
 
@@ -27,7 +27,8 @@ get_concepts_table <- function() {
   # Make sure the concept IDs are integers so that they get rendered as such
   # in shiny::renderTable()
   ct$concept_id <- as.integer(ct$concept_id)
-  ct
+  # Remove "no matching concept" entries
+  dplyr::filter(ct, .data$concept_id != 0)
 }
 
 get_monthly_counts <- function() {

@@ -11,20 +11,20 @@ app_server <- function(input, output, session) {
   # Updated the selected bundle when a row is selected in the bundles table
   mod_update_select_bundle_server("select_bundle", selected_bundle_id)
 
-  # Filter concepts table based on user-selected concepts, showing all by default
-  selected_data <- mod_select_concepts_server("select_concepts", bundle_concepts)
-
   # Get the selected dates for date-range filtering
   selected_dates <- mod_date_range_server("date_range")
 
   # Populate the main concepts table in the dashboard with all concepts and their
   # records and patients counts
   # Get the selected row from the datatable as a reactive output
-  selected_concept_row <- mod_datatable_server("concepts", selected_dates, bundle_concepts)
+  selected_concepts <- mod_datatable_server("concepts", selected_dates, bundle_concepts)
 
   # Generate the plots based on the selected data
-  mod_plots_server("plots", selected_concept_row, selected_dates)
+  mod_plots_server("plots", selected_concepts, selected_dates)
+
+  # Update data to be exported with the selected concepts
+  concepts_for_export <- mod_select_for_export_server("select_for_export", selected_concepts)
 
   # Generate the export tab based on the selected data
-  mod_export_tab_server("export_tab", selected_data)
+  mod_export_tab_server("export_tab", concepts_for_export)
 }
