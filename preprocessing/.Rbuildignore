@@ -1,2 +1,4 @@
 ^preprocessing\.Rproj$
 ^\.Rproj\.user$
+^data-raw$
+^Dockerfile$
