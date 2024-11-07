@@ -21,6 +21,24 @@ con <- connect_to_test_duckdb(db_path)
 
 # Insert dummy tables -------------------------------------------------------------------------
 
+#' Write data to a table in the database
+#'
+#' @param data data.frame, data to be written to the table
+#' @param con A [`DBI::DBIConnection-class`] object
+#' @param table character, name of the table to write to
+#' @param schema character, name of the schema to be used
+#'
+#' @return `TRUE`, invisibly, if the operation was successful
+write_table <- function(data, con, table, schema) {
+  DBI::dbWriteTable(
+    conn = con,
+    name = DBI::Id(schema = schema, table = table),
+    value = data,
+    overwrite = TRUE
+  )
+}
+
+
 ## Load dummy data and write tables to database
 ## We explicitly set the column types for columns that are needed later down the pipeline
 dummy_measurements <- read_csv(

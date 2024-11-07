@@ -15,6 +15,22 @@ stopifnot(dir.exists(out_path))
 
 # Produce test data ---------------------------------------------------------------------------
 
+#' Read a parquet table and sort the results
+#'
+#' @param path path to the parquet file to be read
+#' @inheritParams nanoparquet::read_parquet
+#'
+#' @return A `data.frame` with the results sorted by all columns
+#' @importFrom dplyr arrange across everything
+read_parquet_sorted <- function(path, options = nanoparquet::parquet_options()) {
+  if (!file.exists(path)) {
+    cli::cli_abort("File {.file {path}} not found")
+  }
+
+  nanoparquet::read_parquet(path, options) |>
+    arrange(across(everything()))
+}
+
 # Get the relevant tables and filter
 table_names <- c("concepts", "monthly_counts", "summary_stats")
 paths <- glue::glue("{data_path}/omopcat_{table_names}.parquet")
