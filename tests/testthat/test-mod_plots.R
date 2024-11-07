@@ -29,6 +29,7 @@ test_that("mod_plots_server reacts to changes in the selected date range", {
     mod_plots_server,
     args = list(selected_concepts = mock_concept_row, selected_dates = mock_date_range),
     {
+      ns <- session$ns
       expect_true(inherits(ns, "function"))
       expect_true(grepl(id, ns("")))
       expect_true(grepl("test", ns("test")))
