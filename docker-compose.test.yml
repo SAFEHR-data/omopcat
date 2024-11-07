@@ -1,7 +1,0 @@
-services:
-  omopcat_test:
-    extends:
-      file: docker-compose.yml
-      service: omopcat
-    volumes:
-      - ./data/test_data:/etc/omopcat/data
