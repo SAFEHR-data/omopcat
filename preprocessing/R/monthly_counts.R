@@ -3,6 +3,7 @@
 #' @param cdm A [`CDMConnector`] object, e.g. from [`CDMConnector::cdm_from_con()`]
 #'
 #' @return A `data.frame` with the monthly counts
+#' @keywords internal
 generate_monthly_counts <- function(cdm) {
   # Combine results for all tables
   out <- dplyr::bind_rows( # nolint start

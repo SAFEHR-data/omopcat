@@ -4,6 +4,7 @@
 #' @param concept_ids A vector of concept IDs
 #'
 #' @return A `data.frame` with the monthly counts
+#' @keywords internal
 generate_concepts <- function(cdm, concept_ids) {
   # Extract columns from concept table
   cdm$concept |>

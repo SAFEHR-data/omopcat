@@ -3,6 +3,7 @@
 #' @param cdm A [`CDMConnector`] object, e.g. from [`CDMConnector::cdm_from_con()`]
 #'
 #' @return A `data.frame` with the summary statistics
+#' @keywords internal
 generate_summary_stats <- function(cdm) {
   omop_tables <- cdm[c("measurement", "observation")]
   concept_cols <- c("measurement_concept_id", "observation_concept_id")
