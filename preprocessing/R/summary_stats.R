@@ -4,11 +4,11 @@
 #'
 #' @return A `data.frame` with the summary statistics
 generate_summary_stats <- function(cdm) {
-  table_names <- c("measurement", "observation")
-  concept_names <- c("measurement_concept_id", "observation_concept_id")
+  omop_tables <- cdm[c("measurement", "observation")]
+  concept_cols <- c("measurement_concept_id", "observation_concept_id")
 
   # Combine results for all tables
-  stats <- purrr::map2(table_names, concept_names, ~ calculate_summary_stats(cdm[[.x]], .y))
+  stats <- purrr::map2(omop_tables, concept_cols, calculate_summary_stats)
   stats <- dplyr::bind_rows(stats)
 
   # Map concept names to the concept_ids
@@ -42,6 +42,7 @@ generate_summary_stats <- function(cdm) {
 #' @keywords internal
 calculate_summary_stats <- function(omop_table, concept_name) {
   stopifnot(is.character(concept_name))
+  stopifnot(concept_name %in% colnames(omop_table))
 
   omop_table <- rename(omop_table, concept_id = all_of(concept_name))
 
