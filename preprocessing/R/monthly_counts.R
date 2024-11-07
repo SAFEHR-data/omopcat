@@ -38,31 +38,30 @@ generate_monthly_counts <- function(cdm) {
 #'   - `date_month`: The month of the date
 #'   - `person_count`: The number of unique patients per concept for each month
 #'   - `records_per_person`: The average number of records per person per concept for each month
-#' @importFrom dplyr mutate group_by summarise select n n_distinct collect
 #' @keywords internal
 calculate_monthly_counts <- function(omop_table, concept, date) {
   # Extract year and month from date column
-  omop_table <- mutate(omop_table,
+  omop_table <- dplyr::mutate(omop_table,
     concept_id = {{ concept }},
     date_year = as.integer(lubridate::year({{ date }})),
     date_month = as.integer(lubridate::month({{ date }}))
   )
 
   omop_table |>
-    group_by(.data$date_year, .data$date_month, .data$concept_id) |>
-    summarise(
-      record_count = n(),
-      person_count = n_distinct(.data$person_id),
+    dplyr::group_by(.data$date_year, .data$date_month, .data$concept_id) |>
+    dplyr::summarise(
+      record_count = dplyr::n(),
+      person_count = dplyr::n_distinct(.data$person_id),
     ) |>
     # NOTE: Explicitly cast types to avoid unexpected SQL behaviour,
     # otherwise the records_per_person might end up as an int
     # and the *_count vars as int64, which can give problems later
-    mutate(
+    dplyr::mutate(
       record_count = as.integer(.data$record_count),
       person_count = as.integer(.data$person_count),
       records_per_person = as.double(.data$record_count) / as.double(.data$person_count)
     ) |>
-    select(
+    dplyr::select(
       "concept_id",
       "date_year",
       "date_month",
@@ -71,5 +70,5 @@ calculate_monthly_counts <- function(omop_table, concept, date) {
       "records_per_person"
     ) |>
     ## Collect in case we're dealing with a database-stored table
-    collect()
+    dplyr::collect()
 }

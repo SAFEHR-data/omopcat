@@ -38,13 +38,12 @@ generate_summary_stats <- function(cdm) {
 #'  - `summary_attribute`: The summary attribute (e.g. `"mean"`, `"sd"`, `"frequency"`)
 #'  - `value_as_number`: The value of the summary attribute
 #'  - `value_as_concept_id`: In case of a categorical concept, the concept ID for each category
-#' @importFrom dplyr all_of rename filter collect bind_rows
 #' @keywords internal
 calculate_summary_stats <- function(omop_table, concept_name) {
   stopifnot(is.character(concept_name))
   stopifnot(concept_name %in% colnames(omop_table))
 
-  omop_table <- rename(omop_table, concept_id = all_of(concept_name))
+  omop_table <- dplyr::rename(omop_table, concept_id = dplyr::all_of(concept_name))
 
   numeric_concepts <- filter(omop_table, !is.na(.data$value_as_number))
   # beware CDM docs: NULL=no categorical result, 0=categorical result but no mapping
@@ -53,21 +52,20 @@ calculate_summary_stats <- function(omop_table, concept_name) {
     !is.null(.data$value_as_concept_id) & .data$value_as_concept_id != 0
   )
 
-  numeric_stats <- .summarise_numeric_concepts(numeric_concepts) |> collect()
+  numeric_stats <- .summarise_numeric_concepts(numeric_concepts) |> dplyr::collect()
   categorical_stats <- .summarise_categorical_concepts(categorical_concepts) |>
     # Convert value_as_number to double to make it compatible with numeric stats
-    mutate(value_as_number = as.double(.data$value_as_number)) |>
-    collect()
-  bind_rows(numeric_stats, categorical_stats)
+    dplyr::mutate(value_as_number = as.double(.data$value_as_number)) |>
+    dplyr::collect()
+  dplyr::bind_rows(numeric_stats, categorical_stats)
 }
 
-#' @importFrom dplyr group_by summarise
 #' @importFrom stats sd
 .summarise_numeric_concepts <- function(omop_table) {
   # Calculate mean and sd
   stats <- omop_table |>
-    group_by(.data$concept_id) |>
-    summarise(
+    dplyr::group_by(.data$concept_id) |>
+    dplyr::summarise(
       mean = mean(.data$value_as_number, na.rm = TRUE),
       sd = sd(.data$value_as_number, na.rm = TRUE)
     )
@@ -81,16 +79,15 @@ calculate_summary_stats <- function(omop_table, concept_name) {
     )
 }
 
-#' @importFrom dplyr count mutate select
 .summarise_categorical_concepts <- function(omop_table) {
   # Calculate frequencies
   frequencies <- omop_table |>
-    count(.data$concept_id, .data$value_as_concept_id)
+    dplyr::count(.data$concept_id, .data$value_as_concept_id)
 
   # Wrangle output into the expected format
   frequencies |>
-    mutate(summary_attribute = "frequency") |>
-    select(
+    dplyr::mutate(summary_attribute = "frequency") |>
+    dplyr::select(
       "concept_id",
       "summary_attribute",
       value_as_number = "n",
