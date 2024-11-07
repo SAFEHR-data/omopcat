@@ -16,7 +16,7 @@ measurement <- data.frame(
   person_id = c(1, 1, 2, 3),
   measurement_type_concept_id = 12345,
   measurement_concept_id = 1,
-  measurement_date = as.Date("2020-01-01"),
+  measurement_date = "2020-01-01",
   value_as_number = c(2, 1, 2, 1),
   value_as_concept_id = 0
 )
