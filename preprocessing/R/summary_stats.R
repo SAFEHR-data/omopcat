@@ -46,9 +46,9 @@ calculate_summary_stats <- function(omop_table, concept_name) {
 
   omop_table <- dplyr::rename(omop_table, concept_id = dplyr::all_of(concept_name))
 
-  numeric_concepts <- filter(omop_table, !is.na(.data$value_as_number))
+  numeric_concepts <- dplyr::filter(omop_table, !is.na(.data$value_as_number))
   # beware CDM docs: NULL=no categorical result, 0=categorical result but no mapping
-  categorical_concepts <- filter(
+  categorical_concepts <- dplyr::filter(
     omop_table,
     !is.null(.data$value_as_concept_id) & .data$value_as_concept_id != 0
   )

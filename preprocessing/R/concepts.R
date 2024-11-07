@@ -8,7 +8,7 @@
 generate_concepts <- function(cdm, concept_ids) {
   # Extract columns from concept table
   cdm$concept |>
-    filter(.data$concept_id %in% concept_ids) |>
+    dplyr::filter(.data$concept_id %in% concept_ids) |>
     dplyr::select(
       "concept_id",
       "concept_name",

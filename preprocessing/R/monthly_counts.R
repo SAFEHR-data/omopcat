@@ -6,15 +6,23 @@
 #' @keywords internal
 generate_monthly_counts <- function(cdm) {
   # Combine results for all tables
-  out <- dplyr::bind_rows( # nolint start
-    cdm$condition_occurrence |> calculate_monthly_counts(condition_concept_id, condition_start_date),
-    cdm$drug_exposure |> calculate_monthly_counts(drug_concept_id, drug_exposure_start_date),
-    cdm$procedure_occurrence |> calculate_monthly_counts(procedure_concept_id, procedure_date),
-    cdm$device_exposure |> calculate_monthly_counts(device_concept_id, device_exposure_start_date),
-    cdm$measurement |> calculate_monthly_counts(measurement_concept_id, measurement_date),
-    cdm$observation |> calculate_monthly_counts(observation_concept_id, observation_date),
-    cdm$specimen |> calculate_monthly_counts(specimen_concept_id, specimen_date)
-  ) # nolint end
+  out <- dplyr::bind_rows(
+    cdm$condition_occurrence |> calculate_monthly_counts(
+      .data$condition_concept_id, .data$condition_start_date
+    ),
+    cdm$drug_exposure |>
+      calculate_monthly_counts(.data$drug_concept_id, .data$drug_exposure_start_date),
+    cdm$procedure_occurrence |>
+      calculate_monthly_counts(.data$procedure_concept_id, .data$procedure_date),
+    cdm$device_exposure |>
+      calculate_monthly_counts(.data$device_concept_id, .data$device_exposure_start_date),
+    cdm$measurement |>
+      calculate_monthly_counts(.data$measurement_concept_id, .data$measurement_date),
+    cdm$observation |>
+      calculate_monthly_counts(.data$observation_concept_id, .data$observation_date),
+    cdm$specimen |>
+      calculate_monthly_counts(.data$specimen_concept_id, .data$specimen_date)
+  )
 
   # Map concept names to the concept IDs
   concept_names <- dplyr::select(cdm$concept, "concept_id", "concept_name") |>
