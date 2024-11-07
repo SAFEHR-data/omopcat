@@ -1,6 +1,5 @@
 test_that("generate_summary_stats works on a CDM object", {
-  cdm <- .setup_cdm_object()
-  summary_stats <- generate_summary_stats(cdm)
+  summary_stats <- generate_summary_stats(mock_cdm)
   expect_s3_class(summary_stats, "data.frame")
   expect_named(summary_stats, c(
     "concept_id", "concept_name", "summary_attribute", "value_as_number", "value_as_string"

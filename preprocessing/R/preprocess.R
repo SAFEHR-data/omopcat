@@ -96,8 +96,11 @@ preprocess <- function(out_path = Sys.getenv("PREPROCESS_OUT_PATH")) {
 #' When not in production, creates a CDM from one of the CDMConnector example
 #' datasets (`"GiBleed"` by default), using [`CDMConnector::eunomia_dir()`].
 #' This is intended for use in testing and development.
+#'
+#' @param .envir Passed on to [`connect_to_db()`], controls the scope in which the database
+#'    connection should live. When it goes out of scope, the database connection is closed.
 #' @noRd
-.setup_cdm_object <- function() {
+.setup_cdm_object <- function(.envir = parent.frame()) {
   if (.running_in_production()) {
     name <- Sys.getenv("DB_NAME")
     con <- connect_to_db(
@@ -113,7 +116,7 @@ preprocess <- function(out_path = Sys.getenv("PREPROCESS_OUT_PATH")) {
     name <- Sys.getenv("TEST_DB_NAME", unset = "GiBleed")
     duckdb_path <- CDMConnector::eunomia_dir(dataset_name = name)
     rlang::check_installed("duckdb")
-    con <- connect_to_db(duckdb::duckdb(duckdb_path), .envir = parent.frame())
+    con <- connect_to_db(duckdb::duckdb(duckdb_path), .envir = .envir)
   }
 
   # Load the data in a CDMConnector object

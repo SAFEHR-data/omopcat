@@ -1,6 +1,5 @@
 test_that("generate_monthly_counts works on a CDM object", {
-  cdm <- .setup_cdm_object()
-  monthly_counts <- generate_monthly_counts(cdm)
+  monthly_counts <- generate_monthly_counts(mock_cdm)
   expect_s3_class(monthly_counts, "data.frame")
   expect_true(nrow(monthly_counts) > 0)
   expect_named(monthly_counts, c(
