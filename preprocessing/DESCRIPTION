@@ -14,11 +14,18 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Imports:
+    CDMConnector,
     cli,
+    DBI,
     dplyr,
+    duckdb,
     fs,
+    lubridate,
     nanoparquet,
+    purrr,
     rlang,
+    RPostgres,
+    tidyr,
     withr
 Suggests:
     testthat (>= 3.0.0)
