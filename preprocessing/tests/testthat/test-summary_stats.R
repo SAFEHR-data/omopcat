@@ -34,9 +34,13 @@ test_that("calculate_summary_stats produces the expected results", {
 })
 
 db <- dbplyr::src_memdb()
-db_measurement <- dplyr::copy_to(db, measurement, name = "measurement", overwrite = TRUE)
+db_measurement <- dplyr::copy_to(db, mock_measurements, name = "measurement", overwrite = TRUE)
 test_that("calculate_summary_stats works with a database-stored table", {
-  res <- calculate_summary_stats(db_measurement, "measurement_concept_id")
-  expect_s3_class(res, "data.frame")
-  expect_named(res, c("concept_id", "summary_attribute", "value_as_number", "value_as_concept_id"))
+  ref <- calculate_summary_stats(mock_measurements, "measurement_concept_id")
+  db_res <- calculate_summary_stats(db_measurement, "measurement_concept_id")
+
+  expect_s3_class(db_res, "data.frame")
+  expect_named(db_res, c("concept_id", "summary_attribute", "value_as_number", "value_as_concept_id"))
+  expect_identical(db_res, ref)
+  expect_type(db_res$value_as_number, "double")
 })
