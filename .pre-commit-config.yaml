@@ -7,6 +7,7 @@ repos:
       - id: style-files
         args: [--style_pkg=styler, --style_fun=tidyverse_style]
       - id: roxygenize
+        args: [--root=./app]
         additional_dependencies:
           - bslib
           - config
@@ -36,6 +37,7 @@ repos:
       # codemeta must be above use-tidy-description when both are used
       # -   id: codemeta-description-updated
       - id: use-tidy-description
+        args: [--root=./app]
       # - id: lintr  # disabling lintr hook as it doesn't seem to correctly load the package
       # see also https://github.com/lorenzwalthert/precommit/issues/440
       - id: parsable-R
@@ -43,7 +45,8 @@ repos:
       - id: no-print-statement
       - id: no-debug-statement
       - id: deps-in-desc
-        exclude: ^scripts/
+        args: [--root=./app]
+        exclude: "^scripts/|^app/dev/"
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0
     hooks:
@@ -53,11 +56,6 @@ repos:
         files: '^\.Rbuildignore$'
       - id: end-of-file-fixer
         exclude: '\.Rd'
-  - repo: https://github.com/pre-commit-ci/pre-commit-ci-config
-    rev: v1.6.1
-    hooks:
-      # Only required when https://pre-commit.ci is used for config validation
-      - id: check-pre-commit-ci-config
   - repo: local
     hooks:
       - id: forbid-to-commit
