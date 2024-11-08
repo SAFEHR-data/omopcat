@@ -1,11 +1,7 @@
-cli::cli_h1("Producing test data")
-
-
 # Setup ---------------------------------------------------------------------------------------
 
 suppressPackageStartupMessages({
   library(dplyr)
-  library(omopcat)
 })
 
 data_path <- here::here("data/test_data")
