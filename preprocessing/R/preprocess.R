@@ -111,7 +111,7 @@ preprocess <- function(out_path = Sys.getenv("PREPROCESS_OUT_PATH")) {
       .envir = parent.frame()
     )
   } else {
-    name <- Sys.getenv("TEST_DB_NAME", unset = "GiBleed")
+    name <- Sys.getenv("DB_NAME", unset = "GiBleed")
     duckdb_path <- CDMConnector::eunomia_dir(dataset_name = name)
     rlang::check_installed("duckdb")
     con <- connect_to_db(duckdb::duckdb(duckdb_path), .envir = .envir)

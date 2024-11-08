@@ -17,10 +17,12 @@ services:
       PORT: ${PREPROCESS_PORT}
       DB_USERNAME: ${PREPROCESS_DB_USERNAME}
       DB_PASSWORD: ${PREPROCESS_DB_PASSWORD}
-      DB_CDM_SCHEMA: main
+      DB_CDM_SCHEMA: ${PREPROCESS_DB_CDM_SCHEMA}
+      EUNOMIA_DATA_FOLDER: /etc/preprocessing/data-raw/test_db
     command: ["R", "-e", "omopcat.preprocessing::preprocess()"]
     volumes:
       - ${DATA_VOLUME_PATH}:/etc/preprocessing/data
+      - ${TEST_DB_PATH}:/etc/preprocessing/data-raw/test_db
 
   omopcat:
     build:
