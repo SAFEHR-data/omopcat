@@ -20,4 +20,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build the Docker image
-        run: docker compose build ${{ matrix.image }}
+        run: |
+          cp .env.sample .env
+          docker compose build ${{ matrix.image }}
