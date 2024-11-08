@@ -2,6 +2,7 @@
 withr::local_options(usethis.quiet = TRUE, cli.default_handler = function(...) {})
 
 test_that("preprocessing produces the expected files", {
+  testthat::skip_on_ci() # avoid re-downloading example database on GHA runners
   out_path <- tempdir()
   expected_files <- c(
     file.path(out_path, "omopcat_concepts.parquet"),
