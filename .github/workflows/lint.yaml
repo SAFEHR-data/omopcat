@@ -18,6 +18,10 @@ concurrency:
 jobs:
   lint:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package_dir: [app, preprocessing]
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -28,25 +32,19 @@ jobs:
           use-public-rspm: true
 
       - uses: r-lib/actions/setup-renv@v2
+        with:
+          working-directory: ${{ matrix.package_dir }}
 
       - name: Install lintr
         run: install.packages("lintr")
         shell: Rscript {0}
+        working-directory: ${{ matrix.package_dir }}
 
-      - name: Lint app
+      - name: Lint
         run: |
           pkgload::load_all()
           lintr::lint_package()
         shell: Rscript {0}
-        working-directory: ./app
-        env:
-          LINTR_ERROR_ON_LINT: true
-
-      - name: Lint preprocessing
-        run: |
-          pkgload::load_all()
-          lintr::lint_package()
-        shell: Rscript {0}
-        working-directory: ./preprocessing
+        working-directory: ${{ matrix.package_dir }}
         env:
           LINTR_ERROR_ON_LINT: true
