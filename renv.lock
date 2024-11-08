@@ -193,25 +193,6 @@
       ],
       "Hash": "beb7e18bf3f9e096f716a52a77ec793c"
     },
-    "RSQLite": {
-      "Package": "RSQLite",
-      "Version": "2.3.7",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "DBI",
-        "R",
-        "bit64",
-        "blob",
-        "cpp11",
-        "memoise",
-        "methods",
-        "pkgconfig",
-        "plogr",
-        "rlang"
-      ],
-      "Hash": "46b45a4dd7bb0e0f4e3fc22245817240"
-    },
     "Rcpp": {
       "Package": "Rcpp",
       "Version": "1.0.13-1",
@@ -1495,6 +1476,29 @@
       ],
       "Hash": "caecf4e78df185f39703c28a73658659"
     },
+    "omopcat.preprocessing": {
+      "Package": "omopcat.preprocessing",
+      "Version": "0.0.0.9000",
+      "Source": "Local",
+      "RemoteType": "local",
+      "RemoteUrl": "/Users/milan/Projects/SAFEHR-data/omopcat/preprocessing",
+      "Requirements": [
+        "CDMConnector",
+        "DBI",
+        "RPostgres",
+        "cli",
+        "dplyr",
+        "duckdb",
+        "fs",
+        "lubridate",
+        "nanoparquet",
+        "purrr",
+        "rlang",
+        "tidyr",
+        "withr"
+      ],
+      "Hash": "dd34fcde945f22afa611854a0f3b1c66"
+    },
     "omopgenerics": {
       "Package": "omopgenerics",
       "Version": "0.3.1",
@@ -2525,7 +2529,7 @@
     },
     "waldo": {
       "Package": "waldo",
-      "Version": "0.6.0",
+      "Version": "0.6.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -2536,7 +2540,7 @@
         "methods",
         "rlang"
       ],
-      "Hash": "53ec6571dc7a321797cde0abe007ff53"
+      "Hash": "52f574062a7b66e56926988c3fbdb3b7"
     },
     "whisker": {
       "Package": "whisker",
