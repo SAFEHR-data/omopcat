@@ -3,20 +3,21 @@ name: Build Docker Image
 on:
   push:
     branches: ["main"]
-    paths: ["deploy/**"]
+    paths: ["docker-compose.yml", "app/Dockerfile", "preprocessing/Dockerfile"]
   pull_request:
     branches: ["main"]
-    paths: ["deploy/**"]
+    paths: ["docker-compose.yml", "app/Dockerfile", "preprocessing/Dockerfile"]
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        image: [omopcat, preprocess]
 
     steps:
       - uses: actions/checkout@v4
-      - name: Add dummy .Renviron file
-        run: touch deploy/.Renviron
       - name: Build the Docker image
-        run: docker compose build
-        working-directory: deploy/
+        run: docker compose build ${{ matrix.image }}
