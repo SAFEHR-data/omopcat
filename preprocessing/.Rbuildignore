@@ -1,4 +1,7 @@
+^renv$
+^renv\.lock$
 ^preprocessing\.Rproj$
 ^\.Rproj\.user$
 ^data-raw$
 ^Dockerfile$
+^omopcat\.preprocessing\.Rproj$
