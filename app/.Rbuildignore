@@ -20,3 +20,4 @@ $run_dev.*
 ^renv\.lock$
 ^scripts$
 dev_history.R
+^Dockerfile$
