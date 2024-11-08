@@ -48,37 +48,50 @@ mod_plots_server <- function(id, selected_concepts, selected_dates) {
     )
   )
 
+  summary_stats <- get_summary_stats()
+  monthly_counts <- get_monthly_counts()
+
+  # Check for duplicated rows, potentially a problem with the source data
+  if (nrow(summary_stats) > dplyr::n_distinct(summary_stats)) {
+    cli::cli_warn(c(
+      "Duplicate rows detected in summary stats. Only keeping distinct rows.",
+      "i" = "This might point to a problem with the source data"
+    ))
+    summary_stats <- dplyr::distinct(summary_stats)
+  }
+
+
   moduleServer(id, function(input, output, session) {
     selected_concept_ids <- reactive(selected_concepts()$concept_id)
 
     ## Filter data based on selected concept and date range
-    monthly_counts <- reactive({
+    filtered_monthly_counts <- reactive({
       req(length(selected_concept_ids()) > 0)
       req(selected_dates)
-      get_monthly_counts() |>
+      monthly_counts |>
         dplyr::filter(.data$concept_id %in% selected_concept_ids()) |>
         filter_dates(selected_dates())
     })
 
-    summary_stats <- reactive({
+    filtered_summary_stats <- reactive({
       req(length(selected_concept_ids()) > 0)
-      get_summary_stats() |>
+      summary_stats |>
         dplyr::filter(.data$concept_id %in% selected_concept_ids())
     })
 
     output$monthly_counts <- plotly::renderPlotly({
-      req(nrow(monthly_counts()) > 0)
-      monthly_count_plot(monthly_counts())
+      req(nrow(filtered_monthly_counts()) > 0)
+      monthly_count_plot(filtered_monthly_counts())
     })
 
     output$numeric_stats <- renderPlot({
-      req(nrow(summary_stats()) > 0)
-      stat_numeric_plot(summary_stats())
+      req(nrow(filtered_summary_stats()) > 0)
+      stat_numeric_plot(filtered_summary_stats())
     })
 
     output$categorical_stats <- renderPlot({
-      req(nrow(summary_stats()) > 0)
-      stat_categorical_plot(summary_stats())
+      req(nrow(filtered_summary_stats()) > 0)
+      stat_categorical_plot(filtered_summary_stats())
     })
   })
 }
