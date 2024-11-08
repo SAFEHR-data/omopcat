@@ -19,10 +19,8 @@ Imports:
     ggplot2,
     golem (>= 0.4.1),
     shiny (>= 1.9.1),
-    DBI,
     glue,
     tidyr,
-    withr,
     forcats,
     readr,
     lubridate,
@@ -35,9 +33,7 @@ Imports:
     purrr,
     htmltools,
     markdown,
-    bsicons,
-    CDMConnector,
-    RPostgres
+    bsicons
 Suggests:
     devtools,
     usethis,
@@ -47,10 +43,8 @@ Suggests:
     spelling,
     here,
     lintr,
-    dbplyr,
-    RSQLite,
     precommit,
-    duckdb
+    withr
 Remotes: SAFEHR-data/omop-bundles
 Encoding: UTF-8
 LazyData: true

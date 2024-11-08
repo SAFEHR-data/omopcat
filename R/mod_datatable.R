@@ -54,7 +54,6 @@ mod_datatable_ui <- function(id) {
 #' @return The selected row as a reactive object
 #'
 #' @noRd
-#' @importFrom dplyr group_by summarise
 mod_datatable_server <- function(id, selected_dates, bundle_concepts) {
   stopifnot(is.reactive(selected_dates))
   stopifnot(is.reactive(bundle_concepts))
@@ -66,7 +65,7 @@ mod_datatable_server <- function(id, selected_dates, bundle_concepts) {
     concepts_with_counts <- reactive({
       join_counts_to_concepts(all_concepts, monthly_counts, selected_dates()) |>
         # Handle low frequencies
-        mutate(
+        dplyr::mutate(
           total_records = replace_low_frequencies(.data$total_records),
           mean_persons = replace_low_frequencies(.data$mean_persons),
           mean_records_per_person = replace_low_frequencies(.data$mean_records_per_person)

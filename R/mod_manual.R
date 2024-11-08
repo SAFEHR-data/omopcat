@@ -9,6 +9,7 @@
 #' @importFrom shiny NS tagList
 #' @importFrom bslib card card_header
 #' @importFrom htmltools includeMarkdown
+#' @importFrom markdown mark
 mod_manual_ui <- function(id) {
   tagList(
     fluidRow(
