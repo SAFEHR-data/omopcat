@@ -2,6 +2,7 @@ FROM rocker/tidyverse:4.4.1
 
 WORKDIR /pkg
 ADD preprocessing .
+COPY preprocessing/renv.lock ./renv.lock
 
 RUN install2.r --error --skipinstalled renv remotes && \
     R -e 'renv::restore()' && \

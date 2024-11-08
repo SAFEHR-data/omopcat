@@ -2,6 +2,7 @@ FROM rocker/shiny-verse:4.4.1
 
 WORKDIR /app
 ADD app .
+COPY app/renv.lock ./renv.lock
 
 # Install renv and restore environment
 # omopbundles is installed separately as renv is giving problems
