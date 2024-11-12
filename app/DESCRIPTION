@@ -1,0 +1,56 @@
+Package: omopcat
+Title: The OMOP Data Catalogue Dashboard
+Version: 0.2.1.9000
+Authors@R: c(
+    person('Milan', 'Malfait', email = 'm.malfait@ucl.ac.uk', role = c('cre', 'aut')),
+    person('Stefan', 'Piatek', role = 'aut'),
+    person('Baptiste', 'Briot Ribeyre', role = 'aut'),
+    person('Andy', 'South', role = 'aut'),
+    person("SAFEHR", role = c("cph", "fnd"))
+  )
+Description: A Shiny app to display an OMOP data catalogue in an interactive dashboard. Enables
+    users to interactively explore available OMOP concepts by displaying useful summary statistics
+    and subsequently export a selection of concepts of interest.
+License: Apache License (>= 2)
+Imports: 
+    bslib,
+    config (>= 0.3.2),
+    DT,
+    ggplot2,
+    golem (>= 0.4.1),
+    shiny (>= 1.9.1),
+    glue,
+    tidyr,
+    forcats,
+    readr,
+    lubridate,
+    dplyr,
+    cli,
+    nanoparquet,
+    rlang,
+    omopbundles (>= 0.1.1),
+    plotly (>= 4.10.4),
+    purrr,
+    htmltools,
+    markdown,
+    bsicons
+Suggests:
+    devtools,
+    usethis,
+    fs,
+    styler,
+    testthat (>= 3.0.0),
+    spelling,
+    here,
+    lintr,
+    precommit,
+    withr
+Remotes: SAFEHR-data/omop-bundles
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.2
+Config/testthat/edition: 3
+Language: en-US
+Roxygen: list(markdown = TRUE)
+URL: https://github.com/SAFEHR-data/omopcat
+BugReports: https://github.com/SAFEHR-data/omopcat/issues

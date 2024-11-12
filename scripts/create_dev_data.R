@@ -1,20 +1,55 @@
-# Master script to set up the test data
-# Generates the dummy data in `inst/test_data` for running the app in dev mode by calling
-# the relevant scripts in the correct order.
+# Setup ---------------------------------------------------------------------------------------
 
-here::i_am("scripts/create_dev_data.R")
+suppressPackageStartupMessages({
+  library(dplyr)
+})
 
-Sys.setenv("ENV" = "dev")
-# Path to download Eunomia datasets
-Sys.setenv(EUNOMIA_DATA_FOLDER = file.path("data-raw/test_db/eunomia"))
-# Name of the synthetic dataset to use
-Sys.setenv(TEST_DB_NAME = "synthea-allergies-10k")
-# OMOP CDM version
-Sys.setenv(TEST_DB_OMOP_VERSION = "5.3")
-# Schema name for data and results
-Sys.setenv(DB_CDM_SCHEMA = "main")
+data_path <- here::here("data/test_data")
+stopifnot(dir.exists(data_path))
+out_path <- here::here("inst/dev_data")
+stopifnot(dir.exists(out_path))
 
-source(here::here("scripts/01_setup_test_db.R"))
-source(here::here("scripts/02_insert_dummy_tables.R"))
-source(here::here("scripts/03_analyse_omop_cdm.R"))
-source(here::here("scripts/04_produce_dev_data.R"))
+# Produce test data ---------------------------------------------------------------------------
+
+#' Read a parquet table and sort the results
+#'
+#' @param path path to the parquet file to be read
+#' @inheritParams nanoparquet::read_parquet
+#'
+#' @return A `data.frame` with the results sorted by all columns
+#' @importFrom dplyr arrange across everything
+read_parquet_sorted <- function(path, options = nanoparquet::parquet_options()) {
+  if (!file.exists(path)) {
+    cli::cli_abort("File {.file {path}} not found")
+  }
+
+  nanoparquet::read_parquet(path, options) |>
+    arrange(across(everything()))
+}
+
+# Get the relevant tables and filter
+table_names <- c("concepts", "monthly_counts", "summary_stats")
+paths <- glue::glue("{data_path}/omopcat_{table_names}.parquet")
+tables <- purrr::map(paths, read_parquet_sorted)
+names(tables) <- table_names
+
+# Keep only concepts for which we have summary statistics
+keep_concepts <- tables$summary_stats$concept_id
+tables <- purrr::map(tables, ~ .x[.x$concept_id %in% keep_concepts, ])
+
+# Keep only data from 2019 onwards
+monthly_counts <- tables$monthly_counts
+filtered_monthly <- monthly_counts[monthly_counts$date_year >= 2019, ]
+tables$monthly_counts <- filtered_monthly
+
+# Filter the other tables to match the concepts left over after year filtering
+tables <- purrr::map(tables, ~ .x[.x$concept_id %in% filtered_monthly$concept_id, ])
+
+# Write all results to the test data folder
+purrr::iwalk(tables, function(tbl, name) {
+  path <- glue::glue("{out_path}/omopcat_{name}.csv")
+  cli::cli_alert_info("Writing {name} to {path}")
+  readr::write_csv(tbl, file = path)
+})
+
+cli::cli_alert_success("Test data produced")

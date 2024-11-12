@@ -1,0 +1,34 @@
+Package: omopcat.preprocessing
+Title: Preprocessing for the omopcat App
+Version: 0.0.0.9000
+Authors@R: c(
+    person('Milan', 'Malfait', email = 'm.malfait@ucl.ac.uk', role = c('cre', 'aut')),
+    person('Stefan', 'Piatek', role = 'aut'),
+    person('Baptiste', 'Briot Ribeyre', role = 'aut'),
+    person('Andy', 'South', role = 'aut'),
+    person("SAFEHR", role = c("cph", "fnd"))
+  )
+Description: Preprocess data for the omopcat app.
+License: Apache License (>= 2)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Imports:
+    CDMConnector,
+    cli,
+    DBI,
+    dplyr,
+    duckdb,
+    fs,
+    lubridate,
+    nanoparquet,
+    purrr,
+    rlang,
+    RPostgres,
+    tidyr,
+    withr
+Suggests:
+    dbplyr,
+    RSQLite,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
