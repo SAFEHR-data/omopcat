@@ -19,13 +19,22 @@ and subsequently export a selection of concepts of interest.
 
 ## Installation
 
-You can install the development version of omopcat from within R like so:
+The data catalogue consists of 2 separate R packages:
+
+- [`omopcat`](./app/) defines the [Shiny](https://shiny.posit.co/) app to display the catalogue
+- [`omopcat.preprocessing`](./preprocessing/) contains the functionality to summarise an OMOP data source to use as input for the app
+
+The source for these is contained in the `app/` and `preprocessing/` directories, respectively.
+
+You can install the development version of these packages from within R like so:
 
 ```r
 install.packages("remotes")
 usethis::create_github_token()
 credentials::set_github_pat()
-remotes::install_github("SAFEHR-data/omopcat")
+
+remotes::install_github("SAFEHR-data/omopcat/app") # omopcat
+remotes::install_github("SAFEHR-data/omopcat/preprocessing") # omopcat.preprocessing
 ```
 
 You will need to copy the PAT from the web page that `usethis::create_github_token`
