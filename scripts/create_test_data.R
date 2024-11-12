@@ -3,7 +3,7 @@
 withr::local_envvar(
   ENV = "test",
   EUNOMIA_DATA_FOLDER = here::here("data-raw/test_db/eunomia"),
-  TEST_DB_NAME = "synthea-allergies-10k",
+  DB_NAME = "synthea-allergies-10k",
   DB_CDM_SCHEMA = "main"
 )
 
