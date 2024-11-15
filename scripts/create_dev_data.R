@@ -6,7 +6,7 @@ suppressPackageStartupMessages({
 
 data_path <- here::here("data/test_data")
 stopifnot(dir.exists(data_path))
-out_path <- here::here("inst/dev_data")
+out_path <- here::here("app/inst/dev_data")
 stopifnot(dir.exists(out_path))
 
 # Produce test data ---------------------------------------------------------------------------
