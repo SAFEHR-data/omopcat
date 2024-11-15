@@ -44,7 +44,7 @@ get_monthly_counts <- function() {
   } else {
     data <- .read_parquet_table("omopcat_monthly_counts")
   }
-  .manage_low_frequency(data)
+  return(data)
 }
 
 get_summary_stats <- function() {
@@ -56,12 +56,7 @@ get_summary_stats <- function() {
   } else {
     out <- .read_parquet_table("omopcat_summary_stats")
   }
-  dplyr::mutate(out,
-    value_as_number = ifelse(.data$summary_attribute == "frequency",
-      replace_low_frequencies(.data$value_as_number),
-      .data$value_as_number
-    )
-  )
+  return(out)
 }
 
 filter_dates <- function(x, date_range) {
@@ -85,21 +80,4 @@ filter_dates <- function(x, date_range) {
   }
 
   nanoparquet::read_parquet(glue::glue("{data_dir}/{table_name}.parquet"))
-}
-
-# Manage low frequency statistics
-# by removing values equal to 0 and
-# by replacing values below the threshold with the replacement value
-# (both defined in environment variables)
-.manage_low_frequency <- function(df) {
-  # Remove records with values equal to 0
-  df <- dplyr::filter(df, .data$records_per_person > 0)
-  df <- dplyr::filter(df, .data$person_count > 0)
-  # Replace values below the threshold with the replacement value
-  dplyr::mutate(
-    df,
-    records_per_person = replace_low_frequencies(.data$records_per_person),
-    person_count = replace_low_frequencies(.data$person_count),
-    record_count = replace_low_frequencies(.data$record_count)
-  )
 }
