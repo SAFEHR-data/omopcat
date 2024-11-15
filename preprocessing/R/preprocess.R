@@ -46,11 +46,14 @@ preprocess <- function(out_path = Sys.getenv("PREPROCESS_OUT_PATH")) {
 
   cdm <- .setup_cdm_object()
 
+  threshold <- Sys.getenv("LOW_FREQUENCY_THRESHOLD")
+  replacement <- Sys.getenv("LOW_FREQUENCY_REPLACEMENT")
+
   cli::cli_progress_message("Generating monthly_counts table")
-  monthly_counts <- generate_monthly_counts(cdm)
+  monthly_counts <- generate_monthly_counts(cdm, threshold = threshold, replacement = replacement)
 
   cli::cli_progress_message("Generating summary_stats table")
-  summary_stats <- generate_summary_stats(cdm)
+  summary_stats <- generate_summary_stats(cdm, threshold = threshold, replacement = replacement)
 
   cli::cli_progress_message("Generating concepts table")
   concept_ids_with_data <- unique(c(monthly_counts$concept_id, summary_stats$concept_id))
@@ -74,7 +77,9 @@ preprocess <- function(out_path = Sys.getenv("PREPROCESS_OUT_PATH")) {
     "HOST",
     "PORT",
     "DB_USERNAME",
-    "DB_PASSWORD"
+    "DB_PASSWORD",
+    "LOW_FREQUENCY_THRESHOLD",
+    "LOW_FREQUENCY_REPLACEMENT"
   )
 
   missing <- Sys.getenv(required_envvars) == ""

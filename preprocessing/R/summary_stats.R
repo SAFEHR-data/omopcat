@@ -1,15 +1,20 @@
 #' Generate the `omopcat_summary_stats` table
 #'
 #' @param cdm A [`CDMConnector`] object, e.g. from [`CDMConnector::cdm_from_con()`]
+#' @param threshold Threshold value below which values will be replaced by `replacement`
+#' @param replacement Value with which values below `threshold` will be replaced
 #'
 #' @return A `data.frame` with the summary statistics
 #' @keywords internal
-generate_summary_stats <- function(cdm) {
+generate_summary_stats <- function(cdm, threshold, replacement) {
   omop_tables <- cdm[c("measurement", "observation")]
   concept_cols <- c("measurement_concept_id", "observation_concept_id")
 
   # Combine results for all tables
-  stats <- purrr::map2(omop_tables, concept_cols, calculate_summary_stats)
+  stats <- purrr::map2(omop_tables, concept_cols,
+    calculate_summary_stats,
+    threshold = threshold, replacement = replacement
+  )
   stats <- dplyr::bind_rows(stats)
 
   # Map concept names to the concept_ids
@@ -33,6 +38,8 @@ generate_summary_stats <- function(cdm) {
 #'
 #' @param omop_table A table from the OMOP CDM
 #' @param concept_name The name of the concept ID column
+#' @param threshold Threshold value below which values will be replaced by `replacement`
+#' @param replacement Value with which values below `threshold` will be replaced
 #'
 #' @return A `data.frame` with the following columns:
 #'  - `concept_id`: The concept ID
@@ -40,7 +47,7 @@ generate_summary_stats <- function(cdm) {
 #'  - `value_as_number`: The value of the summary attribute
 #'  - `value_as_concept_id`: In case of a categorical concept, the concept ID for each category
 #' @keywords internal
-calculate_summary_stats <- function(omop_table, concept_name) {
+calculate_summary_stats <- function(omop_table, concept_name, threshold, replacement) {
   stopifnot(is.character(concept_name))
   stopifnot(concept_name %in% colnames(omop_table))
 
@@ -54,10 +61,16 @@ calculate_summary_stats <- function(omop_table, concept_name) {
   )
 
   numeric_stats <- .summarise_numeric_concepts(numeric_concepts) |> dplyr::collect()
+
   categorical_stats <- .summarise_categorical_concepts(categorical_concepts) |>
     # Convert value_as_number to double to make it compatible with numeric stats
     dplyr::mutate(value_as_number = as.double(.data$value_as_number)) |>
-    dplyr::collect()
+    dplyr::collect() |>
+    replace_low_frequencies(
+      cols = "value_as_number",
+      threshold = threshold, replacement = replacement
+    )
+
   dplyr::bind_rows(numeric_stats, categorical_stats)
 }
 
