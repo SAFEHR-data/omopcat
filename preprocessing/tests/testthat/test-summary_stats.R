@@ -45,12 +45,16 @@ test_that("calculate_summary_stats replaces low-frequency values", {
 
   is_categorical <- res$summary_attribute == "frequency"
   expect_true(all(res[is_categorical, "value_as_number"] > 0))
-  expect_true(all(res[is_categorical, "value_as_number"] >= threshold |
-    res[is_categorical, "value_as_number"] == replacement))
+  expect_true(all(
+    res[is_categorical, "value_as_number"] >= threshold |
+      res[is_categorical, "value_as_number"] == replacement
+  ))
 
   ## Only categorical stats should be replaced
-  expect_false(all(res[!is_categorical, "value_as_number"] >= threshold |
-    res[!is_categorical, "value_as_number"] == replacement))
+  expect_false(all(
+    res[!is_categorical, "value_as_number"] >= threshold |
+      res[!is_categorical, "value_as_number"] == replacement
+  ))
 })
 
 db <- dbplyr::src_memdb()
