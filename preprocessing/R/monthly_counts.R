@@ -1,10 +1,12 @@
 #' Generate the 'omopcat_monthly_counts' table
 #'
 #' @param cdm A [`CDMConnector`] object, e.g. from [`CDMConnector::cdm_from_con()`]
+#' @param threshold Threshold value below which values will be replaced by `replacement`
+#' @param replacement Value with which values below `threshold` will be replaced
 #'
 #' @return A `data.frame` with the monthly counts
 #' @keywords internal
-generate_monthly_counts <- function(cdm) {
+generate_monthly_counts <- function(cdm, threshold, replacement) {
   # Combine results for all tables
   out <- dplyr::bind_rows(
     cdm$condition_occurrence |> calculate_monthly_counts(
@@ -30,7 +32,11 @@ generate_monthly_counts <- function(cdm) {
     dplyr::collect()
   out |>
     dplyr::left_join(concept_names, by = c("concept_id" = "concept_id")) |>
-    dplyr::select("concept_id", "concept_name", dplyr::everything())
+    dplyr::select("concept_id", "concept_name", dplyr::everything()) |>
+    replace_low_frequencies(
+      cols = c("record_count", "person_count", "records_per_person"),
+      threshold = threshold, replacement = replacement
+    )
 }
 
 

@@ -35,17 +35,22 @@ test_that("preprocessing is skipped if files already exist", {
   expect_false(preprocess(out_path = out_path))
 })
 
-test_that("preprocessing fails if envvars are missing", {
-  withr::local_envvar(
-    ENV = "prod",
-    DB_NAME = NULL,
-    HOST = NULL,
-    PORT = NULL,
-    DB_USERNAME = NULL,
-    DB_PASSWORD = NULL,
-    DB_CDM_SCHEMA = NULL
+test_that("preprocessing fails in prod if envvars are missing", {
+  withr::local_envvar(ENV = "prod")
+  required_envvars <- c(
+    "DB_NAME",
+    "HOST",
+    "PORT",
+    "DB_USERNAME",
+    "DB_PASSWORD",
+    "LOW_FREQUENCY_THRESHOLD",
+    "LOW_FREQUENCY_REPLACEMENT"
   )
-  expect_error(preprocess(out_path = tempfile()), "not set")
+
+  for (envvar in required_envvars) {
+    withr::local_envvar(.new = setNames(list(NULL), envvar))
+    expect_error(preprocess(out_path = tempfile()), "not set")
+  }
 })
 
 test_that("Setting up CDM object works for non-prod data", {

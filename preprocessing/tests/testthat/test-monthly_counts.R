@@ -1,5 +1,5 @@
 test_that("generate_monthly_counts works on a CDM object", {
-  monthly_counts <- generate_monthly_counts(mock_cdm)
+  monthly_counts <- generate_monthly_counts(mock_cdm, threshold = 0, replacement = 0)
   expect_s3_class(monthly_counts, "data.frame")
   expect_true(nrow(monthly_counts) > 0)
   expect_named(monthly_counts, c(
@@ -8,9 +8,19 @@ test_that("generate_monthly_counts works on a CDM object", {
   ))
 })
 
+test_that("generate_monthly_counts replaces low-frequency values", {
+  threshold <- 5
+  replacement <- 0.5
+  monthly_counts <- generate_monthly_counts(mock_cdm, threshold = threshold, replacement = replacement)
+
+  cols <- c("record_count", "person_count", "records_per_person")
+  expect_true(all(monthly_counts[cols] > 0))
+  expect_true(all(monthly_counts[cols] >= threshold | monthly_counts[cols] == replacement))
+})
+
 ## Set up a mock measurement OMOP table
 ## Measurements for 3 different patients on the same day, with 1 patient having 2 measurements
-measurement <- data.frame(
+mock_measurement <- data.frame(
   measurement_id = 1:4,
   person_id = c(1, 1, 2, 3),
   measurement_type_concept_id = 12345,
@@ -21,7 +31,7 @@ measurement <- data.frame(
 )
 
 test_that("calculate_monthly_counts produces the expected results", {
-  res <- calculate_monthly_counts(measurement, measurement_concept_id, measurement_date)
+  res <- calculate_monthly_counts(mock_measurement, measurement_concept_id, measurement_date)
   expect_s3_class(res, "data.frame")
   expect_named(res, c("concept_id", "date_year", "date_month", "record_count", "person_count", "records_per_person"))
   expect_equal(nrow(res), 1)
@@ -30,9 +40,9 @@ test_that("calculate_monthly_counts produces the expected results", {
 })
 
 db <- dbplyr::src_memdb()
-db_measurement <- dplyr::copy_to(db, measurement, name = "measurement", overwrite = TRUE)
+db_measurement <- dplyr::copy_to(db, mock_measurement, name = "measurement", overwrite = TRUE)
 test_that("calculate_monthly_counts works on Database-stored tables", {
-  ref <- calculate_monthly_counts(measurement, measurement_concept_id, measurement_date)
+  ref <- calculate_monthly_counts(mock_measurement, measurement_concept_id, measurement_date)
   db_res <- calculate_monthly_counts(db_measurement, measurement_concept_id, measurement_date)
 
   expect_s3_class(db_res, "data.frame")

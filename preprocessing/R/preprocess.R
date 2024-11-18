@@ -39,18 +39,21 @@ preprocess <- function(out_path = Sys.getenv("PREPROCESS_OUT_PATH")) {
     return(invisible(FALSE))
   }
 
-  if (.running_in_production()) {
+  if (.in_prod()) {
     cli::cli_alert_info("Running in production mode")
     .check_prod_env()
   }
 
   cdm <- .setup_cdm_object()
 
+  threshold <- Sys.getenv("LOW_FREQUENCY_THRESHOLD")
+  replacement <- Sys.getenv("LOW_FREQUENCY_REPLACEMENT")
+
   cli::cli_progress_message("Generating monthly_counts table")
-  monthly_counts <- generate_monthly_counts(cdm)
+  monthly_counts <- generate_monthly_counts(cdm, threshold = threshold, replacement = replacement)
 
   cli::cli_progress_message("Generating summary_stats table")
-  summary_stats <- generate_summary_stats(cdm)
+  summary_stats <- generate_summary_stats(cdm, threshold = threshold, replacement = replacement)
 
   cli::cli_progress_message("Generating concepts table")
   concept_ids_with_data <- unique(c(monthly_counts$concept_id, summary_stats$concept_id))
@@ -64,7 +67,7 @@ preprocess <- function(out_path = Sys.getenv("PREPROCESS_OUT_PATH")) {
   return(invisible(TRUE))
 }
 
-.running_in_production <- function() {
+.in_prod <- function() {
   return(Sys.getenv("ENV") == "prod")
 }
 
@@ -74,7 +77,9 @@ preprocess <- function(out_path = Sys.getenv("PREPROCESS_OUT_PATH")) {
     "HOST",
     "PORT",
     "DB_USERNAME",
-    "DB_PASSWORD"
+    "DB_PASSWORD",
+    "LOW_FREQUENCY_THRESHOLD",
+    "LOW_FREQUENCY_REPLACEMENT"
   )
 
   missing <- Sys.getenv(required_envvars) == ""
@@ -99,7 +104,7 @@ preprocess <- function(out_path = Sys.getenv("PREPROCESS_OUT_PATH")) {
 #'    connection should live. When it goes out of scope, the database connection is closed.
 #' @noRd
 .setup_cdm_object <- function(.envir = parent.frame()) {
-  if (.running_in_production()) {
+  if (.in_prod()) {
     name <- Sys.getenv("DB_NAME")
     con <- connect_to_db(
       RPostgres::Postgres(),

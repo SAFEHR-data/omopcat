@@ -4,10 +4,14 @@
 \alias{generate_monthly_counts}
 \title{Generate the 'omopcat_monthly_counts' table}
 \usage{
-generate_monthly_counts(cdm)
+generate_monthly_counts(cdm, threshold, replacement)
 }
 \arguments{
 \item{cdm}{A \code{\link{CDMConnector}} object, e.g. from \code{\link[CDMConnector:cdm_from_con]{CDMConnector::cdm_from_con()}}}
+
+\item{threshold}{Threshold value below which values will be replaced by \code{replacement}}
+
+\item{replacement}{Value with which values below \code{threshold} will be replaced}
 }
 \value{
 A \code{data.frame} with the monthly counts

@@ -1,4 +1,5 @@
 withr::local_envvar(
+  ENV = "test",
   EUNOMIA_DATA_FOLDER = testthat::test_path("../../data-raw/test_db"),
   TEST_DB_NAME = "GiBleed",
   DB_CDM_SCHEMA = "main",

@@ -4,7 +4,9 @@ withr::local_envvar(
   ENV = "test",
   EUNOMIA_DATA_FOLDER = here::here("data-raw/test_db/eunomia"),
   DB_NAME = "synthea-allergies-10k",
-  DB_CDM_SCHEMA = "main"
+  DB_CDM_SCHEMA = "main",
+  LOW_FREQUENCY_THRESHOLD = 5,
+  LOW_FREQUENCY_REPLACEMENT = 2.5
 )
 
 out_path <- here::here("data/test_data")
