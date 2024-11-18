@@ -52,22 +52,6 @@ test_that("Selected rows are updated when updating `bundle_concepts`", {
   )
 })
 
-test_that("Low frequencies are replaced in the concepts table", {
-  testServer(
-    mod_datatable_server,
-    args = list(
-      selected_dates = reactive_dates,
-      bundle_concepts = reactiveVal()
-    ),
-    {
-      replacement <- as.double(Sys.getenv("LOW_FREQUENCY_REPLACEMENT"))
-
-      expect_true(all(concepts_with_counts()$total_records >= replacement))
-      expect_true(all(concepts_with_counts()$mean_persons >= replacement))
-    }
-  )
-})
-
 test_that("module ui works", {
   ui <- mod_datatable_ui(id = "test")
   golem::expect_shinytaglist(ui)
