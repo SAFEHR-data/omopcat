@@ -39,7 +39,7 @@ preprocess <- function(out_path = Sys.getenv("PREPROCESS_OUT_PATH")) {
     return(invisible(FALSE))
   }
 
-  if (.running_in_production()) {
+  if (.in_prod()) {
     cli::cli_alert_info("Running in production mode")
     .check_prod_env()
   }
@@ -67,7 +67,7 @@ preprocess <- function(out_path = Sys.getenv("PREPROCESS_OUT_PATH")) {
   return(invisible(TRUE))
 }
 
-.running_in_production <- function() {
+.in_prod <- function() {
   return(Sys.getenv("ENV") == "prod")
 }
 
@@ -104,7 +104,7 @@ preprocess <- function(out_path = Sys.getenv("PREPROCESS_OUT_PATH")) {
 #'    connection should live. When it goes out of scope, the database connection is closed.
 #' @noRd
 .setup_cdm_object <- function(.envir = parent.frame()) {
-  if (.running_in_production()) {
+  if (.in_prod()) {
     name <- Sys.getenv("DB_NAME")
     con <- connect_to_db(
       RPostgres::Postgres(),
