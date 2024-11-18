@@ -12,8 +12,8 @@
 #' @return A numeric vector with low frequencies replaced
 #' @keywords internal
 replace_low_frequencies <- function(df, cols, threshold, replacement) {
-  threshold_num <- .as_numeric(threshold, "threshold")
-  replacement_num <- .as_numeric(replacement, "replacement")
+  threshold <- .as_numeric(threshold, "threshold")
+  replacement <- .as_numeric(replacement, "replacement")
 
   # Remove records with values equal to 0
   df <- dplyr::filter(df, dplyr::if_all(dplyr::all_of(cols), ~ . > 0))
@@ -22,7 +22,7 @@ replace_low_frequencies <- function(df, cols, threshold, replacement) {
   dplyr::mutate(
     df, dplyr::across(
       dplyr::all_of(cols),
-      ~ ifelse(.x < threshold_num, replacement_num, .x)
+      ~ ifelse(.x < threshold, replacement, .x)
     )
   )
 }
