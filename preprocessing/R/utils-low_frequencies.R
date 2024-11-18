@@ -1,7 +1,9 @@
 #' Helper function to replace low frequencies
 #'
-#' Replaces frequencies below a certain threshold with a new value, based on the
-#' `LOW_FREQUENCY_THRESHOLD` and `LOW_FREQUENCY_REPLACEMENT` environment variables.
+#' Replaces frequencies below the given `threshold` with the value given by the `replacement`
+#' argument. These values are typically set by the `LOW_FREQUENCY_THRESHOLD`
+#' and `LOW_FREQUENCY_REPLACEMENT` environment variables. This is done to avoid identifiability
+#' of the health records.
 #' Values equal to zero are filtered out prior to replacement.
 #'
 #' @param df A data.frame

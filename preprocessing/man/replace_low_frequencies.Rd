@@ -19,8 +19,10 @@ replace_low_frequencies(df, cols, threshold, replacement)
 A numeric vector with low frequencies replaced
 }
 \description{
-Replaces frequencies below a certain threshold with a new value, based on the
-\code{LOW_FREQUENCY_THRESHOLD} and \code{LOW_FREQUENCY_REPLACEMENT} environment variables.
+Replaces frequencies below the given \code{threshold} with the value given by the \code{replacement}
+argument. These values are typically set by the \code{LOW_FREQUENCY_THRESHOLD}
+and \code{LOW_FREQUENCY_REPLACEMENT} environment variables. This is done to avoid identifiability
+of the health records.
 Values equal to zero are filtered out prior to replacement.
 }
 \keyword{internal}
