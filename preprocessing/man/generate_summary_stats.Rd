@@ -4,10 +4,14 @@
 \alias{generate_summary_stats}
 \title{Generate the \code{omopcat_summary_stats} table}
 \usage{
-generate_summary_stats(cdm)
+generate_summary_stats(cdm, threshold, replacement)
 }
 \arguments{
 \item{cdm}{A \code{\link{CDMConnector}} object, e.g. from \code{\link[CDMConnector:cdm_from_con]{CDMConnector::cdm_from_con()}}}
+
+\item{threshold}{Threshold value below which values will be replaced by \code{replacement}}
+
+\item{replacement}{Value with which values below \code{threshold} will be replaced}
 }
 \value{
 A \code{data.frame} with the summary statistics

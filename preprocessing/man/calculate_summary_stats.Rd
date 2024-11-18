@@ -4,12 +4,16 @@
 \alias{calculate_summary_stats}
 \title{Calculate summary statistics for an OMOP table}
 \usage{
-calculate_summary_stats(omop_table, concept_name)
+calculate_summary_stats(omop_table, concept_name, threshold, replacement)
 }
 \arguments{
 \item{omop_table}{A table from the OMOP CDM}
 
 \item{concept_name}{The name of the concept ID column}
+
+\item{threshold}{Threshold value below which values will be replaced by \code{replacement}}
+
+\item{replacement}{Value with which values below \code{threshold} will be replaced}
 }
 \value{
 A \code{data.frame} with the following columns:
