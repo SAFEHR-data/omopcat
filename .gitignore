@@ -49,4 +49,4 @@ po/*~
 rsconnect/
 
 !dev
-.env
+*.env
