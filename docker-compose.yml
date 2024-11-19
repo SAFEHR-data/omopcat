@@ -49,4 +49,4 @@ services:
     volumes:
       - ${DATA_VOLUME_PATH}:/etc/omopcat/data
     ports:
-      - 3838:3838
+      - ${SHINY_PORT}:3838
