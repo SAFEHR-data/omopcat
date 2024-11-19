@@ -100,4 +100,18 @@ docker compose up -d omopcat
 
 By default, the app will be hosted at `http://localhost:3838`.
 
-See the [deployment docs](./deploy/README.md) for more details.
+### Public version
+
+Copy the `public.env.sample` to `public.env` and fill out the necessary environment variables.
+
+Then run the pre-processing pipeline with
+
+```sh
+docker compose --env-file public.env run preprocess
+```
+
+and deploy the app with
+
+```sh
+docker compose --env-file public.env -p omopcat-public up -d omopcat
+```
