@@ -52,7 +52,7 @@ generate_monthly_counts <- function(cdm, threshold, replacement,
     )
   )
 
-  out <- purrr::map_dfr(arg_list, ~ do.call(.summarise, .))
+  out <- purrr::map_dfr(arg_list, function(args) do.call(.summarise, args))
 
   # Map concept names to the concept IDs
   concept_names <- dplyr::select(cdm$concept, "concept_id", "concept_name") |>

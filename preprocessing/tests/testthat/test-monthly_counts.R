@@ -97,7 +97,10 @@ test_that("summarise_counts works on Database-stored tables at quarterly level",
   db_res <- summarise_counts(db_measurement, "measurement_concept_id", "measurement_date", level = "quarterly")
 
   expect_s3_class(db_res, "data.frame")
-  expect_named(db_res, c("concept_id", "date_year", "date_quarter", "record_count", "person_count", "records_per_person"))
+  expect_named(
+    db_res,
+    c("concept_id", "date_year", "date_quarter", "record_count", "person_count", "records_per_person")
+  )
   expect_type(db_res$record_count, "integer")
   expect_type(db_res$person_count, "integer")
   expect_type(db_res$records_per_person, "double")
