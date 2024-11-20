@@ -1,8 +1,27 @@
 # Disable cli messages
 withr::local_options(usethis.quiet = TRUE, cli.default_handler = function(...) {})
+withr::local_envvar(SUMMARISE_LEVEL = "monthly")
 
 test_that("preprocessing produces the expected files", {
   testthat::skip_on_ci() # avoid re-downloading example database on GHA runners
+  out_path <- tempdir()
+  expected_files <- c(
+    file.path(out_path, "omopcat_concepts.parquet"),
+    file.path(out_path, "omopcat_monthly_counts.parquet"),
+    file.path(out_path, "omopcat_summary_stats.parquet")
+  )
+  withr::defer(fs::file_delete(expected_files))
+
+  expect_no_error({
+    success <- preprocess(out_path = out_path)
+  })
+  expect_true(success)
+  expect_true(all(file.exists(expected_files)))
+})
+
+test_that("preprocessing works with quarterly summarisation", {
+  testthat::skip_on_ci() # avoid re-downloading example database on GHA runners
+  withr::local_envvar(SUMMARISE_LEVEL = "quarterly")
   out_path <- tempdir()
   expected_files <- c(
     file.path(out_path, "omopcat_concepts.parquet"),
@@ -44,7 +63,8 @@ test_that("preprocessing fails in prod if envvars are missing", {
     "DB_USERNAME",
     "DB_PASSWORD",
     "LOW_FREQUENCY_THRESHOLD",
-    "LOW_FREQUENCY_REPLACEMENT"
+    "LOW_FREQUENCY_REPLACEMENT",
+    "SUMMARISE_LEVEL"
   )
 
   for (envvar in required_envvars) {
