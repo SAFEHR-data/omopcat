@@ -39,8 +39,9 @@ test_that("summarise_counts produces the expected results at monthly level", {
   expect_equal(res$records_per_person, 4 / 3)
 })
 
-db <- dbplyr::src_memdb()
-db_measurement <- dplyr::copy_to(db, mock_measurement, name = "measurement", overwrite = TRUE)
+con <- duckdb::dbConnect(duckdb::duckdb())
+duckdb::duckdb_register(con, "measurement", mock_measurement)
+db_measurement <- dplyr::tbl(con, "measurement")
 test_that("summarise_counts works on Database-stored tables at monthly level", {
   ref <- summarise_counts(mock_measurement, "measurement_concept_id", "measurement_date", level = "monthly")
   db_res <- summarise_counts(db_measurement, "measurement_concept_id", "measurement_date", level = "monthly")
