@@ -21,7 +21,7 @@ services:
       EUNOMIA_DATA_FOLDER: /mnt/preprocessing/data-raw/test_db
       LOW_FREQUENCY_THRESHOLD: ${LOW_FREQUENCY_THRESHOLD}
       LOW_FREQUENCY_REPLACEMENT: ${LOW_FREQUENCY_REPLACEMENT}
-      SUMMARISE_LEVEL: ${SUMMARISE_LEVEL}
+      SUMMARISE_LEVEL: ${PREPROCESS_SUMMARISE_LEVEL}
     command: ["R", "-e", "omopcat.preprocessing::preprocess()"]
     volumes:
       - ${DATA_VOLUME_PATH}:/mnt/preprocessing/data
@@ -47,7 +47,6 @@ services:
       OMOPCAT_DATA_PATH: /etc/omopcat/data
       LOW_FREQUENCY_THRESHOLD: ${LOW_FREQUENCY_THRESHOLD}
       LOW_FREQUENCY_REPLACEMENT: ${LOW_FREQUENCY_REPLACEMENT}
-      SUMMARISE_LEVEL: ${SUMMARISE_LEVEL}
     volumes:
       - ${DATA_VOLUME_PATH}:/etc/omopcat/data
     ports:
