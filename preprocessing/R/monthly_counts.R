@@ -98,8 +98,9 @@ summarise_counts <- function(omop_table, concept_col, date_col, level) {
   )
 
   if (level == "quarterly") {
-    # NOTE: lubridate::quarter is supported for postgres back-ends, but not sqlite
-    omop_table$date_quarter <- as.integer(lubridate::quarter(.data[[date_col]]))
+    # NOTE: lubridate::quarter is not supported for all SQL back-ends
+    omop_table <- omop_table |>
+      dplyr::mutate(date_quarter = as.integer(lubridate::quarter(.data[[date_col]])))
   }
 
   omop_table |>
