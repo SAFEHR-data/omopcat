@@ -30,8 +30,8 @@ mock_measurement <- data.frame(
   value_as_concept_id = 0
 )
 
-test_that("calculate_monthly_counts produces the expected results", {
-  res <- calculate_monthly_counts(mock_measurement, measurement_concept_id, measurement_date)
+test_that("summarise_counts produces the expected results at monthly level", {
+  res <- summarise_counts(mock_measurement, "measurement_concept_id", "measurement_date", level = "monthly")
   expect_s3_class(res, "data.frame")
   expect_named(res, c("concept_id", "date_year", "date_month", "record_count", "person_count", "records_per_person"))
   expect_equal(nrow(res), 1)
@@ -41,9 +41,21 @@ test_that("calculate_monthly_counts produces the expected results", {
 
 db <- dbplyr::src_memdb()
 db_measurement <- dplyr::copy_to(db, mock_measurement, name = "measurement", overwrite = TRUE)
-test_that("calculate_monthly_counts works on Database-stored tables", {
-  ref <- calculate_monthly_counts(mock_measurement, measurement_concept_id, measurement_date)
-  db_res <- calculate_monthly_counts(db_measurement, measurement_concept_id, measurement_date)
+test_that("summarise_counts works on Database-stored tables at monthly level", {
+  ref <- summarise_counts(mock_measurement, "measurement_concept_id", "measurement_date", level = "monthly")
+  db_res <- summarise_counts(db_measurement, "measurement_concept_id", "measurement_date", level = "monthly")
+
+  expect_s3_class(db_res, "data.frame")
+  expect_named(db_res, c("concept_id", "date_year", "date_month", "record_count", "person_count", "records_per_person"))
+  expect_type(db_res$record_count, "integer")
+  expect_type(db_res$person_count, "integer")
+  expect_type(db_res$records_per_person, "double")
+  expect_identical(db_res, ref)
+})
+
+test_that("summarise_counts works on Database-stored tables at quarterly level", {
+  ref <- summarise_counts(mock_measurement, "measurement_concept_id", "measurement_date", level = "quarterly")
+  db_res <- summarise_counts(db_measurement, "measurement_concept_id", "measurement_date", level = "quarterly")
 
   expect_s3_class(db_res, "data.frame")
   expect_named(db_res, c("concept_id", "date_year", "date_month", "record_count", "person_count", "records_per_person"))
