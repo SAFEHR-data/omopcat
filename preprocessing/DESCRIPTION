@@ -1,6 +1,6 @@
 Package: omopcat.preprocessing
 Title: Preprocessing for the omopcat App
-Version: 0.2.2
+Version: 0.2.2.9000
 Authors@R: c(
     person('Milan', 'Malfait', email = 'm.malfait@ucl.ac.uk', role = c('cre', 'aut')),
     person('Stefan', 'Piatek', role = 'aut'),
