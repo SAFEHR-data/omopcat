@@ -3,28 +3,56 @@
 #' @param cdm A [`CDMConnector`] object, e.g. from [`CDMConnector::cdm_from_con()`]
 #' @param threshold Threshold value below which values will be replaced by `replacement`
 #' @param replacement Value with which values below `threshold` will be replaced
+#' @param level At which resolution the counts should be summarised.
+#'    Currently supports `"monthly"` or `"quarterly"`.
 #'
 #' @return A `data.frame` with the monthly counts
 #' @keywords internal
-generate_monthly_counts <- function(cdm, threshold, replacement) {
+generate_monthly_counts <- function(cdm, threshold, replacement,
+                                    level = c("monthly", "quarterly")) {
+  level <- match.arg(level)
+  .summarise <- function(...) summarise_counts(..., level = level)
+
   # Combine results for all tables
-  out <- dplyr::bind_rows(
-    cdm$condition_occurrence |> calculate_monthly_counts(
-      .data$condition_concept_id, .data$condition_start_date
+  arg_list <- list(
+    list(
+      omop_table = cdm[["measurement"]],
+      concept_col = "measurement_concept_id",
+      date_col = "measurement_date"
     ),
-    cdm$drug_exposure |>
-      calculate_monthly_counts(.data$drug_concept_id, .data$drug_exposure_start_date),
-    cdm$procedure_occurrence |>
-      calculate_monthly_counts(.data$procedure_concept_id, .data$procedure_date),
-    cdm$device_exposure |>
-      calculate_monthly_counts(.data$device_concept_id, .data$device_exposure_start_date),
-    cdm$measurement |>
-      calculate_monthly_counts(.data$measurement_concept_id, .data$measurement_date),
-    cdm$observation |>
-      calculate_monthly_counts(.data$observation_concept_id, .data$observation_date),
-    cdm$specimen |>
-      calculate_monthly_counts(.data$specimen_concept_id, .data$specimen_date)
+    list(
+      omop_table = cdm[["observation"]],
+      concept_col = "observation_concept_id",
+      date_col = "observation_date"
+    ),
+    list(
+      omop_table = cdm[["condition_occurrence"]],
+      concept_col = "condition_concept_id",
+      date_col = "condition_start_date"
+    ),
+    list(
+      omop_table = cdm[["drug_exposure"]],
+      concept_col = "drug_concept_id",
+      date_col = "drug_exposure_start_date"
+    ),
+    list(
+      omop_table = cdm[["procedure_occurrence"]],
+      concept_col = "procedure_concept_id",
+      date_col = "procedure_date"
+    ),
+    list(
+      omop_table = cdm[["device_exposure"]],
+      concept_col = "device_concept_id",
+      date_col = "device_exposure_start_date"
+    ),
+    list(
+      omop_table = cdm[["specimen"]],
+      concept_col = "specimen_concept_id",
+      date_col = "specimen_date"
+    )
   )
+
+  out <- purrr::map_dfr(arg_list, function(args) do.call(.summarise, args))
 
   # Map concept names to the concept IDs
   concept_names <- dplyr::select(cdm$concept, "concept_id", "concept_name") |>
@@ -39,31 +67,44 @@ generate_monthly_counts <- function(cdm, threshold, replacement) {
     )
 }
 
-
-#' Calculate monthly statistics for an OMOP concept
+#' Summarise record counts
 #'
 #' @param omop_table A table from the OMOP CDM
-#' @param concept The name of the concept column to calculate statistics for
-#' @param date The name of the date column to calculate statistics for
+#' @param concept_col The name of the concept column to calculate statistics for
+#' @param date_col The name of the date column to calculate statistics for
+#' @param level The resolution at which to summarise the record counts.
+#'    Currently supports `"monthly"` or `"quarterly"`
 #'
 #' @return A `data.frame` with the following columns:
 #'   - `concept_id`: The concept ID
 #'   - `concept_name`: The concept name
 #'   - `date_year`: The year of the date
-#'   - `date_month`: The month of the date
+#'   - `date_month` or `date_quarter`: The month or quarter of the date, depending on `level`
 #'   - `person_count`: The number of unique patients per concept for each month
 #'   - `records_per_person`: The average number of records per person per concept for each month
 #' @keywords internal
-calculate_monthly_counts <- function(omop_table, concept, date) {
-  # Extract year and month from date column
-  omop_table <- dplyr::mutate(omop_table,
-    concept_id = {{ concept }},
-    date_year = as.integer(lubridate::year({{ date }})),
-    date_month = as.integer(lubridate::month({{ date }}))
+summarise_counts <- function(omop_table, concept_col, date_col, level) {
+  group_by_var <- switch(level,
+    monthly = "date_month",
+    quarterly = "date_quarter",
+    stop(sprintf("Summary level `%s` not supported", level))
   )
 
+  # Extract year, month and quarter from date column
+  omop_table <- dplyr::mutate(omop_table,
+    concept_id = .data[[concept_col]],
+    date_year = as.integer(lubridate::year(.data[[date_col]])),
+    date_month = as.integer(lubridate::month(.data[[date_col]]))
+  )
+
+  if (level == "quarterly") {
+    # NOTE: lubridate::quarter is not supported for all SQL back-ends
+    omop_table <- omop_table |>
+      dplyr::mutate(date_quarter = as.integer(lubridate::quarter(.data[[date_col]])))
+  }
+
   omop_table |>
-    dplyr::group_by(.data$date_year, .data$date_month, .data$concept_id) |>
+    dplyr::group_by(.data$date_year, .data[[group_by_var]], .data$concept_id) |>
     dplyr::summarise(
       record_count = dplyr::n(),
       person_count = dplyr::n_distinct(.data$person_id),
@@ -79,7 +120,7 @@ calculate_monthly_counts <- function(omop_table, concept, date) {
     dplyr::select(
       "concept_id",
       "date_year",
-      "date_month",
+      dplyr::all_of(group_by_var),
       "record_count",
       "person_count",
       "records_per_person"

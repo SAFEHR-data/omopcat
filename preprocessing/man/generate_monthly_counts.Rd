@@ -4,7 +4,12 @@
 \alias{generate_monthly_counts}
 \title{Generate the 'omopcat_monthly_counts' table}
 \usage{
-generate_monthly_counts(cdm, threshold, replacement)
+generate_monthly_counts(
+  cdm,
+  threshold,
+  replacement,
+  level = c("monthly", "quarterly")
+)
 }
 \arguments{
 \item{cdm}{A \code{\link{CDMConnector}} object, e.g. from \code{\link[CDMConnector:cdm_from_con]{CDMConnector::cdm_from_con()}}}
@@ -12,6 +17,9 @@ generate_monthly_counts(cdm, threshold, replacement)
 \item{threshold}{Threshold value below which values will be replaced by \code{replacement}}
 
 \item{replacement}{Value with which values below \code{threshold} will be replaced}
+
+\item{level}{At which resolution the counts should be summarised.
+Currently supports \code{"monthly"} or \code{"quarterly"}.}
 }
 \value{
 A \code{data.frame} with the monthly counts

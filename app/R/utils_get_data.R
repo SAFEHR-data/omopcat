@@ -44,7 +44,17 @@ get_monthly_counts <- function() {
   } else {
     data <- .read_parquet_table("omopcat_monthly_counts")
   }
+
+  if ("date_quarter" %in% colnames(data)) {
+    ## Set `date_month` to the first month of the quarter
+    data$date_month <- .quarter_to_month(data$date_quarter)
+  }
+
   return(data)
+}
+
+.quarter_to_month <- function(quarter) {
+  return((quarter - 1) * 3 + 1)
 }
 
 get_summary_stats <- function() {
