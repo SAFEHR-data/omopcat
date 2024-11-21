@@ -1,4 +1,4 @@
-# omopcat (development version)
+# omopcat 0.2.2
 
 Refactoring the deployment setup and reorganise the repo (@milanmlft in #108).
 The preprocessing functionality now lives in a separate `omopcat.preprocessing`
