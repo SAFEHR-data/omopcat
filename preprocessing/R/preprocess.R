@@ -48,11 +48,14 @@ preprocess <- function(out_path = Sys.getenv("PREPROCESS_OUT_PATH")) {
 
   threshold <- Sys.getenv("LOW_FREQUENCY_THRESHOLD")
   replacement <- Sys.getenv("LOW_FREQUENCY_REPLACEMENT")
+  summarise_level <- Sys.getenv("SUMMARISE_LEVEL")
+
+  cli::cli_alert_info("Summarising record counts at the '{summarise_level}' level")
 
   cli::cli_progress_message("Generating monthly_counts table")
   monthly_counts <- generate_monthly_counts(cdm,
     threshold = threshold, replacement = replacement,
-    level = Sys.getenv("SUMMARISE_LEVEL")
+    level = summarise_level
   )
 
   cli::cli_progress_message("Generating summary_stats table")
