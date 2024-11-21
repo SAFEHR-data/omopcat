@@ -1,4 +1,23 @@
-# omopcat (development version)
+# omopcat 0.2.2
+
+Refactoring the deployment setup and reorganise the repo (@milanmlft in #108).
+The preprocessing functionality now lives in a separate `omopcat.preprocessing`
+package in the `preprocessing/` directory of the repo. While the app was moved to
+`app/`. Both have their own Docker containers so they can be run independently
+from each other.
+
+## New features
+
+* Move low-frequency replacement to pre-processing (@milanmlft in #109)
+* Remove `no matching concept` instances (@milanmlft in #110)
+* Enable public version of app with courser data (@milanmlft in #111)
+
+## Fixes
+
+* Remove duplicate stats with warning (@milanmlft in #107)
+
+
+**Full Changelog**: https://github.com/SAFEHR-data/omopcat/compare/v0.2.1...v0.2.2
 
 # omopcat 0.2.1
 
