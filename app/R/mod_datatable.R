@@ -25,7 +25,8 @@ mod_datatable_ui <- function(id) {
           "Clear selected rows"
         )
       ),
-      DT::DTOutput(ns("datatable"))
+      DT::DTOutput(ns("datatable")),
+      min_height = 650
     )
   )
 }
