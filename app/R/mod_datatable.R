@@ -114,7 +114,6 @@ join_counts_to_concepts <- function(concepts, monthly_counts, selected_dates) {
       # round to avoid decimal values in in total_records because of low-req replacement
       total_records = sum(round(.data$record_count)),
       mean_persons = round(mean(.data$person_count, na.rm = TRUE), 2),
-      mean_records_per_person = round(mean(.data$records_per_person, na.rm = TRUE), 2)
     )
   # Use inner_join so we only keep concepts for which we have counts in the selected dates
   dplyr::inner_join(concepts, summarised_counts, by = "concept_id")
