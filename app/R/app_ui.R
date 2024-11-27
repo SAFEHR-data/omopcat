@@ -11,6 +11,7 @@ app_ui <- function(request) {
 
     # The UI logic
     page_navbar(
+      fillable = FALSE,
       title = .app_title(),
       sidebar = sidebar(
         title = "Filtering options",
