@@ -78,8 +78,8 @@ mod_datatable_server <- function(id, selected_dates, bundle_concepts) {
       colnames = c(
         "ID" = "concept_id",
         "Name" = "concept_name",
-        "Records" = "total_records",
-        "Patients" = "mean_persons",
+        "Total Records" = "total_records",
+        "Average Patients" = "mean_persons",
         "Domain ID" = "domain_id",
         "Vocabulary ID" = "vocabulary_id",
         "Concept Class ID" = "concept_class_id"
