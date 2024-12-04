@@ -64,12 +64,21 @@ mod_datatable_server <- function(id, selected_dates, bundle_concepts) {
 
   moduleServer(id, function(input, output, session) {
     concepts_with_counts <- reactive({
+      low_freq_threshold <- as.numeric(Sys.getenv("LOW_FREQUENCY_THRESHOLD"))
+
       join_counts_to_concepts(all_concepts, monthly_counts, selected_dates()) |>
         # Reorder and select the columns we want to display
         dplyr::select(
           "concept_id", "concept_name",
           "total_records", "mean_persons",
           "domain_id", "vocabulary_id", "concept_class_id"
+        ) |>
+        # Conditionally round numbers for better display
+        dplyr::mutate(
+          dplyr::across(
+            dplyr::where(is.double),
+            function(x) ifelse(x > low_freq_threshold, round(x), round(x, 2))
+          )
         )
     })
     output$datatable <- DT::renderDT(concepts_with_counts(),
@@ -78,8 +87,8 @@ mod_datatable_server <- function(id, selected_dates, bundle_concepts) {
       colnames = c(
         "ID" = "concept_id",
         "Name" = "concept_name",
-        "Records" = "total_records",
-        "Patients" = "mean_persons",
+        "Total Records" = "total_records",
+        "Average Patients" = "mean_persons",
         "Domain ID" = "domain_id",
         "Vocabulary ID" = "vocabulary_id",
         "Concept Class ID" = "concept_class_id"
@@ -111,10 +120,10 @@ join_counts_to_concepts <- function(concepts, monthly_counts, selected_dates) {
     filter_dates(selected_dates) |>
     dplyr::group_by(.data$concept_id) |>
     dplyr::summarise(
-      # round to avoid decimal values in in total_records because of low-req replacement
-      total_records = sum(round(.data$record_count)),
-      mean_persons = round(mean(.data$person_count, na.rm = TRUE), 2),
-      mean_records_per_person = round(mean(.data$records_per_person, na.rm = TRUE), 2)
+      total_records = sum(.data$record_count),
+      # Note that we can only calculate the average number of persons per month here
+      # as we cannot identify unique patients across months
+      mean_persons = mean(.data$person_count, na.rm = TRUE),
     )
   # Use inner_join so we only keep concepts for which we have counts in the selected dates
   dplyr::inner_join(concepts, summarised_counts, by = "concept_id")
