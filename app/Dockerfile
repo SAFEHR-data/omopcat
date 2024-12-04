@@ -13,7 +13,7 @@ RUN install2.r --error --skipinstalled renv remotes && \
 RUN R -e 'remotes::install_github("SAFEHR-data/omop-bundles")'
 
 # Install the app
-RUN R -e 'remotes::install_local(".", dependencies = TRUE)'
+RUN R -e 'devtools::install(".", dependencies = TRUE)'
 
 EXPOSE 3838
 CMD ["R", "-e", "options('shiny.port'=3838, shiny.host='0.0.0.0'); omopcat::run_app()" ]
