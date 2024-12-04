@@ -77,7 +77,7 @@ mod_datatable_server <- function(id, selected_dates, bundle_concepts) {
         dplyr::mutate(
           dplyr::across(
             dplyr::where(is.double),
-            function(x) ifelse(x > low_freq_threshold, round(x), round(x, 6))
+            function(x) ifelse(x > low_freq_threshold, round(x), round(x, 2))
           )
         )
     })
