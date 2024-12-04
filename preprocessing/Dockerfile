@@ -13,6 +13,6 @@ RUN install2.r --error --skipinstalled renv remotes && \
 
 ADD preprocessing .
 
-RUN R -e 'remotes::install_local(path = ".", dependencies = TRUE)'
+RUN R -e 'devtools::install(path = ".", dependencies = TRUE)'
 
 CMD ["R", "-e", "omopcat.preprocessing::preprocess()"]
