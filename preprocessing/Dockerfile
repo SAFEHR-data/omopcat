@@ -17,7 +17,7 @@ COPY preprocessing/renv/settings.json renv/settings.json
 RUN mkdir renv/.cache
 ENV RENV_PATHS_CACHE renv/.cache
 
-RUN install2.r --error --skipinstalled renv devtools remotes && \
+RUN install2.r --error --skipinstalled renv && \
     R -e 'renv::restore()' && \
     rm -rf /tmp/downloaded_packages
 
@@ -27,7 +27,9 @@ FROM rocker/tidyverse:4.4.1
 WORKDIR /pkg
 COPY --from=base /pkg .
 
-ADD preprocessing .
-RUN R -e 'devtools::install(path = ".", dependencies = FALSE)'
+# Install omopcat.preprocessing package
+# Put package in a subdirectory to avoid overwriting renv files from previous stage
+ADD preprocessing ./pkg
+RUN R -e 'devtools::install(path = "pkg", dependencies = FALSE)'
 
 CMD ["R", "-e", "omopcat.preprocessing::preprocess()"]

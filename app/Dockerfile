@@ -31,9 +31,10 @@ FROM rocker/shiny-verse:4.4.1
 WORKDIR /app
 COPY --from=base /app .
 
-# Install the app
-ADD app .
-RUN R -e 'devtools::install(".", dependencies = FALSE)'
+# Install omopcat package
+# Put package in a subdirectory to avoid overwriting renv files from previous stage
+ADD app ./pkg
+RUN R -e 'devtools::install("pkg", dependencies = FALSE)'
 
 EXPOSE 3838
 CMD ["R", "-e", "options('shiny.port'=3838, shiny.host='0.0.0.0'); omopcat::run_app()" ]
