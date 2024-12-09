@@ -1,8 +1,11 @@
 FROM rocker/shiny-verse:4.4.1
 
 WORKDIR /app
-ADD app .
 COPY app/renv.lock ./renv.lock
+
+# Speed up building by setting make with multiple cores from env
+ARG CORES
+ENV MAKE="make -j${CORES}"
 
 # Install renv and restore environment
 # omopbundles is installed separately as renv is giving problems
@@ -13,6 +16,7 @@ RUN install2.r --error --skipinstalled renv remotes && \
 RUN R -e 'remotes::install_github("SAFEHR-data/omop-bundles")'
 
 # Install the app
+ADD app .
 RUN R -e 'devtools::install(".", dependencies = TRUE)'
 
 EXPOSE 3838

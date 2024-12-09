@@ -37,6 +37,7 @@ services:
         # Required for running on GAE
         HTTP_PROXY: ${HTTP_PROXY}
         HTTPS_PROXY: ${HTTPS_PROXY}
+        CORES: ${PREPROCESS_BUILD_CORES}
     image: omopcat:latest
     platform: linux/amd64
     restart: unless-stopped
