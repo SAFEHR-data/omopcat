@@ -33,7 +33,7 @@ COPY --from=base /app .
 
 # Install omopcat package
 # Put package in a subdirectory to avoid overwriting renv files from previous stage
-ADD app ./pkg
+COPY app ./pkg
 RUN R -e 'devtools::install("pkg", dependencies = FALSE)'
 
 EXPOSE 3838

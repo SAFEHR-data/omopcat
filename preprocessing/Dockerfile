@@ -29,7 +29,7 @@ COPY --from=base /pkg .
 
 # Install omopcat.preprocessing package
 # Put package in a subdirectory to avoid overwriting renv files from previous stage
-ADD preprocessing ./pkg
+COPY preprocessing ./pkg
 RUN R -e 'devtools::install("pkg", dependencies = FALSE)'
 
 CMD ["R", "-e", "omopcat.preprocessing::preprocess()"]
