@@ -93,7 +93,7 @@ mod_datatable_server <- function(id, selected_dates, bundle_concepts) {
         "Vocabulary ID" = "vocabulary_id",
         "Concept Class ID" = "concept_class_id"
       ),
-      selection = list(mode = "multiple", selected = 1, target = "row")
+      selection = list(mode = "multiple", target = "row")
     )
 
     ## Automatically select rows in datatable when a bundle is selected
