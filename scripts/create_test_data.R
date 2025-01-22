@@ -1,4 +1,4 @@
-# Generates the parquet files in data/test_data/ by running the preprocessing pipeilne
+# Generates the parquet files in data/test_data/ by running the preprocessing pipeline
 # on the test database located at data-raw/test_db/eunomia
 withr::local_envvar(
   ENV = "test",
