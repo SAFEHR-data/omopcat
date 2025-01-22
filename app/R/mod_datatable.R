@@ -63,25 +63,11 @@ mod_datatable_server <- function(id, selected_dates, bundle_concepts) {
   monthly_counts <- get_monthly_counts()
 
   moduleServer(id, function(input, output, session) {
-    concepts_with_counts <- reactive({
-      low_freq_threshold <- as.numeric(Sys.getenv("LOW_FREQUENCY_THRESHOLD"))
+    rv <- reactiveValues(
+      concepts_with_counts = join_counts_to_concepts(all_concepts, monthly_counts)
+    )
 
-      join_counts_to_concepts(all_concepts, monthly_counts, selected_dates()) |>
-        # Reorder and select the columns we want to display
-        dplyr::select(
-          "concept_id", "concept_name",
-          "total_records", "mean_persons",
-          "domain_id", "vocabulary_id", "concept_class_id"
-        ) |>
-        # Conditionally round numbers for better display
-        dplyr::mutate(
-          dplyr::across(
-            dplyr::where(is.double),
-            function(x) ifelse(x > low_freq_threshold, round(x), round(x, 2))
-          )
-        )
-    })
-    output$datatable <- DT::renderDT(concepts_with_counts(),
+    output$datatable <- DT::renderDT(rv$concepts_with_counts,
       fillContainer = TRUE,
       rownames = FALSE,
       colnames = c(
@@ -115,9 +101,15 @@ mod_datatable_server <- function(id, selected_dates, bundle_concepts) {
 
 ## Use selected dates to calculate number of patients and records per concept
 ## and join onto selected_data
-join_counts_to_concepts <- function(concepts, monthly_counts, selected_dates) {
+join_counts_to_concepts <- function(concepts, monthly_counts, selected_dates = NULL) {
+  low_freq_threshold <- as.numeric(Sys.getenv("LOW_FREQUENCY_THRESHOLD"))
+
+  if (!is.null(selected_dates)) {
+    monthly_counts <- monthly_counts |>
+      filter_dates(selected_dates)
+  }
+
   summarised_counts <- monthly_counts |>
-    filter_dates(selected_dates) |>
     dplyr::group_by(.data$concept_id) |>
     dplyr::summarise(
       total_records = sum(.data$record_count),
@@ -126,5 +118,18 @@ join_counts_to_concepts <- function(concepts, monthly_counts, selected_dates) {
       mean_persons = mean(.data$person_count, na.rm = TRUE),
     )
   # Use inner_join so we only keep concepts for which we have counts in the selected dates
-  dplyr::inner_join(concepts, summarised_counts, by = "concept_id")
+  dplyr::inner_join(concepts, summarised_counts, by = "concept_id") |>
+    # Reorder and select the columns we want to display
+    dplyr::select(
+      "concept_id", "concept_name",
+      "total_records", "mean_persons",
+      "domain_id", "vocabulary_id", "concept_class_id"
+    ) |>
+    # Conditionally round numbers for better display
+    dplyr::mutate(
+      dplyr::across(
+        dplyr::where(is.double),
+        function(x) ifelse(x > low_freq_threshold, round(x), round(x, 2))
+      )
+    )
 }
