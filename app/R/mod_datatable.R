@@ -82,12 +82,24 @@ mod_datatable_server <- function(id, selected_dates, bundle_concepts) {
       selection = list(mode = "multiple", target = "row")
     )
 
-    ## Automatically select rows in datatable when a bundle is selected
-    row_indices <- reactive({
-      selected_concept_ids <- bundle_concepts()
-      match(selected_concept_ids, concepts_with_counts()$concept_id)
+    datatable_proxy <- DT::dataTableProxy("datatable", session = session, deferUntilFlush = TRUE)
+
+    ## Recompute the concepts with counts when the selected dates change
+    observeEvent(selected_dates(), {
+      original_selection <- rv$concepts_with_counts$concept_id[input$datatable_rows_selected]
+      rv$concepts_with_counts <- join_counts_to_concepts(all_concepts, monthly_counts, selected_dates())
+
+      ## Keep rows selected if they are still in the new table
+      selected_rows <- which(rv$concepts_with_counts$concept_id %in% original_selection)
+      DT::selectRows(datatable_proxy, selected = selected_rows)
     })
-    datatable_proxy <- DT::dataTableProxy("datatable", session = session, deferUntilFlush = FALSE)
+
+    ## Automatically select rows in datatable when a bundle is selected
+    row_indices <- eventReactive(bundle_concepts(), {
+      selected_concept_ids <- bundle_concepts()
+      match(selected_concept_ids, rv$concepts_with_counts$concept_id)
+    })
+
     observeEvent(row_indices(), {
       DT::selectRows(datatable_proxy, selected = row_indices())
     })
@@ -95,7 +107,7 @@ mod_datatable_server <- function(id, selected_dates, bundle_concepts) {
       DT::selectRows(datatable_proxy, selected = NULL) # nocov
     })
 
-    reactive(concepts_with_counts()[input$datatable_rows_selected, ])
+    reactive(rv$concepts_with_counts[input$datatable_rows_selected, ])
   })
 }
 
