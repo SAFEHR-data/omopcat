@@ -28,7 +28,7 @@ generate_summary_stats <- function(cdm, threshold, replacement) {
     dplyr::rename(value_as_string = "concept_name") |>
     # Then we get the names for the main concept_ids
     dplyr::left_join(concept_names, by = c("concept_id" = "concept_id")) |>
-    dplyr::select("concept_id", "concept_name", !"value_as_concept_id")
+    dplyr::select("concept_id", "concept_name", dplyr::everything())
 }
 
 #' Calculate summary statistics for an OMOP table

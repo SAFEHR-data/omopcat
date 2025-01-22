@@ -1,4 +1,4 @@
-# Generates the parquet files in data/test_data/ by running the preprocessing pipeilne
+# Generates the parquet files in data/test_data/ by running the preprocessing pipeline
 # on the test database located at data-raw/test_db/eunomia
 withr::local_envvar(
   ENV = "test",
@@ -9,7 +9,7 @@ withr::local_envvar(
   LOW_FREQUENCY_REPLACEMENT = 2.5
 )
 
-out_path <- here::here("data/test_data")
+out_path <- here::here("data/test_data/internal")
 omopcat.preprocessing::preprocess(out_path)
 
 cli::cli_alert_success("Test data written to {out_path}")
