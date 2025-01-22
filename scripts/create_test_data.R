@@ -9,7 +9,7 @@ withr::local_envvar(
   LOW_FREQUENCY_REPLACEMENT = 2.5
 )
 
-out_path <- here::here("data/test_data")
+out_path <- here::here("data/test_data/internal")
 omopcat.preprocessing::preprocess(out_path)
 
 cli::cli_alert_success("Test data written to {out_path}")
