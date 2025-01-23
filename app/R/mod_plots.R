@@ -33,12 +33,12 @@ mod_plots_ui <- function(id) {
 #' Generates the plot of the requested `type`. When no concept is selected, or no data is available,
 #' an error is raised.
 #'
-#' @param selected_concepts Reactive value containing the selected concepts, used for filtering
+#' @param selected_concept_ids Reactive value containing the selected concept IDs, used for filtering
 #' @param selected_dates Optional reactive value if date filtering needs to be applied
 #'
 #' @noRd
-mod_plots_server <- function(id, selected_concepts, selected_dates) {
-  stopifnot(is.reactive(selected_concepts))
+mod_plots_server <- function(id, selected_concept_ids, selected_dates) {
+  stopifnot(is.reactive(selected_concept_ids))
   stopifnot(is.reactive(selected_dates))
 
   ## Set default theme for ggplot2
@@ -62,8 +62,6 @@ mod_plots_server <- function(id, selected_concepts, selected_dates) {
 
 
   moduleServer(id, function(input, output, session) {
-    selected_concept_ids <- reactive(selected_concepts()$concept_id)
-
     ## Filter data based on selected concept and date range
     filtered_monthly_counts <- reactive({
       req(length(selected_concept_ids()) > 0)

@@ -18,11 +18,12 @@ test_that("datatable server works", {
       expect_true(grepl(id, ns("")))
       expect_true(grepl("test", ns("test")))
 
-      # NOTE: the return value of mod_datatable_server is the row selected from the datatable
-      # by a user. When running in tests, the output has 0 rows because there is no user interaction
-      selected_row <- session$getReturned()
-      expect_true(is.reactive(selected_row))
-      expect_s3_class(selected_row(), "data.frame")
+      # NOTE: the return value of mod_datatable_server is a vector of the concepts selected from
+      # the datatable by a user. When running in tests, the output has 0 rows because there is no
+      # user interaction
+      selected_concepts <- session$getReturned()
+      expect_true(is.reactive(selected_concepts))
+      expect_type(selected_concepts(), "NULL")
       expect_s3_class(output$datatable, "json")
 
       # Check that concepts table only shows concepts that have records for the selected date range
@@ -48,7 +49,7 @@ test_that("Selected rows are updated when updating `bundle_concepts`", {
       select_concepts <- rv$concepts_with_counts$concept_id[c(1, 2)]
       bundle_concepts(select_concepts)
       session$flushReact()
-      expect_equal(rv$bundle_concept_rows, c(1, 2))
+      expect_equal(rv$selected_concepts, select_concepts)
     }
   )
 })
