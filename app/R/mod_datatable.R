@@ -65,12 +65,11 @@ mod_datatable_server <- function(id, selected_dates, bundle_concepts) {
   moduleServer(id, function(input, output, session) {
     rv <- reactiveValues(
       concepts_with_counts = join_counts_to_concepts(all_concepts, monthly_counts),
-      bundle_concept_rows = NULL # store this in rv so we have access when testing
+      selected_concepts = NULL # Keep track of which concepts have been selected
     )
 
-    output$datatable <- DT::renderDT(rv$concepts_with_counts,
+    output$datatable <- DT::renderDT(isolate(rv$concepts_with_counts),
       fillContainer = TRUE,
-      rownames = FALSE,
       colnames = c(
         "ID" = "concept_id",
         "Name" = "concept_name",
@@ -85,27 +84,47 @@ mod_datatable_server <- function(id, selected_dates, bundle_concepts) {
 
     datatable_proxy <- DT::dataTableProxy("datatable")
 
+    ## Keep track of which rows have been selected
+    observeEvent(input$datatable_rows_selected, {
+      concept_ids <- rv$concepts_with_counts$concept_id
+      rv$selected_concepts <- concept_ids[input$datatable_rows_selected]
+    })
+
     ## Recompute the concepts with counts when the selected dates change
     observeEvent(selected_dates(), {
       original_selection <- rv$concepts_with_counts$concept_id[input$datatable_rows_selected]
       rv$concepts_with_counts <- join_counts_to_concepts(all_concepts, monthly_counts, selected_dates())
 
       ## Keep rows selected if they are still in the new table
-      selected_rows <- which(rv$concepts_with_counts$concept_id %in% original_selection)
-      DT::selectRows(datatable_proxy, selected = selected_rows)
+      rows_to_select <- which(rv$concepts_with_counts$concept_id %in% original_selection)
+      rv$selected_concepts <- rv$concepts_with_counts$concept_id[rows_to_select]
+      DT::selectRows(datatable_proxy, selected = rows_to_select)
     })
 
-    ## Update the selected rows when the bundle changes
+    ## Update the selected rows when the bundle changes and move them to the top of the table
     observeEvent(bundle_concepts(), {
-      rv$bundle_concept_rows <- which(rv$concepts_with_counts$concept_id %in% bundle_concepts())
-      DT::selectRows(datatable_proxy, selected = rv$bundle_concept_rows)
+      rows_to_select <- which(rv$concepts_with_counts$concept_id %in% bundle_concepts())
+      not_selected <- setdiff(seq_len(nrow(rv$concepts_with_counts)), rows_to_select)
+      ordered_data <- rv$concepts_with_counts[c(rows_to_select, not_selected), ]
+
+      ## NOTE: DT::replaceData() requires rownames = TRUE in DT::renderDT() (the default)!
+      DT::replaceData(datatable_proxy, ordered_data, clearSelection = "none")
+
+      ## Update the reactive values to reflect the new order
+      rv$concepts_with_counts <- ordered_data
+
+      ## The rows to select are now the first n rows where n is the number of rows to select
+      new_rows_to_select <- seq_along(rows_to_select)
+      rv$selected_concepts <- bundle_concepts()
+      DT::selectRows(datatable_proxy, selected = new_rows_to_select)
     })
 
     observeEvent(input$clear_rows, {
+      rv$selected_concepts <- NULL
       DT::selectRows(datatable_proxy, selected = NULL) # nocov
     })
 
-    reactive(rv$concepts_with_counts[input$datatable_rows_selected, ])
+    reactive(rv$concepts_with_counts[rv$concepts_with_counts$concept_id %in% rv$selected_concepts, ])
   })
 }
 
