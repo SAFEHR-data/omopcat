@@ -9,11 +9,11 @@ here::i_am("data-raw/test_db/dummy/add_dummy_bundle_concepts.R")
 db_path <- here::here("data-raw/test_db/eunomia/synthea-allergies-10k_5.3_1.0.duckdb")
 
 con <- connect_to_db(db_path)
-eunomia_cdm <- CDMConnector::cdm_from_con(
+eunomia_cdm <- CDMConnector::cdmFromCon(
   con = con,
-  cdm_schema = "main",
-  write_schema = "main",
-  cdm_name = "synthea-allergies-10k"
+  cdmSchema = "main",
+  writeSchema = "main",
+  cdmName = "synthea-allergies-10k"
 )
 eunomia_concepts <- eunomia_cdm$concept |> dplyr::pull(concept_id)
 
