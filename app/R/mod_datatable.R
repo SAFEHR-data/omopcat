@@ -52,7 +52,7 @@ mod_datatable_ui <- function(id) {
 #' @param bundle_concepts A reactive object containing the concept IDs to select as
 #' an integer vector.
 #'
-#' @return The selected row as a reactive object
+#' @return An integer vector of the selected concepts as a reactive object
 #'
 #' @noRd
 mod_datatable_server <- function(id, selected_dates, bundle_concepts) {
@@ -127,7 +127,7 @@ mod_datatable_server <- function(id, selected_dates, bundle_concepts) {
       DT::selectRows(datatable_proxy, selected = NULL) # nocov
     })
 
-    reactive(rv$concepts_with_counts[rv$concepts_with_counts$concept_id %in% rv$selected_concepts, ])
+    reactive(rv$selected_concepts)
   })
 }
 
