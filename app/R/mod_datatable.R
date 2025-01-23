@@ -93,7 +93,10 @@ mod_datatable_server <- function(id, selected_dates, bundle_concepts) {
     ## Recompute the concepts with counts when the selected dates change
     observeEvent(selected_dates(), {
       original_selection <- rv$concepts_with_counts$concept_id[input$datatable_rows_selected]
-      rv$concepts_with_counts <- join_counts_to_concepts(all_concepts, monthly_counts, selected_dates())
+      new_data <- join_counts_to_concepts(all_concepts, monthly_counts, selected_dates())
+
+      rv$concepts_with_counts <- new_data
+      DT::replaceData(datatable_proxy, new_data, clearSelection = "none")
 
       ## Keep rows selected if they are still in the new table
       rows_to_select <- which(rv$concepts_with_counts$concept_id %in% original_selection)
