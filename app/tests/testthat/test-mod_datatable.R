@@ -48,7 +48,7 @@ test_that("Selected rows are updated when updating `bundle_concepts`", {
       select_concepts <- rv$concepts_with_counts$concept_id[c(1, 2)]
       bundle_concepts(select_concepts)
       session$flushReact()
-      expect_equal(rv$bundle_concept_rows, c(1, 2))
+      expect_equal(rv$selected_concepts, select_concepts)
     }
   )
 })
