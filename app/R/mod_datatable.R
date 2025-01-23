@@ -63,25 +63,12 @@ mod_datatable_server <- function(id, selected_dates, bundle_concepts) {
   monthly_counts <- get_monthly_counts()
 
   moduleServer(id, function(input, output, session) {
-    concepts_with_counts <- reactive({
-      low_freq_threshold <- as.numeric(Sys.getenv("LOW_FREQUENCY_THRESHOLD"))
+    rv <- reactiveValues(
+      concepts_with_counts = join_counts_to_concepts(all_concepts, monthly_counts),
+      bundle_concept_rows = NULL # store this in rv so we have access when testing
+    )
 
-      join_counts_to_concepts(all_concepts, monthly_counts, selected_dates()) |>
-        # Reorder and select the columns we want to display
-        dplyr::select(
-          "concept_id", "concept_name",
-          "total_records", "mean_persons",
-          "domain_id", "vocabulary_id", "concept_class_id"
-        ) |>
-        # Conditionally round numbers for better display
-        dplyr::mutate(
-          dplyr::across(
-            dplyr::where(is.double),
-            function(x) ifelse(x > low_freq_threshold, round(x), round(x, 2))
-          )
-        )
-    })
-    output$datatable <- DT::renderDT(concepts_with_counts(),
+    output$datatable <- DT::renderDT(rv$concepts_with_counts,
       fillContainer = TRUE,
       rownames = FALSE,
       colnames = c(
@@ -96,28 +83,43 @@ mod_datatable_server <- function(id, selected_dates, bundle_concepts) {
       selection = list(mode = "multiple", target = "row")
     )
 
-    ## Automatically select rows in datatable when a bundle is selected
-    row_indices <- reactive({
-      selected_concept_ids <- bundle_concepts()
-      match(selected_concept_ids, concepts_with_counts()$concept_id)
+    datatable_proxy <- DT::dataTableProxy("datatable")
+
+    ## Recompute the concepts with counts when the selected dates change
+    observeEvent(selected_dates(), {
+      original_selection <- rv$concepts_with_counts$concept_id[input$datatable_rows_selected]
+      rv$concepts_with_counts <- join_counts_to_concepts(all_concepts, monthly_counts, selected_dates())
+
+      ## Keep rows selected if they are still in the new table
+      selected_rows <- which(rv$concepts_with_counts$concept_id %in% original_selection)
+      DT::selectRows(datatable_proxy, selected = selected_rows)
     })
-    datatable_proxy <- DT::dataTableProxy("datatable", session = session, deferUntilFlush = FALSE)
-    observeEvent(row_indices(), {
-      DT::selectRows(datatable_proxy, selected = row_indices())
+
+    ## Update the selected rows when the bundle changes
+    observeEvent(bundle_concepts(), {
+      rv$bundle_concept_rows <- which(rv$concepts_with_counts$concept_id %in% bundle_concepts())
+      DT::selectRows(datatable_proxy, selected = rv$bundle_concept_rows)
     })
+
     observeEvent(input$clear_rows, {
       DT::selectRows(datatable_proxy, selected = NULL) # nocov
     })
 
-    reactive(concepts_with_counts()[input$datatable_rows_selected, ])
+    reactive(rv$concepts_with_counts[input$datatable_rows_selected, ])
   })
 }
 
 ## Use selected dates to calculate number of patients and records per concept
 ## and join onto selected_data
-join_counts_to_concepts <- function(concepts, monthly_counts, selected_dates) {
+join_counts_to_concepts <- function(concepts, monthly_counts, selected_dates = NULL) {
+  low_freq_threshold <- as.numeric(Sys.getenv("LOW_FREQUENCY_THRESHOLD"))
+
+  if (!is.null(selected_dates)) {
+    monthly_counts <- monthly_counts |>
+      filter_dates(selected_dates)
+  }
+
   summarised_counts <- monthly_counts |>
-    filter_dates(selected_dates) |>
     dplyr::group_by(.data$concept_id) |>
     dplyr::summarise(
       total_records = sum(.data$record_count),
@@ -126,5 +128,18 @@ join_counts_to_concepts <- function(concepts, monthly_counts, selected_dates) {
       mean_persons = mean(.data$person_count, na.rm = TRUE),
     )
   # Use inner_join so we only keep concepts for which we have counts in the selected dates
-  dplyr::inner_join(concepts, summarised_counts, by = "concept_id")
+  dplyr::inner_join(concepts, summarised_counts, by = "concept_id") |>
+    # Reorder and select the columns we want to display
+    dplyr::select(
+      "concept_id", "concept_name",
+      "total_records", "mean_persons",
+      "domain_id", "vocabulary_id", "concept_class_id"
+    ) |>
+    # Conditionally round numbers for better display
+    dplyr::mutate(
+      dplyr::across(
+        dplyr::where(is.double),
+        function(x) ifelse(x > low_freq_threshold, round(x), round(x, 2))
+      )
+    )
 }

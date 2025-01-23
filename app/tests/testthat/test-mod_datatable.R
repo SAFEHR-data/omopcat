@@ -29,8 +29,8 @@ test_that("datatable server works", {
       # To check this, we access the reactive object `concepts_with_counts` created within the server
       selected_dates(c("2020-01-01", "2020-12-31"))
       session$flushReact()
-      expect_equal(nrow(concepts_with_counts()), 4)
-      expect_true(all(concepts_with_counts()$total_records > 0))
+      expect_equal(nrow(rv$concepts_with_counts), 4)
+      expect_true(all(rv$concepts_with_counts$total_records > 0))
     }
   )
 })
@@ -45,9 +45,10 @@ test_that("Selected rows are updated when updating `bundle_concepts`", {
     {
       # Not really possible to test the updating of the selected rows, but we can check
       # whether the reactive row_indices get updated correctly as a proxy
-      select_concepts <- concepts_with_counts()$concept_id[c(1, 2)]
+      select_concepts <- rv$concepts_with_counts$concept_id[c(1, 2)]
       bundle_concepts(select_concepts)
-      expect_equal(row_indices(), c(1, 2))
+      session$flushReact()
+      expect_equal(rv$bundle_concept_rows, c(1, 2))
     }
   )
 })

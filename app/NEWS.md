@@ -1,5 +1,12 @@
 # omopcat (development version)
 
+* Keep the concepts table at a minimum height (@milanmlft #114)
+* Use better low-frequency replacement values (@milanmlft #115)
+* Improved docker build speed and caching (@stefpiatek #118)
+* Removed auto-selection of first row in the concepts table (@DW10 #120)
+* Keep the `value_as_concept_id` column in the summary stats table (@milanmlft #122)
+* Keep rows selected when date range changes (@milanmlft #123)
+
 # omopcat 0.2.2
 
 Refactoring the deployment setup and reorganise the repo (@milanmlft in #108).
