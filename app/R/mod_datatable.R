@@ -64,7 +64,8 @@ mod_datatable_server <- function(id, selected_dates, bundle_concepts) {
 
   moduleServer(id, function(input, output, session) {
     rv <- reactiveValues(
-      concepts_with_counts = join_counts_to_concepts(all_concepts, monthly_counts)
+      concepts_with_counts = join_counts_to_concepts(all_concepts, monthly_counts),
+      bundle_concept_rows = NULL # store this in rv so we have access when testing
     )
 
     output$datatable <- DT::renderDT(rv$concepts_with_counts,
@@ -96,8 +97,8 @@ mod_datatable_server <- function(id, selected_dates, bundle_concepts) {
 
     ## Update the selected rows when the bundle changes
     observeEvent(bundle_concepts(), {
-      rows_to_select <- which(rv$concepts_with_counts$concept_id %in% bundle_concepts())
-      DT::selectRows(datatable_proxy, selected = rows_to_select)
+      rv$bundle_concept_rows <- which(rv$concepts_with_counts$concept_id %in% bundle_concepts())
+      DT::selectRows(datatable_proxy, selected = rv$bundle_concept_rows)
     })
 
     observeEvent(input$clear_rows, {
