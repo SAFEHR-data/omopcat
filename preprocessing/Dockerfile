@@ -1,5 +1,5 @@
 # Stage 1: installing renv environment
-FROM rocker/tidyverse:4.4.1 AS base
+FROM rocker/tidyverse:4.4.2 AS base
 
 WORKDIR /pkg
 
@@ -22,7 +22,7 @@ RUN install2.r --error --skipinstalled renv && \
     rm -rf /tmp/downloaded_packages
 
 # Stage 2: Installing omopcat.preprocessing
-FROM rocker/tidyverse:4.4.1
+FROM rocker/tidyverse:4.4.2
 
 WORKDIR /pkg
 COPY --from=base /pkg .
