@@ -1,6 +1,5 @@
 if (interactive()) {
   suppressMessages(require("devtools"))
-  suppressMessages(require("golem"))
 
   # warn about partial matching
   options(
