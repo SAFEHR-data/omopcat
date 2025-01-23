@@ -1,4 +1,4 @@
-# omopcat (development version)
+# omopcat 0.3.0
 
 * Keep the concepts table at a minimum height (@milanmlft #114)
 * Use better low-frequency replacement values (@milanmlft #115)
