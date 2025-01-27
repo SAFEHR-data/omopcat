@@ -7,7 +7,7 @@
 generate_summary_stats(cdm, threshold, replacement)
 }
 \arguments{
-\item{cdm}{A \code{\link{CDMConnector}} object, e.g. from \code{\link[CDMConnector:cdm_from_con]{CDMConnector::cdm_from_con()}}}
+\item{cdm}{A \code{\link{CDMConnector}} object, e.g. from \code{\link[CDMConnector:cdmFromCon]{CDMConnector::cdmFromCon()}}}
 
 \item{threshold}{Threshold value below which values will be replaced by \code{replacement}}
 

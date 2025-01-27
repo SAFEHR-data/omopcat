@@ -21,7 +21,7 @@ schema <- "main"
 withr::with_envvar(
   new = c(EUNOMIA_DATA_FOLDER = dir),
   {
-    invisible(CDMConnector::eunomia_dir(dataset_name = name, cdm_version = version))
+    invisible(CDMConnector::eunomiaDir(datasetName = name, cdmVersion = version))
   }
 )
 
@@ -103,7 +103,7 @@ write_table(dummy_observations, con, "observation", schema = schema)
 
 ## Verify integrity, turn warnings into error
 tryCatch(
-  cdm <- CDMConnector::cdm_from_con(con, cdm_schema = schema, write_schema = schema),
+  cdm <- CDMConnector::cdmFromCon(con, cdmSchema = schema, writeSchema = schema),
   warning = function(cnd) {
     msg <- sprintf("CDM integrity check produced warnings: %s", conditionMessage(cnd))
     rlang::abort(msg, call = NULL)

@@ -1,5 +1,5 @@
 # Stage 1: installing renv environment
-FROM rocker/shiny-verse:4.4.1 AS base
+FROM rocker/shiny-verse:4.4.2 AS base
 
 WORKDIR /app
 
@@ -26,7 +26,7 @@ RUN install2.r --error --skipinstalled renv devtools remotes && \
 RUN R -e 'remotes::install_github("SAFEHR-data/omop-bundles")'
 
 # Stage 2: Installing omopcat
-FROM rocker/shiny-verse:4.4.1
+FROM rocker/shiny-verse:4.4.2
 
 WORKDIR /app
 COPY --from=base /app .

@@ -1,6 +1,6 @@
 #' Generate the `omopcat_concepts` table
 #'
-#' @param cdm A [`CDMConnector`] object, e.g. from [`CDMConnector::cdm_from_con()`]
+#' @param cdm A [`CDMConnector`] object, e.g. from [`CDMConnector::cdmFromCon()`]
 #' @param concept_ids A vector of concept IDs
 #'
 #' @return A `data.frame` with the monthly counts

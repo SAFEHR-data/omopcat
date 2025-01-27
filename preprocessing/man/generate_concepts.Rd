@@ -7,7 +7,7 @@
 generate_concepts(cdm, concept_ids)
 }
 \arguments{
-\item{cdm}{A \code{\link{CDMConnector}} object, e.g. from \code{\link[CDMConnector:cdm_from_con]{CDMConnector::cdm_from_con()}}}
+\item{cdm}{A \code{\link{CDMConnector}} object, e.g. from \code{\link[CDMConnector:cdmFromCon]{CDMConnector::cdmFromCon()}}}
 
 \item{concept_ids}{A vector of concept IDs}
 }

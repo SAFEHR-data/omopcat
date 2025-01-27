@@ -1,6 +1,6 @@
 #' Generate the 'omopcat_monthly_counts' table
 #'
-#' @param cdm A [`CDMConnector`] object, e.g. from [`CDMConnector::cdm_from_con()`]
+#' @param cdm A [`CDMConnector`] object, e.g. from [`CDMConnector::cdmFromCon()`]
 #' @param threshold Threshold value below which values will be replaced by `replacement`
 #' @param replacement Value with which values below `threshold` will be replaced
 #' @param level At which resolution the counts should be summarised.
