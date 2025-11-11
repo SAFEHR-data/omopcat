@@ -19,12 +19,11 @@ RUN python3 -m venv /opt/certbot/ && \
     /opt/certbot/bin/pip install certbot certbot-nginx && \
     ln -s /opt/certbot/bin/certbot /usr/bin/certbot
 
-
 # Replace the SERVER_NAME variable in the nginx.conf.template file
 COPY www/nginx.conf.template /etc/nginx/conf.d/nginx.conf.template
-
+COPY --chmod=755 www/docker_entrypoint.sh /usr/local/bin/docker_entrypoint.sh
 ARG SERVER_NAME
 ENV SERVER_NAME=${SERVER_NAME}
 RUN envsubst '${SERVER_NAME}' < /etc/nginx/conf.d/nginx.conf.template > /etc/nginx/conf.d/default.conf
-# /usr/bin/certbot --nginx --non-interactive --agree-tos &&
-CMD nginx -g 'daemon off;'
+
+CMD /usr/local/bin/docker_entrypoint.sh
