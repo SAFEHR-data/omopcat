@@ -1,0 +1,10 @@
+FROM nginx:latest
+
+COPY www/nginx.conf.template /etc/nginx/conf.d/nginx.conf.template
+
+# Replace the SERVER_NAME variable in the nginx.conf.template file
+ARG SERVER_NAME
+ENV SERVER_NAME=${SERVER_NAME}
+RUN envsubst < /etc/nginx/conf.d/nginx.conf.template > /etc/nginx/conf.d/default.conf
+
+CMD ["nginx", "-g", "daemon off;"]
