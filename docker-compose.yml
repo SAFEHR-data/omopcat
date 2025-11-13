@@ -59,8 +59,6 @@ services:
     build:
       context: .
       dockerfile: www/Dockerfile.nginx
-      args:
-        SERVER_NAME: ${SERVER_NAME}
     platform: linux/amd64
     restart: unless-stopped
     ports:
