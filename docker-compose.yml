@@ -68,4 +68,8 @@ services:
       - "443:443"
     depends_on:
       - omopcat
+    volumes:
+      - certbot_data:/etc/letsencrypt
 
+volumes:
+  certbot_data:
