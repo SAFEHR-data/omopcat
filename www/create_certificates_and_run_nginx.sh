@@ -9,7 +9,8 @@ if [ "$SERVER_NAME" != "localhost" ]; then
     fi
     echo "Config file found, running nginx"
     nginx -g 'daemon off;'
+else
+    echo "Running locally, running nginx without config file"
+    nginx -g 'daemon off;'
 fi
 
-echo "Running locally, running nginx without config file"
-nginx -g 'daemon off;'
