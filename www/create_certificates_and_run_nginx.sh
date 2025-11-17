@@ -1,6 +1,8 @@
 #!/bin/sh
 set -euxo pipefail
 
+# Needs to be run at runtime so that it can access the DNS for certificate authentication
+
 if [ "$SERVER_NAME" != "localhost" ]; then
     if [ ! -f /etc/nginx/conf.d/default.conf ]; then
         echo "Config file not found, creating it"

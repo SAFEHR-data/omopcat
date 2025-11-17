@@ -19,10 +19,7 @@ RUN python3 -m venv /opt/certbot/ && \
     /opt/certbot/bin/pip install certbot certbot-nginx && \
     ln -s /opt/certbot/bin/certbot /usr/bin/certbot
 
-
-
 # Create certificates for SSL
 COPY --chmod=755 www/create_certificates_and_run_nginx.sh /usr/local/bin/create_certificates_and_run_nginx.sh
- 
 
 CMD /usr/local/bin/create_certificates_and_run_nginx.sh

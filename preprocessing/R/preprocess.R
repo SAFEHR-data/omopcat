@@ -74,7 +74,7 @@ preprocess <- function(out_path = Sys.getenv("PREPROCESS_OUT_PATH")) {
 }
 
 .in_prod <- function() {
-  return(Sys.getenv("ENV") == "prod")
+  Sys.getenv("ENV") == "prod"
 }
 
 .check_prod_env <- function() {
