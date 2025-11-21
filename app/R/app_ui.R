@@ -11,6 +11,11 @@ app_ui <- function(request) {
 
     # The UI logic
     page_navbar(
+      header = tags$head(
+        # Add in open graph tags for link previews
+        tags$meta(property = "og:title", content = "OMOPCat"),
+        tags$meta(property = "og:description", content = "Catalogue of available structured data from UCLH.")
+      ),
       fillable = FALSE,
       title = .app_title(),
       sidebar = sidebar(
