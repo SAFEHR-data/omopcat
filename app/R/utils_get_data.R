@@ -28,7 +28,8 @@ get_concepts_table <- function() {
   # in shiny::renderTable()
   ct$concept_id <- as.integer(ct$concept_id)
   # Remove "no matching concept" entries
-  dplyr::filter(ct, .data$concept_id != 0)
+  dplyr::filter(ct, .data$concept_id != 0) |>
+    dplyr::select(-standard_concept)
 }
 
 get_monthly_counts <- function() {
