@@ -14,7 +14,7 @@ app_ui <- function(request) {
       header = tags$head(
         # Add in open graph tags for link previews
         tags$meta(property = "og:title", content = "OMOPCat"),
-        tags$meta(property = "og:description", content = "Catalogue of available structured data from UCLH.")
+        tags$meta(property = "og:description", content = "Catalogue of available structured data from UCLH.") # TODO convert UCLH to env variable
       ),
       fillable = FALSE,
       title = .app_title(),
@@ -74,9 +74,13 @@ golem_add_external_resources <- function() {
 }
 
 .app_title <- function() {
-  title <- glue::glue('omopcat v{get_golem_config("golem_version")}')
+  title <- glue::glue('OMOPCat v{get_golem_config("golem_version")}')
   if (!app_prod()) {
     title <- glue::glue("{title} (dev)")
   }
-  title
+
+  htmltools::tagList(
+    h2(title),
+    p("UCLH data catalogue")
+  )
 }

@@ -61,25 +61,35 @@ mod_datatable_server <- function(id, selected_dates, bundle_concepts) {
 
   all_concepts <- get_concepts_table()
   monthly_counts <- get_monthly_counts()
+  mean_persons_name <-   stringr::str_to_title(
+    glue::glue("{Sys.getenv('SUMMARISE_LEVEL', 'monthly')} patients")
+    )
 
   moduleServer(id, function(input, output, session) {
+    column_names <- c(
+      "ID" = "concept_id",
+      "Name" = "concept_name",
+      "Total Records" = "total_records",
+      "Domain ID" = as.character("domain_id"),
+      "Vocabulary ID" = as.character("vocabulary_id"),
+      "Concept Class ID" = as.character("concept_class_id")
+    )
+    column_names[mean_persons_name] <- "mean_persons"
+
     rv <- reactiveValues(
-      concepts_with_counts = join_counts_to_concepts(all_concepts, monthly_counts),
+      concepts_with_counts = join_counts_to_concepts(all_concepts, monthly_counts) |>
+        DT::datatable(
+          filter = list(position = 'top', clear = FALSE),
+          colnames = column_names,
+          fillContainer = TRUE,
+          selection = list(mode = "multiple", target = "row")
+          ) |>
+        DT::formatRound(c("Total Records", mean_persons_name), digits = 1),
       selected_concepts = NULL # Keep track of which concepts have been selected
     )
 
-    output$datatable <- DT::renderDT(isolate(rv$concepts_with_counts),
-      fillContainer = TRUE,
-      colnames = c(
-        "ID" = "concept_id",
-        "Name" = "concept_name",
-        "Total Records" = "total_records",
-        "Average Patients" = "mean_persons",
-        "Domain ID" = "domain_id",
-        "Vocabulary ID" = "vocabulary_id",
-        "Concept Class ID" = "concept_class_id"
-      ),
-      selection = list(mode = "multiple", target = "row")
+    output$datatable <- DT::renderDT(
+      isolate(rv$concepts_with_counts),
     )
 
     datatable_proxy <- DT::dataTableProxy("datatable")
