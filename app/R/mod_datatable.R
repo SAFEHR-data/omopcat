@@ -26,7 +26,7 @@ mod_datatable_ui <- function(id) {
         )
       ),
       DT::DTOutput(ns("datatable")),
-      min_height = 650
+      min_height = 800
     )
   )
 }
