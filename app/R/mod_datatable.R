@@ -84,7 +84,7 @@ mod_datatable_server <- function(id, selected_dates, bundle_concepts) {
           fillContainer = TRUE,
           selection = list(mode = "multiple", target = "row")
           ) |>
-        DT::formatRound(c("Total Records", mean_persons_name), digits = 1),
+        DT::formatRound(c("Total Records", mean_persons_name), digits = 0),
       selected_concepts = NULL # Keep track of which concepts have been selected
     )
 
