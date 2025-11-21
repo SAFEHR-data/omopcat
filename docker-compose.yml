@@ -50,6 +50,7 @@ services:
       LOW_FREQUENCY_THRESHOLD: ${LOW_FREQUENCY_THRESHOLD}
       LOW_FREQUENCY_REPLACEMENT: ${LOW_FREQUENCY_REPLACEMENT}
       SUMMARISE_LEVEL: ${PREPROCESS_SUMMARISE_LEVEL}
+      CATALOGUE_NAME: ${CATALOGUE_NAME}
     volumes:
       - ${DATA_VOLUME_PATH}:/etc/omopcat/data
     # Port exposed internally only - nginx will proxy external requests

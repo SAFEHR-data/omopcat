@@ -14,8 +14,11 @@ app_ui <- function(request) {
       header = tags$head(
         # Add in open graph tags for link previews
         tags$meta(property = "og:title", content = "OMOPCat"),
-        tags$meta(property = "og:description", content = "Catalogue of available structured data from UCLH.") # TODO convert UCLH to env variable
+        tags$meta(
+          property = "og:description", 
+          content = glue::glue("Catalogue of available structured data from {Sys.getenv('CATALOGUE_NAME', 'UCLH')}."))
       ),
+      footer = glue::glue('OMOPCat v{get_golem_config("golem_version")}'),
       fillable = FALSE,
       title = .app_title(),
       sidebar = sidebar(
@@ -66,7 +69,7 @@ golem_add_external_resources <- function() {
     favicon(),
     bundle_resources(
       path = app_sys("app/www"),
-      app_title = "omopcat"
+      app_title = glue::glue("OMOPCat, {Sys.getenv('CATALOGUE_NAME', 'UCLH')} structured data catalogue")
     )
     # Add here other external resources
     # for example, you can add shinyalert::useShinyalert()
@@ -74,13 +77,10 @@ golem_add_external_resources <- function() {
 }
 
 .app_title <- function() {
-  title <- glue::glue('OMOPCat v{get_golem_config("golem_version")}')
+  title <- glue::glue("{Sys.getenv('CATALOGUE_NAME', 'UCLH')} structured data catalogue")
   if (!app_prod()) {
-    title <- glue::glue("{title} (dev)")
+    title <- glue::glue('OMOPCat v{get_golem_config("golem_version")} (dev)')
   }
 
-  htmltools::tagList(
-    h2(title),
-    p("UCLH data catalogue")
-  )
+  title
 }
