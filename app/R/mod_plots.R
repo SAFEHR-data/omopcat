@@ -9,7 +9,7 @@
 #'
 #' @importFrom shiny NS tagList
 mod_plots_ui <- function(id) {
-  summarisation_level <- Sys.getenv("PREPROCESS_SUMMARISE_LEVEL", "monthly")
+  summarisation_level <- Sys.getenv("SUMMARISE_LEVEL", "monthly")
 
   ns <- NS(id)
   tagList(
