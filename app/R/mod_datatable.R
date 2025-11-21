@@ -163,5 +163,7 @@ join_counts_to_concepts <- function(concepts, monthly_counts, selected_dates = N
         dplyr::where(is.double),
         function(x) ifelse(x > low_freq_threshold, round(x), round(x, 2))
       )
-    )
+    ) |>
+    # Default to displaying by total number of records
+    dplyr::arrange(-total_records)
 }
