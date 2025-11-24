@@ -61,9 +61,9 @@ mod_datatable_server <- function(id, selected_dates, bundle_concepts) {
 
   all_concepts <- get_concepts_table()
   monthly_counts <- get_monthly_counts()
-  mean_persons_name <-   stringr::str_to_title(
+  mean_persons_name <- stringr::str_to_title(
     glue::glue("{Sys.getenv('SUMMARISE_LEVEL', 'monthly')} patients")
-    )
+  )
 
   moduleServer(id, function(input, output, session) {
     column_names <- c(
@@ -79,11 +79,11 @@ mod_datatable_server <- function(id, selected_dates, bundle_concepts) {
     rv <- reactiveValues(
       concepts_with_counts = join_counts_to_concepts(all_concepts, monthly_counts) |>
         DT::datatable(
-          filter = list(position = 'top', clear = FALSE),
+          filter = list(position = "top", clear = FALSE),
           colnames = column_names,
           fillContainer = TRUE,
           selection = list(mode = "multiple", target = "row")
-          ) |>
+        ) |>
         DT::formatRound(c("Total Records", mean_persons_name), digits = 0),
       selected_concepts = NULL # Keep track of which concepts have been selected
     )

@@ -8,11 +8,12 @@
 #' @importFrom shiny shinyApp
 #' @importFrom golem with_golem_options
 run_app <- function(
-    onStart = NULL,
-    options = list(),
-    enableBookmarking = NULL,
-    uiPattern = "/",
-    ...) {
+  onStart = NULL,
+  options = list(),
+  enableBookmarking = NULL,
+  uiPattern = "/",
+  ...
+) {
   # Synchronise environment variable settings and golem options for running in prod
   if (app_prod()) {
     .check_envvars("OMOPCAT_DATA_PATH")

@@ -15,8 +15,9 @@ app_ui <- function(request) {
         # Add in open graph tags for link previews
         tags$meta(property = "og:title", content = "OMOPCat"),
         tags$meta(
-          property = "og:description", 
-          content = glue::glue("Catalogue of available structured data from {Sys.getenv('CATALOGUE_NAME', 'UCLH')}."))
+          property = "og:description",
+          content = glue::glue("Catalogue of available structured data from {Sys.getenv('CATALOGUE_NAME', 'UCLH')}.")
+        )
       ),
       footer = glue::glue('OMOPCat v{get_golem_config("golem_version")}'),
       fillable = FALSE,
