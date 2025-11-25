@@ -1,0 +1,272 @@
+# Introduction
+
+## What is OMOP-Cat?
+
+OMOP-Cat is a catalogue of all of the UCLH Epic data the SAFEHR team can readily provide to you in a standardised format. This standardised format is known as the [OMOP Common Data Model](https://www.ohdsi.org/data-standardization/).
+
+
+
+## What can I do in OMOP-Cat?
+
+- **View a summary** of available OMOP data from Epic
+- **Search** for available OMOP data
+- Get an indication of the **frequency of records and patients** for each concept
+- **Export a list** of selected concepts **** that can be used in the omop_es extraction system and provided in your [DAP-R application](https://www.safehr-data.org/data-access-for-research) (if applicable).
+
+
+## What is OMOP?
+
+OMOP refers to the [Observational Medical Outcomes Partnership (OMOP)](https://www.ohdsi.org/data-standardization/) Common Data Model (CDM). This an international data standard that has been designed to standardise the structure and content of observational data.
+
+The value of OMOP standardisation is that it can enable large-scale, reproducible research across institutions and countries. If data is standardised, it is consistent, high quality, and easily shareable (interoperable).
+
+### 
+
+## What is an OMOP concept?
+
+An OMOP concept is a kind of category that represents a clinical term or entity. For example, `Type 2 diabetes mellitus` is an OMOP concept_name, and the concept_id is `201826`.
+
+
+What is an OMOP bundle?
+
+### 
+
+
+
+
+
+Note: The minimum time range available for a summary is a 1 month period. OMOP-Cat contains no Confidential Patient Information
+
+
+
+# Navigation
+
+OMOP-Cat consists of a sidebar and four main tabs:
+
+- Concepts 
+- Bundles
+- Export
+- Help
+
+## The Sidebar
+
+The OMOP-Cat sidebar is the rectangular pane located on the lefthand side of the screen.
+
+![](https://slabstatic.com/prod/assets/esx1c4en/post/rebg2x83/preimages/XXE8dv5jRiUJ8b5vdWUxeMtT.png)
+
+The sidebar is visible on every tab section. It contains:
+
+### Date Range Slider
+
+![](https://slabstatic.com/prod/assets/esx1c4en/post/rebg2x83/preimages/efZ4RCTgMDghghtEoO4cWsR6.png)
+
+To filter OMOP concept records by date range, hover your cursor over each blue circle on the timeline, then drag to your desired month and year.
+
+
+
+
+
+### Select Bundle Drop-down
+
+![](https://slabstatic.com/prod/assets/esx1c4en/post/rebg2x83/preimages/qF8jbpdx4xSnrRa6UNiUk16P.png)
+
+Click the dropdown to search for a pre-selected group of related concepts, e.g. _full blood count differential_.  See more information in the Bundles section.
+
+
+
+### Add Current Selection to Export
+
+![](https://slabstatic.com/prod/assets/esx1c4en/post/rebg2x83/preimages/clgp1YtQ5G90vIimKjy4SojG.png)
+
+Click entries in the concepts table (see Concepts section) to export them as a list (see Export section).
+
+
+
+### Concepts Selected for Export
+
+![](https://slabstatic.com/prod/assets/esx1c4en/post/rebg2x83/preimages/mQrr4y45CsoBvP0pMNGEW95t.png)
+
+This tile displays the number of concepts that you currently have selected in the table that will be exported in the **Export Tab** (see Export section for more details).
+
+Note: deselecting rows in a table will not deselect them for export.
+
+### 
+
+## Concepts Tab
+
+![](https://slabstatic.com/prod/assets/esx1c4en/post/rebg2x83/preimages/BbARTk9iZAaVHXUO4w3c3MP2.png)
+
+### The Concepts Overview Table 
+
+The Concepts Overview table is the default page when you visit OMOP-Cat. The table gives an overview of all available concepts.
+
+You can select how many entries you'd like to view per page with the 'entries' dropdown in the top left corner of the table.
+
+![](https://slabstatic.com/prod/assets/esx1c4en/post/rebg2x83/preimages/d0913bzCkkADB9l7NK4ZZDPi.png)
+
+You can search for particular keyword or category by typing in the '**search**' box on the top right corner of the table.
+
+![](https://slabstatic.com/prod/assets/esx1c4en/post/rebg2x83/preimages/BWhW8uhD7sfUBwJFthV4sCwH.png)
+
+The search function is dynamic and will search every column for a partial match. For example, searching for 'headache' will display 'temporal headache', 'headache following lumbar puncture' and 'muscular headache'.
+
+
+
+![](https://slabstatic.com/prod/assets/esx1c4en/post/rebg2x83/preimages/8rkITN1ovooGDk9heuREJNtS.png)
+
+**The table contains the following columns:**
+
+- **ID** - the OMOP ID number that has been assigned to the given concept. For example, 'refractory migraine' has the OMOP Concept ID of 443615. 
+- **Name** - standardised OMOP name. For example, 'sinus headache'.
+- **Total Records** - number of records available for a given concept within the time window.
+- **Average Patients** - average number of patients in the dataset that have the selected concept within the 3-month time period. For example,  about 50,000 patients have 'pulse rate' concept data. Note: counts below 30 are converted to .1 to protect patient privacy. 
+- **Domain ID** - which domain the selected concept belongs to. For example, measurement or specimen.
+- **Vocabulary ID** - what coding system is being used, for example, SNOMED or LOINC.
+- **Concept Class ID** - further details on the category of the concept, for example, observable entity or lab test.
+
+
+
+Clicking on a row within the table shows the summary statistics for the selected concept in the two tiles on the bottom of the page (see The Monthly Records and Summary Statistics Plot Box for more details).
+
+![](https://slabstatic.com/prod/assets/esx1c4en/post/rebg2x83/preimages/yQ06DQvQmNEIV7Jf17j6vKaE.png)
+
+You can select multiple rows at once by simply clicking on each row.
+
+You can deselect concepts individually by clicking the same row again. You can clear all selections at once by clicking the **broom icon** in the top right corner of the table:
+
+![](https://slabstatic.com/prod/assets/esx1c4en/post/rebg2x83/preimages/zNEKMz2S15HJXoQC15DI9uOS.png)
+
+
+
+### The `r Sys.getenv('SUMMARISE_LEVEL', 'monthly')` records 
+
+When you select one or more concept rows in the Concepts Overview table, the tile on the bottom left of the screen left displays the **Distribution of Monthly Records for the selected concept(s)**.
+
+This chart displays the number of records available in each month for the selected concepts over the specified date range. (Reminder: date range is applied in the Date Range Slider in the Sidebar.)
+
+You can toggle this chart to full screen by clicking the **Expand** icon in the bottom right corner of the chart.
+
+![](https://slabstatic.com/prod/assets/esx1c4en/post/rebg2x83/preimages/v8auOisnvhiojmNrMAgA3O4n.png)
+
+### The Summary Statistics 
+
+The tile to the right of the Monthly Records chart will show the **Summary Statistics for the selected concepts**. The data will display as a box and whisker plot for numeric data (calculated from the mean and standard deviation alone), or as bar chart for categorical data.
+
+![](https://slabstatic.com/prod/assets/esx1c4en/post/rebg2x83/preimages/JAyHpPxoKHi1dFn0KyZEkHb4.png)
+
+Note: the Summary Statistics plots may be empty if the selected concept(s) do not contain any numeric or categorical values (e.g. Procedures do not have any values).
+
+
+
+## Bundles Tab
+
+### Bundles Overview Table 
+
+The Bundles Overview Table shows the available bundles (i.e. groups of related concepts) and the number of concepts included.
+
+This table displays a clearer view of what is available in the **Bundle Drop-down** in the **Sidebar**.
+
+
+
+**The table contains the following columns:**
+
+- **Bundle Name** - indicates what the bundle will contain, e.g. 'Antibodies to HIV'
+- **Domain** - for example, category or observation
+- **Available Concepts** - how many concepts are included in the bundle
+
+
+
+Clicking a row in this table will select the bundle in the **Sidebar drop-down** menu.
+
+![](https://slabstatic.com/prod/assets/esx1c4en/post/rebg2x83/preimages/kveJ2BdnDDR4Q34CtyoE1q22.png)
+
+To see what concepts are in the bundle, switch back to the **Concepts Tab**. The bundle results will be displayed at the top of the table.
+
+![](https://slabstatic.com/prod/assets/esx1c4en/post/rebg2x83/preimages/TTcMmsbrIvL78kIfdiJbce1B.png)
+
+
+
+If you are satisfied with your bundle selection, you can add it to the export list. Ensure your bundle is selected, then click the '**Add current selection to export**' button.
+
+![](https://slabstatic.com/prod/assets/esx1c4en/post/rebg2x83/preimages/eSa5ILqu1596y2s4GBJfyrOF.png)
+
+**Note:** the **bundle drop-down box** supports typing for a quicker bundle search.
+
+### 
+
+## Export Tab
+
+The Export Tab displays the concepts that have been selected for export to a .cvs file. The table shows a preview of the concepts and their details, e.g. Concept Name and Domain ID.
+
+![](https://slabstatic.com/prod/assets/esx1c4en/post/rebg2x83/preimages/9tmuVPQtZmjlXaJHAfEHwMDN.png)
+
+### The Summary Tiles
+
+On the top of the Export Tab, there are three tiles which provide a summary of the concepts that have been selected for export.
+
+![](https://slabstatic.com/prod/assets/esx1c4en/post/rebg2x83/preimages/OaOS0gckXmvlQF35QrCdJRlt.png)
+
+The tiles include the following information:
+
+- Domain ID and number of concepts within the domain
+- Concept Class ID and number of concepts within the concept class
+- Vocabulary ID and number of concepts within the vocabulary category.
+
+
+
+### The Export Table
+
+The export table includes the following columns:
+
+- **concept_id** - the OMOP ID number that has been assigned to the given concept. For example, 'refractory migraine' has the OMOP Concept ID of 443615. 
+- **concept_name** - standardised OMOP name. For example, 'sinus headache'.
+- **vocabulary_id** - what coding system is being used, for example, SNOMED or LOINC.
+- **domain_id**- which domain the selected concept belongs to. For example, measurement or specimen.
+- **concept_class_id** - further details on the category of the concept, for example, observable entity or lab test.
+- **concept_code** - The identifier from the coding system used, e.g. the LOINC concept_code `14879-1`  maps to the OMOP Concept ID `3003458` (`Phosphate [Moles/volume] in Serum or Plasma`) 
+
+
+### Export CSV
+
+Clicking the **Export CSV** button will begin a download of the file.
+
+![](https://slabstatic.com/prod/assets/esx1c4en/post/rebg2x83/preimages/lsIlQmWn47KUB0DDz997VG2d.png)
+
+This exported file can then be used in the OMOP_ES extraction system, or as supporting documentation for your [DAP-R application](https://www.safehr-data.org/data-access-for-research) (if applicable).
+
+![](https://slabstatic.com/prod/assets/esx1c4en/post/rebg2x83/preimages/S7j570C4ptcGVsiPmSkXnHvs.png)
+
+### Adding and Removing Concepts for Export
+
+To add concepts to the export, select them in the **Concepts Overview Table** and then click the “**Add current selection to export**” button in the Sidebar.
+
+**Note:** Unselecting a row **does not** remove it from the export. To remove **all concepts** for export, refresh your browser page.
+
+See the Concepts Tab and The Sidebar sections for more details.
+
+
+
+## How OMOP-Cat works
+
+OMOP-Cat uses a pre-processing step to summarize OMOP extractions by calculating `r Sys.getenv('SUMMARISE_LEVEL', 'monthly')` counts for all concepts. These counts power the app’s ability to query data availability by concept.
+
+
+
+## Contact & Support
+
+- GitHub: [https://github.com/SAFEHR-data/omopcat](https://github.com/SAFEHR-data/omopcat)
+- For issues with the app, [open an issue on GitHub](https://github.com/SAFEHR-data/omopcat/issues/new).
+
+**Developed by:** [SAFEHR-data team](https://www.safehr-data.org/our-team) at UCLH and UCL, supported by the [UCLH Biomedical Research Centre](https://www.uclhospitals.brc.nihr.ac.uk/).
+
+
+
+## Licence
+
+Copyright 2025 UCLH SAFEHR-data
+
+Licensed under the Apache License, Version 2.0 (the “License”); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+
+[http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an “AS IS” BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.

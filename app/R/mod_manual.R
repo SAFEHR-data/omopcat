@@ -8,16 +8,19 @@
 #'
 #' @importFrom shiny NS tagList
 #' @importFrom bslib card card_header
-#' @importFrom htmltools includeMarkdown
-#' @importFrom markdown mark
+
 mod_manual_ui <- function(id) {
+  # Render the Rmarkdown file to a temporary markdown file
+  help_path <- file.path(tempdir(), "help_tab.md")
+  knitr::knit(app_sys("app/help_tab.rmd"), help_path, quiet = TRUE)
+
   tagList(
     fluidRow(
       tags$div(
         class = "alert alert-warning",
         .low_frequency_disclaimer()
       ),
-      includeMarkdown(app_sys("app/help_tab.md"))
+      htmltools::includeMarkdown(help_path)
     )
   )
 }

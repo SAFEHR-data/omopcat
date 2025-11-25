@@ -34,7 +34,8 @@ Imports:
     htmltools,
     markdown,
     bsicons,
-    stringr
+    stringr,
+    knitr
 Suggests:
     devtools,
     usethis,
