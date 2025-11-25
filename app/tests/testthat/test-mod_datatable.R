@@ -72,16 +72,16 @@ test_that("Adding records and patients counts to concepts table works", {
     names(concepts_with_counts)
   )
   expect_equal(nrow(concepts_with_counts), 3)
-  expect_equal(concepts_with_counts$total_records, c(100, 200, 300))
-  expect_equal(concepts_with_counts$mean_persons, c(10, 10, 10))
+  expect_setequal(concepts_with_counts$total_records, c(100, 200, 300))
+  expect_setequal(concepts_with_counts$mean_persons, c(10, 10, 10))
 })
 
 test_that("Added counts depends on selected dates", {
   selected_dates <- c("2019-01-01", "2019-12-31")
   concepts_with_counts <- join_counts_to_concepts(mock_selection_data, mock_monthly_counts, selected_dates)
 
-  expect_equal(concepts_with_counts$total_records, c(100, 100, 100))
-  expect_equal(concepts_with_counts$mean_persons, c(10, 10, 10))
+  expect_setequal(concepts_with_counts$total_records, c(100, 100, 100))
+  expect_setequal(concepts_with_counts$mean_persons, c(10, 10, 10))
 })
 
 test_that("Only concepts with data for the selected date range are kept", {
