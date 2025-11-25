@@ -73,7 +73,8 @@ stat_categorical_plot <- function(summary_stats) {
   ggplot(summary_stats, aes(.data$value_as_string, .data$value_as_number)) +
     geom_col(aes(fill = .data$value_as_string), show.legend = FALSE) +
     labs(x = "Category", y = "Frequency") +
-    facet_wrap(vars(.data$concept_name), scales = "free")
+    facet_wrap(vars(.data$concept_name), scales = "free") +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
 }
 
 .process_numeric_stats <- function(summary_stats) {

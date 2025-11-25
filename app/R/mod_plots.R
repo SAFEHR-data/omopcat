@@ -9,12 +9,14 @@
 #'
 #' @importFrom shiny NS tagList
 mod_plots_ui <- function(id) {
+  summarisation_level <- Sys.getenv("SUMMARISE_LEVEL", "monthly")
+
   ns <- NS(id)
   tagList(
     layout_columns(
       card(
         full_screen = TRUE,
-        card_header("Distribution of Monthly Records for the selected concepts"),
+        card_header(glue::glue("Distribution of {summarisation_level} records for the selected concepts")),
         plotly::plotlyOutput(ns("monthly_counts"))
       ),
       navset_card_underline(

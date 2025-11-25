@@ -11,6 +11,15 @@ app_ui <- function(request) {
 
     # The UI logic
     page_navbar(
+      header = tags$head(
+        # Add in open graph tags for link previews
+        tags$meta(property = "og:title", content = "OMOPCat"),
+        tags$meta(
+          property = "og:description",
+          content = glue::glue("Catalogue of available structured data from {Sys.getenv('CATALOGUE_NAME', 'UCLH')}.")
+        )
+      ),
+      footer = glue::glue('OMOPCat v{get_golem_config("golem_version")}'),
       fillable = FALSE,
       title = .app_title(),
       sidebar = sidebar(
@@ -36,7 +45,7 @@ app_ui <- function(request) {
         mod_export_tab_ui("export_tab")
       ),
       nav_panel(
-        title = "help",
+        title = "Help",
         mod_manual_ui("manual")
       )
     )
@@ -61,7 +70,7 @@ golem_add_external_resources <- function() {
     favicon(),
     bundle_resources(
       path = app_sys("app/www"),
-      app_title = "omopcat"
+      app_title = glue::glue("OMOPCat, {Sys.getenv('CATALOGUE_NAME', 'UCLH')} structured data catalogue")
     )
     # Add here other external resources
     # for example, you can add shinyalert::useShinyalert()
@@ -69,9 +78,10 @@ golem_add_external_resources <- function() {
 }
 
 .app_title <- function() {
-  title <- glue::glue('omopcat v{get_golem_config("golem_version")}')
+  title <- glue::glue("{Sys.getenv('CATALOGUE_NAME', 'UCLH')} structured data catalogue")
   if (!app_prod()) {
-    title <- glue::glue("{title} (dev)")
+    title <- glue::glue('OMOPCat v{get_golem_config("golem_version")} (dev)')
   }
+
   title
 }

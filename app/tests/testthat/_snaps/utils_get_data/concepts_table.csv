@@ -1,10 +1,10 @@
-concept_id,concept_name,vocabulary_id,domain_id,concept_class_id,standard_concept,concept_code
-3003573,C Ag [Presence] on Red Blood Cells,LOINC,Measurement,Lab Test,S,948-0
-3005673,Hemoglobin A1c/Hemoglobin.total in Blood by HPLC,LOINC,Measurement,Lab Test,S,17856-6
-3021714,Do sup(a) Ag [Presence] on Red Blood Cells,LOINC,Measurement,Lab Test,S,996-9
-3022250,Lactate dehydrogenase [Enzymatic activity/volume] in Serum or Plasma by Lactate to pyruvate reaction,LOINC,Measurement,Lab Test,S,14804-9
-4092281,Ex-cigarette smoker,SNOMED,Observation,Clinical Finding,S,281018007
-4276526,Cigarette smoker,SNOMED,Observation,Clinical Finding,S,65568007
-4298794,Smoker,SNOMED,Observation,Clinical Finding,S,77176002
-40760007,HIV 1+2 Ab+HIV1 p24 Ag [Presence] in Serum or Plasma by Immunoassay,LOINC,Measurement,Lab Test,S,56888-1
-40762352,Hemoglobin A1c/Hemoglobin.total in Blood by IFCC protocol,LOINC,Measurement,Lab Test,S,59261-8
+concept_id,concept_name,vocabulary_id,domain_id,concept_class_id,concept_code
+3003573,C Ag [Presence] on Red Blood Cells,LOINC,Measurement,Lab Test,948-0
+3005673,Hemoglobin A1c/Hemoglobin.total in Blood by HPLC,LOINC,Measurement,Lab Test,17856-6
+3021714,Do sup(a) Ag [Presence] on Red Blood Cells,LOINC,Measurement,Lab Test,996-9
+3022250,Lactate dehydrogenase [Enzymatic activity/volume] in Serum or Plasma by Lactate to pyruvate reaction,LOINC,Measurement,Lab Test,14804-9
+4092281,Ex-cigarette smoker,SNOMED,Observation,Clinical Finding,281018007
+4276526,Cigarette smoker,SNOMED,Observation,Clinical Finding,65568007
+4298794,Smoker,SNOMED,Observation,Clinical Finding,77176002
+40760007,HIV 1+2 Ab+HIV1 p24 Ag [Presence] in Serum or Plasma by Immunoassay,LOINC,Measurement,Lab Test,56888-1
+40762352,Hemoglobin A1c/Hemoglobin.total in Blood by IFCC protocol,LOINC,Measurement,Lab Test,59261-8
