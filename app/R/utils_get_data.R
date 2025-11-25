@@ -28,6 +28,7 @@ get_concepts_table <- function() {
   # in shiny::renderTable()
   ct$concept_id <- as.integer(ct$concept_id)
   # Remove "no matching concept" entries
+  standard_concept <- NA
   dplyr::filter(ct, .data$concept_id != 0) |>
     dplyr::select(-standard_concept)
 }

@@ -70,14 +70,16 @@ mod_datatable_server <- function(id, selected_dates, bundle_concepts) {
       "ID" = "concept_id",
       "Name" = "concept_name",
       "Total Records" = "total_records",
-      "Domain ID" = as.character("domain_id"),
-      "Vocabulary ID" = as.character("vocabulary_id"),
-      "Concept Class ID" = as.character("concept_class_id")
+      "Domain ID" = "domain_id",
+      "Vocabulary ID" = "vocabulary_id",
+      "Concept Class ID" = "concept_class_id"
     )
     column_names[mean_persons_name] <- "mean_persons"
 
     rv <- reactiveValues(
       concepts_with_counts = join_counts_to_concepts(all_concepts, monthly_counts) |>
+        # Data table call required here so that we can format numeric columns with commas
+        # while still sorting as numeric
         DT::datatable(
           filter = list(position = "top", clear = FALSE),
           colnames = column_names,
@@ -151,6 +153,7 @@ join_counts_to_concepts <- function(concepts, monthly_counts, selected_dates = N
       filter_dates(selected_dates)
   }
 
+  total_records <- NA
   summarised_counts <- monthly_counts |>
     dplyr::group_by(.data$concept_id) |>
     dplyr::summarise(
