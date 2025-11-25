@@ -22,6 +22,7 @@ app_ui <- function(request) {
       footer = glue::glue('OMOPCat v{get_golem_config("golem_version")}'),
       fillable = FALSE,
       title = .app_title(),
+      selected = "Help",
       sidebar = sidebar(
         title = "Filtering options",
         mod_date_range_ui("date_range"),
