@@ -44,6 +44,10 @@ test_that("Selected rows are updated when updating `bundle_concepts`", {
       bundle_concepts = reactiveVal()
     ),
     {
+      # Flush session to ensure selected_dates observeEvent has run and
+      # rv$concepts_with_counts is a data frame, not a DT object
+      session$flushReact()
+
       # Not really possible to test the updating of the selected rows, but we can check
       # whether the reactive row_indices get updated correctly as a proxy
       select_concepts <- rv$concepts_with_counts$concept_id[c(1, 2)]
