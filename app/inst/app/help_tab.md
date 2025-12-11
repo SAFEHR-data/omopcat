@@ -49,4 +49,4 @@ OMOP-Cat has:
 
 ## Support
 
-- Contact uclh.safehr@nhs.net
+- Contact uclh.safehr@nhs.net, we're keen to hear any feedback or issues you're having with the application.
