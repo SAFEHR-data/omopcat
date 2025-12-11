@@ -1,102 +1,52 @@
-# `omopcat` help
+# `OMOP-Cat` quickstart
 
-`omopcat` is for viewing OMOP concept data available.
+OMOP-Cat is a catalogue of UCLH Epic data available in the OMOP Common Data Model (CDM) format. It shows summary data only (quarterly counts, anonymised) and contains no confidential patient information.
 
-It allows you to
+## User guide
 
-* View a summary of OMOP data available (minimum time period 1 month, no Confidential Patient Information)
-* Search available OMOP data
-* Get an indication of the frequency of records and patients for each concept
-* Export a list of selected concepts that can be used in the omop_es extraction system
+Please see our [user guide](https://static1.squarespace.com/static/682a162bad089e4cdfbb144e/t/69398ac10c86bb61be776064/1765378753660/OMOP+Cat+User+Guide.pdf) for detailed information about using this website. 
 
-## Using `omopcat`
+## What Can You Do?
 
-There are four tabs at the top: **Concepts, Bundles, Export & help**.
+- **View** summary of available OMOP data
+- **Search** for concepts and bundles
+- **Check frequency** of records
+- **Export** selected concepts for use in OMOP_ES or DAP-R applications
 
-### Side bar
+## Key Terms
 
-The side bar (visible in each tab) exposes the following elements:
-
-1. The **Date range** slider allows to filter available concepts with records for the given date range.
-1. The **Select bundle** drop-down menu to select a group of related concepts (more info [below](#bundles-tab))
-1. The **"Add current selection to export"** button adds the currently selected concepts to the export (more info [below](#export-tab))
-1. The **Concepts selected for export** keeps track of the number of concepts selected for export
-
-### Concepts tab
-
-The **Concepts Overview** table gives an overview of all available concepts. Users can click on rows
-in this table to visualise the summary statistics for the selected concept(s) in the plots below:
-
-* The Monthly Records plots shows the number of records in each month for the selected concepts over
-the specified date range
-* The Summary Statistics plot shows a box plot or bar chart if the selected concepts have numeric
- or categorical data, respectively
-
-Note that the Summary Statistics plots may be empty in case the selected concept(s) do not contain
-any numeric data.
-
-The **Concepts overview** table also reports the number of records (`Records`) and Patients (`Patients`)
-for each concept. These values are updated for the chosen date range.
-
-**Note**: to ensure patients are not identifiable, low counts are converted to a dummy decimal number.
-
-To add concepts to the export, select them in the overview table and then click the
-"Add current selection to export" button in the side bar. Note that unselecting a row, does _not_
-remove it from the export. So you can interactively explore different sets of concepts without
-them being removed from the export.
-
-### Bundles tab
-
-The **Bundles overview** table shows an overview of the available Bundles (groups of related concepts) 
-and the number of concepts included.
-Clicking a row in this table will select the bundle in the drop-down menu in the side bar and also
-select all included concepts in the Concepts tab for visualisation.
-
-To add a bundle of concepts to the export:
-
-1. Select the desired bundle
-1. Click the "Add current selection to export" button
-
-Note that the drop-down box also allows typing, so you can search for a bundle by typing its name
-in the box.
-
-### Export tab
-
-The export tab gives a summary of the concepts selected for exports and gives a preview of the
-table that will be exported to CSV.
-
-Clicking the **Export CSV** button will download a CSV file of this table to the user's Downloads
-directory. This table can subsequently be used in the `omop_es` extraction system.
-
-## How `omopcat` works
-
-`omopcat` has a pre-processing step that summarises an OMOP extraction by calculating monthly counts
-for all concepts. These monthly counts are used by the `omopcat` app to enable users to query data
-availability by concept.
-
-## Contact
-
-https://github.com/SAFEHR-data/omopcat
-
-If you encounter any issues with the app, feel free to
-[open an issue on GitHub](https://github.com/SAFEHR-data/omopcat/issues/new).
-
-`omopcat` is made by the SAFEHR-data development team at UCLH and UCL supported by the
-[UCLH Biomedical Research Centre](https://www.uclhospitals.brc.nihr.ac.uk/).
+- **OMOP:** an international data standard 
+- **OMOP Concept**: a kind of category that represents a clinical term or entity
+- **OMOP Bundle**: A group of related concepts (e.g., Haemoglobin tests)
 
 
-## Licence
 
-Copyright 2024 UCLH SAFEHR-data
+## Navigation Overview
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+OMOP-Cat has:
 
-  http://www.apache.org/licenses/LICENSE-2.0
+- **Sidebar**: Date range slider, bundle selector, export button.
+- **Tabs**: 
+    - **Concepts**: Browse/search concepts and see their related data
+    - **Bundles**: View selected bundles
+    - **Export**: Review and download selected concepts
+    - **Help**: Support info
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+
+
+## How to Use OMOP-Cat
+
+1. Search for concepts using the search bar on the Concepts tab
+1. Filter by date using the Date Range Slider in the sidebar
+1. Select concepts or bundles and view data regarding your selections 
+1.  Add current selection to export to export your selected concepts/bundles
+1.  On the Export tab, click 'Export CSV' to download a copy of your selections to use for OMOP_ES or in a DAP-R application
+
+
+## Tips
+
+- Deselecting rows does not remove them from export; you must refresh the page to clear all
+
+## Support
+
+- Contact uclh.safehr@nhs.net
