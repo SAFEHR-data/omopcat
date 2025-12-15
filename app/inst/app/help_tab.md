@@ -45,12 +45,13 @@ OMOP-Cat has:
 
 ## Tips
 
-- Deselecting rows does not remove them from export; you must refresh the page to clear all
+Deselecting rows does not remove them from export; you must refresh the page to clear all
 
 ## Support
 
-- Contact uclh.safehr@nhs.net, we're keen to hear any feedback or issues you're having with the application.
+Please contact uclh.safehr@nhs.net, we're keen to hear any feedback or issues you're having with the application.
 
+<https://github.com/SAFEHR-data/omopcat>
 
 ## Licence
 
