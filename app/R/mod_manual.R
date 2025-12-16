@@ -14,10 +14,12 @@ mod_manual_ui <- function(id) {
   tagList(
     fluidRow(
       tags$div(
-        class = "alert alert-warning",
-        .low_frequency_disclaimer()
-      ),
-      includeMarkdown(app_sys("app/help_tab.md"))
+        tags$div(
+          class = "alert alert-warning",
+          .low_frequency_disclaimer()
+        ),
+        includeMarkdown(app_sys("app/help_tab.md"))
+      )
     )
   )
 }
