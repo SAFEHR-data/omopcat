@@ -42,13 +42,20 @@ generate_mock_measurements <- function(dates, n_persons) {
     measurement_type_concept_id = 12345,
     measurement_concept_id = 1,
     value_as_number = 0,
-    value_as_concept_id = 0
+    value_as_concept_id = 0,
+    measurement_source_concept_id = 0
   )
 }
 mock_measurement <- generate_mock_measurements("2020-01-01", 3)
 
 test_that("summarise_counts produces the expected results at monthly level", {
-  res <- summarise_counts(mock_measurement, "measurement_concept_id", "measurement_date", level = "monthly")
+  res <- summarise_counts(
+    mock_measurement,
+    "measurement_concept_id",
+    "measurement_date",
+    "measurement_source_concept_id",
+    level = "monthly"
+  )
 
   expect_s3_class(res, "data.frame")
   expect_named(res, c("concept_id", "date_year", "date_month", "record_count", "person_count", "records_per_person"))
@@ -64,7 +71,13 @@ test_that("summarise_counts produces the expected results at quarterly level", {
     dates = c("2012-03-26", "2012-05-04", "2012-09-23", "2012-12-31"),
     n_persons = 3
   )
-  res <- summarise_counts(mock_measurement, "measurement_concept_id", "measurement_date", level = "quarterly")
+  res <- summarise_counts(
+    mock_measurement,
+    "measurement_concept_id",
+    "measurement_date",
+    "measurement_source_concept_id",
+    level = "quarterly"
+  )
 
   expect_s3_class(res, "data.frame")
   expect_named(res, c("concept_id", "date_year", "date_quarter", "record_count", "person_count", "records_per_person"))
@@ -81,8 +94,20 @@ con <- connect_to_db(duckdb::duckdb())
 duckdb::duckdb_register(con, "measurement", mock_measurement)
 db_measurement <- dplyr::tbl(con, "measurement")
 test_that("summarise_counts works on Database-stored tables at monthly level", {
-  ref <- summarise_counts(mock_measurement, "measurement_concept_id", "measurement_date", level = "monthly")
-  db_res <- summarise_counts(db_measurement, "measurement_concept_id", "measurement_date", level = "monthly")
+  ref <- summarise_counts(
+    mock_measurement,
+    "measurement_concept_id",
+    "measurement_date",
+    "measurement_source_concept_id",
+    level = "monthly"
+  )
+  db_res <- summarise_counts(
+    db_measurement,
+    "measurement_concept_id",
+    "measurement_date",
+    "measurement_source_concept_id",
+    level = "monthly"
+  )
 
   expect_s3_class(db_res, "data.frame")
   expect_named(db_res, c("concept_id", "date_year", "date_month", "record_count", "person_count", "records_per_person"))
@@ -93,8 +118,20 @@ test_that("summarise_counts works on Database-stored tables at monthly level", {
 })
 
 test_that("summarise_counts works on Database-stored tables at quarterly level", {
-  ref <- summarise_counts(mock_measurement, "measurement_concept_id", "measurement_date", level = "quarterly")
-  db_res <- summarise_counts(db_measurement, "measurement_concept_id", "measurement_date", level = "quarterly")
+  ref <- summarise_counts(
+    mock_measurement,
+    "measurement_concept_id",
+    "measurement_date",
+    "measurement_source_concept_id",
+    level = "quarterly"
+  )
+  db_res <- summarise_counts(
+    db_measurement,
+    "measurement_concept_id",
+    "measurement_date",
+    "measurement_source_concept_id",
+    level = "quarterly"
+  )
 
   expect_s3_class(db_res, "data.frame")
   expect_named(

@@ -7,15 +7,23 @@
 #' @return A `data.frame` with the summary statistics
 #' @keywords internal
 generate_summary_stats <- function(cdm, threshold, replacement) {
-  omop_tables <- cdm[c("measurement", "observation")]
-  concept_cols <- c("measurement_concept_id", "observation_concept_id")
+  .calculate <- function(...) calculate_summary_stats(..., threshold = threshold, replacement = replacement)
 
   # Combine results for all tables
-  stats <- purrr::map2(omop_tables, concept_cols,
-    calculate_summary_stats,
-    threshold = threshold, replacement = replacement
+  arg_list <- list(
+    list(
+      omop_table = cdm[["measurement"]],
+      concept_name = "measurement_concept_id",
+      fallback_name = "measurement_source_concept_id"
+    ),
+    list(
+      omop_table = cdm[["observation"]],
+      concept_name = "observation_concept_id",
+      fallback_name = NULL
+    )
   )
-  stats <- dplyr::bind_rows(stats)
+
+  stats <- purrr::map_dfr(arg_list, function(args) do.call(.calculate, args))
 
   # Map concept names to the concept_ids
   concept_names <- dplyr::select(cdm$concept, "concept_id", "concept_name") |>
@@ -38,6 +46,7 @@ generate_summary_stats <- function(cdm, threshold, replacement) {
 #'
 #' @param omop_table A table from the OMOP CDM
 #' @param concept_name The name of the concept ID column
+#' @param fallback_name The name of the source concept ID column used as fallback when concept ID equals `0`
 #' @param threshold Threshold value below which values will be replaced by `replacement`
 #' @param replacement Value with which values below `threshold` will be replaced
 #'
@@ -47,11 +56,24 @@ generate_summary_stats <- function(cdm, threshold, replacement) {
 #'  - `value_as_number`: The value of the summary attribute
 #'  - `value_as_concept_id`: In case of a categorical concept, the concept ID for each category
 #' @keywords internal
-calculate_summary_stats <- function(omop_table, concept_name, threshold, replacement) {
+calculate_summary_stats <- function(omop_table, concept_name, fallback_name, threshold, replacement) {
   stopifnot(is.character(concept_name))
   stopifnot(concept_name %in% colnames(omop_table))
 
-  omop_table <- dplyr::rename(omop_table, concept_id = dplyr::all_of(concept_name))
+  if (!is.null(fallback_name)) {
+    stopifnot(is.character(fallback_name))
+    stopifnot(fallback_name %in% colnames(omop_table))
+    # If concept ID equals `0`, use fallback column (source concept ID)
+    omop_table <- dplyr::mutate(
+      omop_table,
+      concept_id = dplyr::case_when(
+        !!rlang::data_sym(concept_name) == 0 ~ !!rlang::data_sym(fallback_name),
+        .default = !!rlang::data_sym(concept_name)
+      )
+    )
+  } else {
+    omop_table <- dplyr::mutate(omop_table, concept_id = .data[[concept_name]])
+  }
 
   numeric_concepts <- dplyr::filter(omop_table, !is.na(.data$value_as_number))
   # beware CDM docs: NULL=no categorical result, 0=categorical result but no mapping
