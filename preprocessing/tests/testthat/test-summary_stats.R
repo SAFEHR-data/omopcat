@@ -16,12 +16,17 @@ mock_measurements <- data.frame(
   measurement_concept_id = rep(c(1, 2), each = 4),
   measurement_date = "2020-01-01",
   value_as_number = c(2, 1, 2, 1, rep(NA, 4)),
-  value_as_concept_id = c(rep(0, 4), c(1, 1, 2, 3))
+  value_as_concept_id = c(rep(0, 4), c(1, 1, 2, 3)),
+  measurement_source_concept_id = 0
 )
 
 test_that("calculate_summary_stats produces the expected results", {
-  res <- calculate_summary_stats(mock_measurements, "measurement_concept_id",
-    threshold = 0, replacement = 0
+  res <- calculate_summary_stats(
+    mock_measurements,
+    "measurement_concept_id",
+    "measurement_source_concept_id",
+    threshold = 0,
+    replacement = 0
   )
   expect_s3_class(res, "data.frame")
   expect_equal(nrow(res), 5)
@@ -40,8 +45,12 @@ test_that("calculate_summary_stats replaces low-frequency values", {
   threshold <- 10
   replacement <- 2.5
 
-  res <- calculate_summary_stats(mock_measurements, "measurement_concept_id",
-    threshold = threshold, replacement = replacement
+  res <- calculate_summary_stats(
+    mock_measurements,
+    "measurement_concept_id",
+    "measurement_source_concept_id",
+    threshold = threshold,
+    replacement = replacement
   )
 
   is_categorical <- res$summary_attribute == "frequency"
@@ -61,11 +70,19 @@ test_that("calculate_summary_stats replaces low-frequency values", {
 db <- dbplyr::src_memdb()
 db_measurement <- dplyr::copy_to(db, mock_measurements, name = "measurement", overwrite = TRUE)
 test_that("calculate_summary_stats works with a database-stored table", {
-  ref <- calculate_summary_stats(mock_measurements, "measurement_concept_id",
-    threshold = 0, replacement = 0
+  ref <- calculate_summary_stats(
+    mock_measurements,
+    "measurement_concept_id",
+    "measurement_source_concept_id",
+    threshold = 0,
+    replacement = 0
   )
-  db_res <- calculate_summary_stats(db_measurement, "measurement_concept_id",
-    threshold = 0, replacement = 0
+  db_res <- calculate_summary_stats(
+    db_measurement,
+    "measurement_concept_id",
+    "measurement_source_concept_id",
+    threshold = 0,
+    replacement = 0
   )
 
   expect_s3_class(db_res, "data.frame")

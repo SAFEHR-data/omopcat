@@ -18,37 +18,44 @@ generate_monthly_counts <- function(cdm, threshold, replacement,
     list(
       omop_table = cdm[["measurement"]],
       concept_col = "measurement_concept_id",
-      date_col = "measurement_date"
+      date_col = "measurement_date",
+      fallback_col = "measurement_source_concept_id"
     ),
     list(
       omop_table = cdm[["observation"]],
       concept_col = "observation_concept_id",
-      date_col = "observation_date"
+      date_col = "observation_date",
+      fallback_col = NULL
     ),
     list(
       omop_table = cdm[["condition_occurrence"]],
       concept_col = "condition_concept_id",
-      date_col = "condition_start_date"
+      date_col = "condition_start_date",
+      fallback_col = NULL
     ),
     list(
       omop_table = cdm[["drug_exposure"]],
       concept_col = "drug_concept_id",
-      date_col = "drug_exposure_start_date"
+      date_col = "drug_exposure_start_date",
+      fallback_col = NULL
     ),
     list(
       omop_table = cdm[["procedure_occurrence"]],
       concept_col = "procedure_concept_id",
-      date_col = "procedure_date"
+      date_col = "procedure_date",
+      fallback_col = NULL
     ),
     list(
       omop_table = cdm[["device_exposure"]],
       concept_col = "device_concept_id",
-      date_col = "device_exposure_start_date"
+      date_col = "device_exposure_start_date",
+      fallback_col = NULL
     ),
     list(
       omop_table = cdm[["specimen"]],
       concept_col = "specimen_concept_id",
-      date_col = "specimen_date"
+      date_col = "specimen_date",
+      fallback_col = NULL
     )
   )
 
@@ -72,6 +79,7 @@ generate_monthly_counts <- function(cdm, threshold, replacement,
 #' @param omop_table A table from the OMOP CDM
 #' @param concept_col The name of the concept column to calculate statistics for
 #' @param date_col The name of the date column to calculate statistics for
+#' @param fallback_col The name of the source concept column used as fallback when concept id equals `0`
 #' @param level The resolution at which to summarise the record counts.
 #'    Currently supports `"monthly"` or `"quarterly"`
 #'
@@ -83,7 +91,25 @@ generate_monthly_counts <- function(cdm, threshold, replacement,
 #'   - `person_count`: The number of unique patients per concept for each month
 #'   - `records_per_person`: The average number of records per person per concept for each month
 #' @keywords internal
-summarise_counts <- function(omop_table, concept_col, date_col, level) {
+summarise_counts <- function(omop_table, concept_col, date_col, fallback_col, level) {
+  stopifnot(is.character(concept_col))
+  stopifnot(concept_col %in% colnames(omop_table))
+
+  if (!is.null(fallback_col)) {
+    stopifnot(is.character(fallback_col))
+    stopifnot(fallback_col %in% colnames(omop_table))
+    # If concept ID equals `0`, use fallback column (source concept ID)
+    omop_table <- dplyr::mutate(
+      omop_table,
+      concept_id = dplyr::case_when(
+        !!rlang::data_sym(concept_col) == 0 ~ !!rlang::data_sym(fallback_col),
+        .default = !!rlang::data_sym(concept_col)
+      )
+    )
+  } else {
+    omop_table <- dplyr::mutate(omop_table, concept_id = .data[[concept_col]])
+  }
+
   group_by_var <- switch(level,
     monthly = "date_month",
     quarterly = "date_quarter",
@@ -91,8 +117,8 @@ summarise_counts <- function(omop_table, concept_col, date_col, level) {
   )
 
   # Extract year, month and quarter from date column
-  omop_table <- dplyr::mutate(omop_table,
-    concept_id = .data[[concept_col]],
+  omop_table <- dplyr::mutate(
+    omop_table,
     date_year = as.integer(lubridate::year(.data[[date_col]])),
     date_month = as.integer(lubridate::month(.data[[date_col]]))
   )
