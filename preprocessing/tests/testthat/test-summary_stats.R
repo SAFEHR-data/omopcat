@@ -58,7 +58,7 @@ test_that("calculate_summary_stats replaces low-frequency values", {
   ))
 })
 
-db <- dbplyr::src_memdb()
+db <- dbplyr::memdb()
 db_measurement <- dplyr::copy_to(db, mock_measurements, name = "measurement", overwrite = TRUE)
 test_that("calculate_summary_stats works with a database-stored table", {
   ref <- calculate_summary_stats(mock_measurements, "measurement_concept_id",
