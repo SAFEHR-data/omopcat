@@ -78,7 +78,7 @@ mod_datatable_server <- function(id, selected_dates, bundle_concepts) {
 
     rv <- reactiveValues(
       concepts_with_counts = join_counts_to_concepts(all_concepts, monthly_counts) |>
-        num_to_text() |>
+        convert_concept_id() |>
         # Data table call required here so that we can format numeric columns with commas
         # while still sorting as numeric
         DT::datatable(
@@ -109,7 +109,7 @@ mod_datatable_server <- function(id, selected_dates, bundle_concepts) {
       new_data <- join_counts_to_concepts(all_concepts, monthly_counts, selected_dates())
 
       rv$concepts_with_counts <- new_data
-      DT::replaceData(datatable_proxy, num_to_text(new_data), clearSelection = "none")
+      DT::replaceData(datatable_proxy, convert_concept_id(new_data), clearSelection = "none")
 
       ## Keep rows selected if they are still in the new table
       rows_to_select <- which(rv$concepts_with_counts$concept_id %in% original_selection)
@@ -124,7 +124,7 @@ mod_datatable_server <- function(id, selected_dates, bundle_concepts) {
       ordered_data <- rv$concepts_with_counts[c(rows_to_select, not_selected), ]
 
       ## NOTE: DT::replaceData() requires rownames = TRUE in DT::renderDT() (the default)!
-      DT::replaceData(datatable_proxy, num_to_text(ordered_data), clearSelection = "none")
+      DT::replaceData(datatable_proxy, convert_concept_id(ordered_data), clearSelection = "none")
 
       ## Update the reactive values to reflect the new order
       rv$concepts_with_counts <- ordered_data
@@ -144,7 +144,7 @@ mod_datatable_server <- function(id, selected_dates, bundle_concepts) {
   })
 }
 # change ID to text instead of a numeric value
-num_to_text <- function(data) {
+convert_concept_id <- function(data) {
   dplyr::mutate(data, concept_id = as.character(.data$concept_id))
 }
 
