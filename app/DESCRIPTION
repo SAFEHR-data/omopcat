@@ -38,6 +38,7 @@ Imports:
 Suggests:
     devtools,
     usethis,
+    remotes,
     fs,
     styler,
     testthat (>= 3.0.0),
