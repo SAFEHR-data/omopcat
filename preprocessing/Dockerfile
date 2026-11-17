@@ -19,7 +19,7 @@ COPY preprocessing/renv/settings.json renv/settings.json
 
 # change default location of cache to project folder
 RUN mkdir renv/.cache
-ENV RENV_PATHS_CACHE renv/.cache
+ENV RENV_PATHS_CACHE=renv/.cache
 
 RUN install2.r --error --skipinstalled renv && \
     R -e 'renv::restore()' && \

@@ -19,7 +19,7 @@ COPY app/renv/settings.json renv/settings.json
 
 # change default location of cache to project folder
 RUN mkdir renv/.cache
-ENV RENV_PATHS_CACHE renv/.cache
+ENV RENV_PATHS_CACHE=renv/.cache
 
 # Install renv and restore environment
 # omopbundles is installed separately as renv is giving problems
@@ -27,6 +27,7 @@ ENV RENV_PATHS_CACHE renv/.cache
 RUN install2.r --error --skipinstalled renv devtools remotes && \
     R -e 'renv::restore(exclude = "omopbundles")' && \
     rm -rf /tmp/downloaded_packages
+
 RUN R -e 'remotes::install_github("SAFEHR-data/omop-bundles")'
 
 # Stage 2: Installing omopcat
