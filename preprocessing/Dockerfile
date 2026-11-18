@@ -1,7 +1,11 @@
 # Stage 1: installing renv environment
-FROM rocker/tidyverse:4.4.2 AS base
+FROM rocker/tidyverse:4.6.2@sha256:9241ac461c924334777dd3fb047c6e5e0fd1435a85acc171f1a32836861d0a69 AS base
 
 WORKDIR /pkg
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends libuv1 && \
+    rm -rf /var/lib/apt/lists/*
 
 # Speed up building by setting make with multiple cores from env
 ARG CORES
@@ -15,14 +19,18 @@ COPY preprocessing/renv/settings.json renv/settings.json
 
 # change default location of cache to project folder
 RUN mkdir renv/.cache
-ENV RENV_PATHS_CACHE renv/.cache
+ENV RENV_PATHS_CACHE=renv/.cache
 
 RUN install2.r --error --skipinstalled renv && \
     R -e 'renv::restore()' && \
     rm -rf /tmp/downloaded_packages
 
 # Stage 2: Installing omopcat.preprocessing
-FROM rocker/tidyverse:4.4.2
+FROM rocker/tidyverse:4.6.2@sha256:9241ac461c924334777dd3fb047c6e5e0fd1435a85acc171f1a32836861d0a69
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends libuv1 && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /pkg
 COPY --from=base /pkg .
