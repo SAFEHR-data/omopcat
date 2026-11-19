@@ -8,7 +8,8 @@ test_that("preprocessing produces the expected files", {
   expected_files <- c(
     file.path(out_path, "omopcat_concepts.parquet"),
     file.path(out_path, "omopcat_monthly_counts.parquet"),
-    file.path(out_path, "omopcat_summary_stats.parquet")
+    file.path(out_path, "omopcat_summary_stats.parquet"),
+    file.path(out_path, "omopcat_records_dates.parquet")
   )
   withr::defer(fs::file_delete(expected_files))
 
@@ -26,7 +27,8 @@ test_that("preprocessing works with quarterly summarisation", {
   expected_files <- c(
     file.path(out_path, "omopcat_concepts.parquet"),
     file.path(out_path, "omopcat_monthly_counts.parquet"),
-    file.path(out_path, "omopcat_summary_stats.parquet")
+    file.path(out_path, "omopcat_summary_stats.parquet"),
+    file.path(out_path, "omopcat_records_dates.parquet")
   )
   withr::defer(fs::file_delete(expected_files))
 
@@ -46,7 +48,8 @@ test_that("preprocessing is skipped if files already exist", {
   out_files <- c(
     file.path(out_path, "omopcat_concepts.parquet"),
     file.path(out_path, "omopcat_monthly_counts.parquet"),
-    file.path(out_path, "omopcat_summary_stats.parquet")
+    file.path(out_path, "omopcat_summary_stats.parquet"),
+    file.path(out_path, "omopcat_records_dates.parquet")
   )
   fs::file_create(out_files)
   withr::defer(fs::file_delete(out_files))

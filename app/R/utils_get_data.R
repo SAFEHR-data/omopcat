@@ -71,6 +71,17 @@ get_summary_stats <- function() {
   return(out)
 }
 
+get_dates_table <- function() {
+  if (should_use_dev_data()) {
+    out <- readr::read_csv(
+      app_sys("dev_data", "omopcat_records_dates.csv"),
+      col_types = readr::cols(source_release_date = readr::col_date())
+    )
+  } else {
+    out <- .read_parquet_table("omopcat_records_dates")
+  }
+  return(out)
+}
 filter_dates <- function(x, date_range) {
   date_range <- as.Date(date_range)
   if (date_range[2] < date_range[1]) {

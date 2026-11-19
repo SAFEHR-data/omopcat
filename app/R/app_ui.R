@@ -19,7 +19,7 @@ app_ui <- function(request) {
           content = glue::glue("Catalogue of available structured data from {Sys.getenv('CATALOGUE_NAME', 'UCLH')}.")
         )
       ),
-      footer = glue::glue('OMOPCat v{get_golem_config("golem_version")}'),
+      footer = .app_footer(),
       fillable = FALSE,
       title = .app_title(),
       sidebar = sidebar(
@@ -84,4 +84,31 @@ golem_add_external_resources <- function() {
   }
 
   title
+}
+
+#' Footer text: app version and, if known, source release date
+#'
+#' @noRd
+.app_footer <- function() {
+  parts <- c(
+    glue::glue('OMOPCat v{get_golem_config("golem_version")}'),
+    extract_release_date(get_dates_table())
+  )
+
+  paste(parts, collapse = " \u00b7 ")
+}
+
+#' Describe source release date
+#'
+#' @param records_dates A `data.frame` with the record release date.
+#'
+#' @return Character string
+#'
+#' @noRd
+extract_release_date <- function(records_dates) {
+  release_date <- as.Date(records_dates$source_release_date)
+  if (length(release_date) == 0 || is.na(release_date)) {
+    return(NULL)
+  }
+  as.character(glue::glue("Records correct as of {format(release_date, '%B %Y')}"))
 }
