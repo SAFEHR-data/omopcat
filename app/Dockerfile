@@ -20,6 +20,7 @@ COPY app/renv/settings.json renv/settings.json
 # change default location of cache to project folder
 RUN mkdir renv/.cache
 ENV RENV_PATHS_CACHE=renv/.cache
+ENV R_INSTALL_TAR=internal
 
 # Install renv and restore environment
 # omopbundles is installed separately as renv is giving problems
