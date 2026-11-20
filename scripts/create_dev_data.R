@@ -3,7 +3,7 @@
 suppressPackageStartupMessages({
   library(dplyr)
 })
-
+here::i_am("scripts/create_dev_data.R")
 data_path <- here::here("data/test_data/internal")
 stopifnot(dir.exists(data_path))
 out_path <- here::here("app/inst/dev_data")
@@ -23,7 +23,7 @@ read_parquet_sorted <- function(path, options = nanoparquet::parquet_options()) 
     cli::cli_abort("File {.file {path}} not found")
   }
 
-  nanoparquet::read_parquet(path, options) |>
+  nanoparquet::read_parquet(path, options = options) |>
     arrange(across(everything()))
 }
 
@@ -41,6 +41,10 @@ tables <- purrr::map(tables, ~ .x[.x$concept_id %in% keep_concepts, ])
 monthly_counts <- tables$monthly_counts
 filtered_monthly <- monthly_counts[monthly_counts$date_year >= 2019, ]
 tables$monthly_counts <- filtered_monthly
+
+# Save records dates
+records_dates <- nanoparquet::read_parquet(glue::glue("{data_path}/omopcat_records_dates.parquet"))
+readr::write_csv(records_dates, glue::glue("{out_path}/omopcat_records_dates.csv"))
 
 # Filter the other tables to match the concepts left over after year filtering
 tables <- purrr::map(tables, ~ .x[.x$concept_id %in% filtered_monthly$concept_id, ])
