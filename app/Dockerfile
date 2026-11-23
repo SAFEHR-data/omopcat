@@ -3,9 +3,13 @@ FROM rocker/tidyverse:4.6.2@sha256:9241ac461c924334777dd3fb047c6e5e0fd1435a85acc
 
 WORKDIR /app
 
+# bsdtar used as old kernel does not implement openat2
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends libuv1 && \
+    apt-get install -y --no-install-recommends libuv1 libarchive-tools curl && \
+    ln -sf /usr/bin/bsdtar /usr/local/bin/tar && \
     rm -rf /var/lib/apt/lists/*
+ENV R_INSTALL_TAR=/usr/bin/bsdtar
+ENV TAR=/usr/bin/bsdtar
 
 # Speed up building by setting make with multiple cores from env
 ARG CORES
@@ -20,7 +24,6 @@ COPY app/renv/settings.json renv/settings.json
 # change default location of cache to project folder
 RUN mkdir renv/.cache
 ENV RENV_PATHS_CACHE=renv/.cache
-ENV R_INSTALL_TAR=internal
 
 # Install renv and restore environment
 # omopbundles is installed separately as renv is giving problems
@@ -34,9 +37,12 @@ RUN R -e 'remotes::install_github("SAFEHR-data/omop-bundles")'
 # Stage 2: Installing omopcat
 FROM rocker/shiny-verse:4.6.2@sha256:698a41041a522198a2ab9deff61a2c2b807c5058885ee0dcc7ac4f525512deb9
 
+# bsdtar used as old kernel does not implement openat2
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends libuv1 && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get install -y --no-install-recommends libuv1 libarchive-tools && \
+    rm -rf /var/lib/apt/lists/* 
+ENV R_INSTALL_TAR=/usr/bin/bsdtar
+ENV TAR=/usr/bin/bsdtar
 
 WORKDIR /app
 COPY --from=base /app .
