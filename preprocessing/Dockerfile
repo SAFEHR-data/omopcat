@@ -24,8 +24,7 @@ COPY preprocessing/renv/settings.json renv/settings.json
 RUN mkdir renv/.cache
 ENV RENV_PATHS_CACHE=renv/.cache
 
-# bsdtar used as old kernel does not implement openat2
-RUN install2.r --error --skipinstalled renv && \
+RUN install2.r --error --skipinstalled renv devtools && \
     R -e 'renv::restore()' && \
     rm -rf /tmp/downloaded_packages
 
