@@ -36,8 +36,8 @@ RUN install2.r --error --skipinstalled renv devtools remotes && \
 # Authenticate with GitHub to avoid the unauthenticated API rate limit (60/hour per IP).
 # The token is passed as a build secret (id: github_pat) so it is never stored in an image layer.
 # It is optional: without it the install falls back to unauthenticated requests.
-RUN --mount=type=secret,id=github_pat,required=false \
-    if [ -s /run/secrets/github_pat ]; then export GITHUB_PAT="$(cat /run/secrets/read_omopbundles_pat)"; fi && \
+RUN --mount=type=secret,id=read_omopbundles_pat,required=false \
+    if [ -s /run/secrets/read_omopbundles_pat ]; then export GITHUB_PAT="$(cat /run/secrets/read_omopbundles_pat)"; fi && \
     R -e 'remotes::install_github("SAFEHR-data/omop-bundles")'
 
 # Stage 2: Installing omopcat
