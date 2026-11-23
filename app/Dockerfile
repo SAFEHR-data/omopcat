@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1
 # Stage 1: installing renv environment
 FROM rocker/tidyverse:4.6.2@sha256:9241ac461c924334777dd3fb047c6e5e0fd1435a85acc171f1a32836861d0a69 AS base
 
@@ -32,7 +33,12 @@ RUN install2.r --error --skipinstalled renv devtools remotes && \
     R -e 'renv::restore(exclude = "omopbundles")' && \
     rm -rf /tmp/downloaded_packages
 
-RUN R -e 'remotes::install_github("SAFEHR-data/omop-bundles")'
+# Authenticate with GitHub to avoid the unauthenticated API rate limit (60/hour per IP).
+# The token is passed as a build secret (id: github_pat) so it is never stored in an image layer.
+# It is optional: without it the install falls back to unauthenticated requests.
+RUN --mount=type=secret,id=github_pat,required=false \
+    if [ -s /run/secrets/github_pat ]; then export GITHUB_PAT="$(cat /run/secrets/read_omopbundles_pat)"; fi && \
+    R -e 'remotes::install_github("SAFEHR-data/omop-bundles")'
 
 # Stage 2: Installing omopcat
 FROM rocker/shiny-verse:4.6.2@sha256:698a41041a522198a2ab9deff61a2c2b807c5058885ee0dcc7ac4f525512deb9

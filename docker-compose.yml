@@ -38,6 +38,8 @@ services:
         HTTP_PROXY: ${HTTP_PROXY}
         HTTPS_PROXY: ${HTTPS_PROXY}
         CORES: ${BUILD_CORES_MAKE}
+      secrets:
+        - read_omopbundles_pat
     image: omopcat:latest
     platform: linux/amd64
     restart: unless-stopped
@@ -73,6 +75,10 @@ services:
     volumes:
       - ./www/config:/etc/nginx/conf.d:rw
       - certbot_data:/etc/letsencrypt
+
+secrets:
+  read_omopbundles_pat:
+    environment: READ_OMOPBUNDLES_PAT
 
 volumes:
   certbot_data:
