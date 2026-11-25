@@ -13,6 +13,13 @@ generate_monthly_counts <- function(cdm, threshold, replacement,
   level <- match.arg(level)
   .summarise <- function(...) summarise_counts(..., level = level)
 
+  # Patients' gender and race concept counts in each period they have a visit
+  visits_with_person <- cdm[["visit_occurrence"]] |>
+    dplyr::inner_join(
+      dplyr::select(cdm[["person"]], "person_id", "gender_concept_id", "race_concept_id"),
+      by = "person_id"
+    )
+
   # Combine results for all tables
   arg_list <- list(
     list(
@@ -49,6 +56,16 @@ generate_monthly_counts <- function(cdm, threshold, replacement,
       omop_table = cdm[["specimen"]],
       concept_col = "specimen_concept_id",
       date_col = "specimen_date"
+    ),
+    list(
+      omop_table = visits_with_person,
+      concept_col = "gender_concept_id",
+      date_col = "visit_start_date"
+    ),
+    list(
+      omop_table = visits_with_person,
+      concept_col = "race_concept_id",
+      date_col = "visit_start_date"
     )
   )
 
