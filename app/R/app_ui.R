@@ -95,7 +95,7 @@ golem_add_external_resources <- function() {
     extract_release_date(get_dates_table())
   )
 
-  paste(parts, collapse = " \u00b7 ")
+  paste(parts, collapse = "\n")
 }
 
 #' Describe source release date
