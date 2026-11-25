@@ -45,6 +45,7 @@ Suggests:
     spelling,
     here,
     lintr,
+    precommit,
     withr
 Remotes: SAFEHR-data/omop-bundles
 Encoding: UTF-8
