@@ -63,6 +63,10 @@ services:
     build:
       context: .
       dockerfile: www/Dockerfile.nginx
+      args:
+        # Required for running on GAE
+        HTTP_PROXY: ${HTTP_PROXY}
+        HTTPS_PROXY: ${HTTPS_PROXY}
     platform: linux/amd64
     restart: unless-stopped
     ports:
