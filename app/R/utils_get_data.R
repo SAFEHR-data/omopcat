@@ -71,6 +71,20 @@ get_summary_stats <- function() {
   return(out)
 }
 
+get_dates_table <- function() {
+  if (should_use_dev_data()) {
+    path <- app_sys("dev_data", "omopcat_records_dates.csv")
+  } else {
+    path <- file.path(Sys.getenv("OMOPCAT_DATA_PATH"), "omopcat_records_dates.csv")
+  }
+  # if csv file does not exist set source_release_date as NA
+  if (path == "" || !file.exists(path)) {
+    cli::cli_warn("Omopcat date file not found, date is unknown")
+    return(data.frame(source_release_date = as.Date(NA)))
+  }
+  readr::read_csv(path, col_types = readr::cols(source_release_date = readr::col_date()))
+}
+
 filter_dates <- function(x, date_range) {
   date_range <- as.Date(date_range)
   if (date_range[2] < date_range[1]) {

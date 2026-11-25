@@ -79,6 +79,23 @@ Copy the `.env.sample` file to `.env` and fill out the required values
 cp .env.sample .env
 ```
 
+### Building the `omopcat` image
+
+Building the `omopcat` image installs the `omopbundles` package from GitHub.
+Unauthenticated GitHub API requests are limited to 60 per hour per IP address, which is easily
+exhausted on a shared network. You can optionally create a GitHub
+[personal access token](https://github.com/settings/tokens) (no scopes needed for public repositories)
+in `READ_OMOPBUNDLES_PAT` before building:
+
+```sh
+export READ_OMOPBUNDLES_PAT=<your token>
+docker compose build omopcat
+```
+
+The token is passed to the build as a [build secret](https://docs.docker.com/build/building/secrets/),
+so it is not stored in the image. It is optional; without it the build falls back to unauthenticated requests.
+In GitHub Actions the built-in `READ_OMOPBUNDLES_PAT` is used.
+
 ### Pre-processing
 
 The pre-processing pipeline can be run with the following command

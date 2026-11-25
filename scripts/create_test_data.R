@@ -1,5 +1,6 @@
 # Generates the parquet files in data/test_data/ by running the preprocessing pipeline
 # on the test database located at data-raw/test_db/eunomia
+here::i_am("scripts/create_test_data.R")
 withr::local_envvar(
   ENV = "test",
   EUNOMIA_DATA_FOLDER = here::here("data-raw/test_db/eunomia"),

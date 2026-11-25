@@ -25,6 +25,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build the Docker image
+        env:
+          # Used as a build secret to install omopbundles from GitHub (see docker-compose.yml)
+          GITHUB_PAT: ${{ secrets.READ_OMOPBUNDLES_PAT }}
         run: |
           cp .env.sample .env
           docker compose build ${{ matrix.image }}

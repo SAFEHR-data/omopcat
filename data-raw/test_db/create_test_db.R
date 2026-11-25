@@ -25,7 +25,11 @@ withr::with_envvar(
   }
 )
 
-con <- DBI::dbConnect(duckdb::duckdb(glue::glue("{dir}/{name}_{version}_1.1.duckdb")))
+# find duckdb version and name file respectively
+duckdb_version <- substr(utils::packageVersion("duckdb"), 1, 3)
+db_file <- glue::glue("{dir}/{name}_{version}_{duckdb_version}.duckdb")
+stopifnot(file.exists(db_file))
+con <- DBI::dbConnect(duckdb::duckdb(db_file))
 withr::defer(DBI::dbDisconnect(con))
 
 
