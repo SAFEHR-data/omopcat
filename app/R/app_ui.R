@@ -110,5 +110,5 @@ extract_release_date <- function(records_dates) {
   if (length(release_date) == 0 || is.na(release_date)) {
     return(NULL)
   }
-  as.character(glue::glue("Records correct as of {format(release_date, '%B %Y')}"))
+  as.character(glue::glue("- Records correct as of {format(release_date, '%B %Y')}"))
 }

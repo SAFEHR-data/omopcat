@@ -42,9 +42,11 @@ monthly_counts <- tables$monthly_counts
 filtered_monthly <- monthly_counts[monthly_counts$date_year >= 2019, ]
 tables$monthly_counts <- filtered_monthly
 
-# Save records dates
-records_dates <- nanoparquet::read_parquet(glue::glue("{data_path}/omopcat_records_dates.parquet"))
-readr::write_csv(records_dates, glue::glue("{out_path}/omopcat_records_dates.csv"))
+stopifnot(file.copy(
+  glue::glue("{data_path}/omopcat_records_dates.csv"),
+  glue::glue("{out_path}/omopcat_records_dates.csv"),
+  overwrite = TRUE
+))
 
 # Filter the other tables to match the concepts left over after year filtering
 tables <- purrr::map(tables, ~ .x[.x$concept_id %in% filtered_monthly$concept_id, ])

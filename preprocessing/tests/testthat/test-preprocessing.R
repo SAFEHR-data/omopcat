@@ -9,7 +9,7 @@ test_that("preprocessing produces the expected files", {
     file.path(out_path, "omopcat_concepts.parquet"),
     file.path(out_path, "omopcat_monthly_counts.parquet"),
     file.path(out_path, "omopcat_summary_stats.parquet"),
-    file.path(out_path, "omopcat_records_dates.parquet")
+    file.path(out_path, "omopcat_records_dates.csv")
   )
   withr::defer(fs::file_delete(expected_files))
 
@@ -28,7 +28,7 @@ test_that("preprocessing works with quarterly summarisation", {
     file.path(out_path, "omopcat_concepts.parquet"),
     file.path(out_path, "omopcat_monthly_counts.parquet"),
     file.path(out_path, "omopcat_summary_stats.parquet"),
-    file.path(out_path, "omopcat_records_dates.parquet")
+    file.path(out_path, "omopcat_records_dates.csv")
   )
   withr::defer(fs::file_delete(expected_files))
 
@@ -49,7 +49,7 @@ test_that("preprocessing is skipped if files already exist", {
     file.path(out_path, "omopcat_concepts.parquet"),
     file.path(out_path, "omopcat_monthly_counts.parquet"),
     file.path(out_path, "omopcat_summary_stats.parquet"),
-    file.path(out_path, "omopcat_records_dates.parquet")
+    file.path(out_path, "omopcat_records_dates.csv")
   )
   fs::file_create(out_files)
   withr::defer(fs::file_delete(out_files))

@@ -27,7 +27,7 @@ preprocess <- function(out_path = Sys.getenv("PREPROCESS_OUT_PATH")) {
     concepts = file.path(out_path, "omopcat_concepts.parquet"),
     monthly_counts = file.path(out_path, "omopcat_monthly_counts.parquet"),
     summary_stats = file.path(out_path, "omopcat_summary_stats.parquet"),
-    records_dates = file.path(out_path, "omopcat_records_dates.parquet")
+    records_dates = file.path(out_path, "omopcat_records_dates.csv")
   )
 
   # Only run pre-processing if the expected files don't exist
@@ -73,7 +73,7 @@ preprocess <- function(out_path = Sys.getenv("PREPROCESS_OUT_PATH")) {
   nanoparquet::write_parquet(concepts_table, out_files["concepts"])
   nanoparquet::write_parquet(monthly_counts, out_files["monthly_counts"])
   nanoparquet::write_parquet(summary_stats, out_files["summary_stats"])
-  nanoparquet::write_parquet(records_dates, out_files["records_dates"])
+  utils::write.csv(records_dates, out_files["records_dates"], row.names = FALSE, na = "")
   cli::cli_alert_success("Tables written to {.path {out_files}}")
 
   return(invisible(TRUE))
