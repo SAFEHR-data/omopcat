@@ -98,11 +98,12 @@ summarise_counts <- function(omop_table, concept_col, date_col, fallback_col, le
   if (!is.null(fallback_col)) {
     stopifnot(is.character(fallback_col))
     stopifnot(fallback_col %in% colnames(omop_table))
+    
     # If concept ID equals `0`, use fallback column (source concept ID)
     omop_table <- dplyr::mutate(
       omop_table,
       concept_id = dplyr::case_when(
-        !!rlang::data_sym(concept_col) == 0 ~ !!rlang::data_sym(fallback_col),
+        !!rlang::data_sym(concept_col) == 0 & !is.na(!!rlang::data_sym(fallback_col)) ~ !!rlang::data_sym(fallback_col),
         .default = !!rlang::data_sym(concept_col)
       )
     )
