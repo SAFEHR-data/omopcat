@@ -21,6 +21,7 @@ The pre-processing pipeline generates the following files:
 \item \code{out_path}/omopcat_concepts.parquet
 \item \code{out_path}/omopcat_monthly_counts.parquet
 \item \code{out_path}/omopcat_summary_stats.parquet
+\item \code{out_path}/omopcat_records_dates.parquet
 }
 
 If all these files already exist, the pipeline will not be run.
