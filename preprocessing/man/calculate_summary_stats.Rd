@@ -4,12 +4,20 @@
 \alias{calculate_summary_stats}
 \title{Calculate summary statistics for an OMOP table}
 \usage{
-calculate_summary_stats(omop_table, concept_name, threshold, replacement)
+calculate_summary_stats(
+  omop_table,
+  concept_name,
+  fallback_name,
+  threshold,
+  replacement
+)
 }
 \arguments{
 \item{omop_table}{A table from the OMOP CDM}
 
 \item{concept_name}{The name of the concept ID column}
+
+\item{fallback_name}{The name of the source concept ID column used as fallback when concept ID equals \code{0}}
 
 \item{threshold}{Threshold value below which values will be replaced by \code{replacement}}
 

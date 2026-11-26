@@ -4,7 +4,7 @@
 \alias{summarise_counts}
 \title{Summarise record counts}
 \usage{
-summarise_counts(omop_table, concept_col, date_col, level)
+summarise_counts(omop_table, concept_col, date_col, fallback_col, level)
 }
 \arguments{
 \item{omop_table}{A table from the OMOP CDM}
@@ -12,6 +12,8 @@ summarise_counts(omop_table, concept_col, date_col, level)
 \item{concept_col}{The name of the concept column to calculate statistics for}
 
 \item{date_col}{The name of the date column to calculate statistics for}
+
+\item{fallback_col}{The name of the source concept column used as fallback when concept id equals \code{0}}
 
 \item{level}{The resolution at which to summarise the record counts.
 Currently supports \code{"monthly"} or \code{"quarterly"}}
