@@ -17,7 +17,7 @@ mock_measurements <- data.frame(
   measurement_date = "2020-01-01",
   value_as_number = c(2, 1, 2, 1, rep(NA, 4)),
   value_as_concept_id = c(rep(0, 4), c(1, 1, 2, 3)),
-  measurement_source_concept_id = NA
+  measurement_source_concept_id = NA_integer_
 )
 
 test_that("calculate_summary_stats produces the expected results", {

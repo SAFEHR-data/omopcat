@@ -43,7 +43,7 @@ generate_mock_measurements <- function(dates, n_persons) {
     measurement_concept_id = 1,
     value_as_number = 0,
     value_as_concept_id = 0,
-    measurement_source_concept_id = NA
+    measurement_source_concept_id = NA_integer_
   )
 }
 mock_measurement <- generate_mock_measurements("2020-01-01", 3)
