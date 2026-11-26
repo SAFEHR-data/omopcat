@@ -72,11 +72,11 @@ test_that("calculate_summary_stats handles fallback column", {
     measurement_id = 1:8,
     person_id = 1,
     measurement_type_concept_id = rep(c(12345, 23456), each = 4),
-    measurement_concept_id = c(rep(c(1, 2), each = 3), c(0, 0)),
+    measurement_concept_id = c(1, 1, 1, 0, 2, 2, 2, 0),
     measurement_date = "2020-01-01",
     value_as_number = c(2, 1, 2, 1, rep(NA, 4)),
     value_as_concept_id = c(rep(0, 4), c(1, 1, 2, 3)),
-    measurement_source_concept_id = c(rep(NA, 6), c(1, 2))
+    measurement_source_concept_id = c(NA, NA, 1, 1, NA, NA, 2, 2)
   )
   
   res <- calculate_summary_stats(

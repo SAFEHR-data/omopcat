@@ -43,7 +43,7 @@ generate_mock_measurements <- function(dates, n_persons) {
     measurement_concept_id = 1,
     value_as_number = 0,
     value_as_concept_id = 0,
-    measurement_source_concept_id = 0
+    measurement_source_concept_id = NA
   )
 }
 mock_measurement <- generate_mock_measurements("2020-01-01", 3)
@@ -99,7 +99,7 @@ test_that("summarise_counts handles fallback column", {
     measurement_concept_id = c(1, 1, 0),
     value_as_number = 0,
     value_as_concept_id = 0,
-    measurement_source_concept_id = c(0, 0, 1)
+    measurement_source_concept_id = c(NA, 1, 1)
   )
   
   res <- summarise_counts(
