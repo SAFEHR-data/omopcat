@@ -67,6 +67,38 @@ test_that("calculate_summary_stats replaces low-frequency values", {
   ))
 })
 
+test_that("calculate_summary_stats handles fallback column", {
+  df <- data.frame(
+    measurement_id = 1:8,
+    person_id = 1,
+    measurement_type_concept_id = rep(c(12345, 23456), each = 4),
+    measurement_concept_id = c(),
+    measurement_date = "2020-01-01",
+    value_as_number = c(rep(c(1, 2), each = 3), c(0, 0)),
+    value_as_concept_id = c(rep(0, 4), c(1, 1, 2, 3)),
+    measurement_source_concept_id = c(rep(0, 6), c(1, 2))
+  )
+  
+  res <- calculate_summary_stats(
+    df,
+    "measurement_concept_id",
+    "measurement_source_concept_id",
+    threshold = 0,
+    replacement = 0
+  )
+  expect_s3_class(res, "data.frame")
+  expect_equal(nrow(res), 5)
+  mean <- res[res$summary_attribute == "mean", ][["value_as_number"]]
+  sd <- res[res$summary_attribute == "sd", ][["value_as_number"]]
+  expect_equal(mean, 1.5)
+  expect_equal(sd^2, 1 / 3)
+
+  frequencies <- res[res$summary_attribute == "frequency", ]
+  expect_equal(nrow(frequencies), 3)
+  expect_equal(frequencies$value_as_number, c(2, 1, 1))
+  expect_equal(frequencies$value_as_concept_id, c(1, 2, 3))
+})
+
 db <- dbplyr::src_memdb()
 db_measurement <- dplyr::copy_to(db, mock_measurements, name = "measurement", overwrite = TRUE)
 test_that("calculate_summary_stats works with a database-stored table", {

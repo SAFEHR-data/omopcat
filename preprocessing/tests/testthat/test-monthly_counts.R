@@ -90,6 +90,35 @@ test_that("summarise_counts produces the expected results at quarterly level", {
   expect_equal(res$record_count, rep(3, 4))
 })
 
+test_that("summarise_counts handles fallback column", {
+  grid <- expand.grid(measurement_date = as.Date(dates), person_id = seq_len(3))
+  df <- data.frame(
+    grid,
+    measurement_id = seq_len(nrow(grid)),
+    measurement_type_concept_id = 12345,
+    measurement_concept_id = c(1, 1, 0),
+    value_as_number = 0,
+    value_as_concept_id = 0,
+    measurement_source_concept_id = c(0, 0, 1)
+  )
+  
+  res <- summarise_counts(
+    df,
+    "measurement_concept_id",
+    "measurement_date",
+    "measurement_source_concept_id",
+    level = "monthly"
+  )
+
+  expect_s3_class(res, "data.frame")
+  expect_named(res, c("concept_id", "date_year", "date_month", "record_count", "person_count", "records_per_person"))
+  expect_equal(nrow(res), 1)
+
+  expect_equal(res$record_count, 3)
+  expect_equal(res$person_count, 3)
+  expect_equal(res$records_per_person, 1)
+})
+
 con <- connect_to_db(duckdb::duckdb())
 duckdb::duckdb_register(con, "measurement", mock_measurement)
 db_measurement <- dplyr::tbl(con, "measurement")
