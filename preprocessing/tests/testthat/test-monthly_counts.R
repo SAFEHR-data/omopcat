@@ -91,7 +91,7 @@ test_that("summarise_counts produces the expected results at quarterly level", {
 })
 
 test_that("summarise_counts handles fallback column", {
-  grid <- expand.grid(measurement_date = as.Date(dates), person_id = seq_len(3))
+  grid <- expand.grid(measurement_date = as.Date("2020-01-01"), person_id = seq_len(3))
   df <- data.frame(
     grid,
     measurement_id = seq_len(nrow(grid)),
