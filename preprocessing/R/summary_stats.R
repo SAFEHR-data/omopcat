@@ -19,7 +19,7 @@ generate_summary_stats <- function(cdm, threshold, replacement) {
     list(
       omop_table = cdm[["observation"]],
       concept_name = "observation_concept_id",
-      fallback_name = NULL
+      fallback_name = "observation_source_concept_id"
     )
   )
 

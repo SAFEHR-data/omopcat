@@ -25,31 +25,31 @@ generate_monthly_counts <- function(cdm, threshold, replacement,
       omop_table = cdm[["observation"]],
       concept_col = "observation_concept_id",
       date_col = "observation_date",
-      fallback_col = NULL
+      fallback_col = "observation_source_concept_id"
     ),
     list(
       omop_table = cdm[["condition_occurrence"]],
       concept_col = "condition_concept_id",
       date_col = "condition_start_date",
-      fallback_col = NULL
+      fallback_col = "condition_source_concept_id"
     ),
     list(
       omop_table = cdm[["drug_exposure"]],
       concept_col = "drug_concept_id",
       date_col = "drug_exposure_start_date",
-      fallback_col = NULL
+      fallback_col = "drug_source_concept_id"
     ),
     list(
       omop_table = cdm[["procedure_occurrence"]],
       concept_col = "procedure_concept_id",
       date_col = "procedure_date",
-      fallback_col = NULL
+      fallback_col = "procedure_source_concept_id"
     ),
     list(
       omop_table = cdm[["device_exposure"]],
       concept_col = "device_concept_id",
       date_col = "device_exposure_start_date",
-      fallback_col = NULL
+      fallback_col = "device_source_concept_id"
     ),
     list(
       omop_table = cdm[["specimen"]],
