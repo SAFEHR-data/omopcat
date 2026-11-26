@@ -1,4 +1,4 @@
-FROM nginx:1.29.3@sha256:ac27e318cff1c5340d9a2c2d8db5f0a374dabfe1f285f81348008e01bd980d4d
+FROM nginx:1.31.9@sha256:5b9ebb95001cc4f5242fbc3e1a9ac76d313c8ba197c7e5803a77d3f7879f0cda
 
 # Install certbot for SSL certificate creation and renewal
 RUN apt update && \

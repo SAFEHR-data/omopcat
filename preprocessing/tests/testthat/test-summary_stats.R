@@ -99,7 +99,7 @@ test_that("calculate_summary_stats handles fallback column", {
   expect_equal(frequencies$value_as_concept_id, c(1, 2, 3))
 })
 
-db <- dbplyr::src_memdb()
+db <- dbplyr::memdb()
 db_measurement <- dplyr::copy_to(db, mock_measurements, name = "measurement", overwrite = TRUE)
 test_that("calculate_summary_stats works with a database-stored table", {
   ref <- calculate_summary_stats(

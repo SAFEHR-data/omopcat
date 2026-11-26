@@ -44,3 +44,13 @@ test_that("Running app in prod fails if data path not set", {
     "Environment variable `OMOPCAT_DATA_PATH` not set"
   )
 })
+
+test_that("if release date exists footer shows the month and year", {
+  records_dates <- data.frame(source_release_date = as.Date("2026-03-13"))
+  expect_equal(extract_release_date(records_dates), "- Records correct as of March 2026")
+})
+
+test_that("footer description is empty without a release date", {
+  records_dates <- data.frame(source_release_date = as.Date(NA))
+  expect_null(extract_release_date(records_dates))
+})

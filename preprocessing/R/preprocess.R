@@ -5,6 +5,7 @@
 #' * `out_path`/omopcat_concepts.parquet
 #' * `out_path`/omopcat_monthly_counts.parquet
 #' * `out_path`/omopcat_summary_stats.parquet
+#' * `out_path`/omopcat_records_dates.parquet
 #'
 #' If all these files already exist, the pipeline will not be run.
 #'
@@ -25,7 +26,8 @@ preprocess <- function(out_path = Sys.getenv("PREPROCESS_OUT_PATH")) {
   out_files <- c(
     concepts = file.path(out_path, "omopcat_concepts.parquet"),
     monthly_counts = file.path(out_path, "omopcat_monthly_counts.parquet"),
-    summary_stats = file.path(out_path, "omopcat_summary_stats.parquet")
+    summary_stats = file.path(out_path, "omopcat_summary_stats.parquet"),
+    records_dates = file.path(out_path, "omopcat_records_dates.csv")
   )
 
   # Only run pre-processing if the expected files don't exist
@@ -65,9 +67,13 @@ preprocess <- function(out_path = Sys.getenv("PREPROCESS_OUT_PATH")) {
   concept_ids_with_data <- unique(c(monthly_counts$concept_id, summary_stats$concept_id))
   concepts_table <- generate_concepts(cdm, concept_ids = concept_ids_with_data)
 
+  cli::cli_progress_message("Generating recorrds_dates table")
+  records_dates <- generate_records_dates(cdm)
+
   nanoparquet::write_parquet(concepts_table, out_files["concepts"])
   nanoparquet::write_parquet(monthly_counts, out_files["monthly_counts"])
   nanoparquet::write_parquet(summary_stats, out_files["summary_stats"])
+  utils::write.csv(records_dates, out_files["records_dates"], row.names = FALSE, na = "")
   cli::cli_alert_success("Tables written to {.path {out_files}}")
 
   return(invisible(TRUE))

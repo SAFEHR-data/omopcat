@@ -2,7 +2,7 @@
 # R specific hooks: https://github.com/lorenzwalthert/precommit
 repos:
   - repo: https://github.com/lorenzwalthert/precommit
-    rev: v0.4.3.9001
+    rev: 2e05db3fea9db1e0a8e3c84540219c7e0a0915ff # main at R4.6.1
     hooks:
       - id: style-files
         args: [--style_pkg=styler, --style_fun=tidyverse_style]
@@ -45,8 +45,15 @@ repos:
       - id: no-print-statement
       - id: no-debug-statement
       - id: deps-in-desc
+        name: deps-in-desc (app)
         args: [--root=./app]
-        exclude: "^scripts/|^app/dev/"
+        files: '^app/.*\.(R|r|Rmd|rmd)$'
+        exclude: '^app/dev/|renv/'
+      - id: deps-in-desc
+        name: deps-in-desc (preprocessing)
+        args: [--root=./preprocessing]
+        files: '^preprocessing/.*\.(R|r|Rmd|rmd)$'
+        exclude: 'renv/'
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0
     hooks:
