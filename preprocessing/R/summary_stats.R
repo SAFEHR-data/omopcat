@@ -63,13 +63,13 @@ calculate_summary_stats <- function(omop_table, concept_name, fallback_name, thr
   if (!is.null(fallback_name)) {
     stopifnot(is.character(fallback_name))
     stopifnot(fallback_name %in% colnames(omop_table))
-    
+
     # If concept ID equals `0`, use fallback column (source concept ID)
     omop_table <- dplyr::mutate(
       omop_table,
       concept_id = dplyr::case_when(
-        !!rlang::data_sym(concept_name) == 0
-          & !is.na(!!rlang::data_sym(fallback_name)) ~ !!rlang::data_sym(fallback_name),
+        !!rlang::data_sym(concept_name) == 0 &
+          !is.na(!!rlang::data_sym(fallback_name)) ~ !!rlang::data_sym(fallback_name),
         .default = !!rlang::data_sym(concept_name)
       )
     )

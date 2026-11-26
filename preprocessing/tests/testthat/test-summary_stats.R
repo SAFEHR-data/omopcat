@@ -78,7 +78,7 @@ test_that("calculate_summary_stats handles fallback column", {
     value_as_concept_id = c(rep(0, 4), c(1, 1, 2, 3)),
     measurement_source_concept_id = c(NA, NA, 1, 1, NA, NA, 2, 2)
   )
-  
+
   res <- calculate_summary_stats(
     df,
     "measurement_concept_id",

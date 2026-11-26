@@ -101,7 +101,7 @@ test_that("summarise_counts handles fallback column", {
     value_as_concept_id = 0,
     measurement_source_concept_id = c(NA, 1, 1)
   )
-  
+
   res <- summarise_counts(
     df,
     "measurement_concept_id",
